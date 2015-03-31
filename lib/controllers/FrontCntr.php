@@ -77,7 +77,9 @@ class FrontCntr
             // передаем управление конктретному контроллеру
             $method->invoke($controller);
             //}
-            new View();
+            $view = new View();
+            $view->drowPage();
+
         }
     }
 

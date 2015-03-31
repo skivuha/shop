@@ -199,7 +199,7 @@ class MyPdo
     }
 
     /*
-    *Query bilder
+    *Query builder
     */
     public function query()
     {
@@ -302,13 +302,32 @@ class MyPdo
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $arr = array();
             while($row = $stmt->fetchAll())
-            {   $arr = $row;
-                return $arr;
+            {
+                $arr = $row;
             }
+            $this->defaultVar();
+            return $arr;
         }
     }
 
+    private function defaultVar()
+    {
+        $this->select='';
+        $this->table='';
+        $this->where='';
+        $this->is='';
+        $this->order='';
+        $this->delete='';
+        $this->update='';
+        $this->insert='';
+        $this->old='';
+        $this->new='';
+        $this->query='';
+        $this->limit_start='';
+        $this->limit_end='';
+    }
 }
+
 
 
 /*

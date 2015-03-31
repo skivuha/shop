@@ -1,8 +1,8 @@
 <?php
-session_start();
-
 
 define('SALT', "mimimi");
+//колличество товаров на странице
+define('PERPAGE', 6);
 
 define('DB_NAME', 'book');
 define('DB_HOST', 'localhost');

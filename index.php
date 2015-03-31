@@ -10,11 +10,7 @@ function __autoload($class){
 $front = FrontCntr::getInstance();
 $front->route();
 
-
-
 //echo $front->getBody();
-
-
 
 /*include_once 'config.php';
 include_once 'templates/view.php';

@@ -27,7 +27,7 @@ class Palette
         $data.='<ul class="authorsCol">';
         foreach($arr as $authors)
         {
-            $data.='<li><a href="/Home/index/author/'.$authors['authors_id'].'">'.$authors['authors_name'].'</a></li>';
+            $data.='<li><a href="/Home/sort/author/'.$authors['authors_id'].'">'.$authors['authors_name'].'</a></li>';
         }
         $data.='</ul></div>';
         return $data;
@@ -41,7 +41,7 @@ class Palette
         $data.='<ul class="genreCol">';
         foreach($arr as $genres)
         {
-            $data.='<li><a href="/Home/index/genre/'.$genres['genre_id'].'">'.$genres['genre_name'].'</a></li>';
+            $data.='<li><a href="/Home/sort/genre/'.$genres['genre_id'].'">'.$genres['genre_name'].'</a></li>';
         }
         $data.='</ul></div>';
         return $data;
@@ -75,48 +75,8 @@ class Palette
         return $data;
     }
 
-    function genrePage($arr)
+    function navBar($uri, $page, $page_count)
     {
-        $data = '';
-        $data.= '<h2><?=$get_authors[0][authors_name]?></h2>';
-        foreach($arr as $books) {
-            $data .= '<div align="center" id="contentIndex"><div id=contenrInfo>';
-            $data .= '<p><a href="?view=details&book_id=<?=$books['book_id']?>" class="nameBook"><?=$books['book_name']?></p>';
-            $data .= '<img src="<?=IMG?><?=$books['img']?>"><p></a><br>';
-            $data .= '<span id="priceBook"><?=$books['price']?> $</span></p><br>';
-            $data .= '<p><a href="?view=details&book_id=<?=$books['book_id']?>" id="detailsBook">Details</a></p>';
-            $data .= '</div></div>';
-        }
-        $data .= '<div class="reviews"></div>';
-        $data .= '<div class="pager"></div>';
-        return $data;
-    }
-
-
-
-    function pageNav($page, $page_count)
-    {
-        $request = $_SERVER['REQUEST_URI'];
-        $splits = explode('/', trim($request, '/'));
-        $controller = !empty($splits[0]) ? ucfirst($splits[0]) . 'Cntr' : 'Home';
-        $action = !empty($splits[1]) ? $splits[1] . 'Action' : 'index';
-        $fc = FrontCntr::getInstance();
-        $params = $fc->getParams();
-        if(!$splits[0])
-        {
-            $uri = '';
-            $uri.="$controller/$action";
-        }
-        else
-        {
-            $uri = '';
-            $uri.="$splits[0]/$splits[1]";
-            foreach($params as $key => $value)
-            {
-                if($key != 'page' ) $uri .= "/$key/$value";
-            }
-        }
-
         // crating of links
         $back = '';
         $forward = '';
@@ -127,26 +87,41 @@ class Palette
         $page2right = '';
         $page1right = '';
 
-        if($page > 1){$back = "<a href='/$uri/page/" .($page-1). "'>&lt;</a>";
+        if($page > 1)
+        {
+            $back = "<a href='/$uri/page/" .($page-1). "'>&lt;</a>";
         }
-        if($page < $page_count){$forward = "<a href='/$uri/page/" .($page+1). "'>&gt;</a>";
+        if($this->page < $this->page_count)
+        {
+            $forward = "<a href='/$uri/page/" .($page+1). "'>&gt;</a>";
         }
-        if($page > 3){$startpage = "<a href='/$uri/page/1'>&laquo;</a>";
+        if($page > 3)
+        {
+            $startpage = "<a href='/$uri/page/1'>&laquo;</a>";
         }
-        if($page < $page_count-2){$endpage = "<a href='/$uri/page/{$page_count}'>&raquo;</a>";
+        if($page < $page_count-2)
+        {
+            $endpage = "<a href='/$uri/page/{$page_count}'>&raquo;</a>";
         }
-        if($page - 2 > 0){$page2left = "<a href='/$uri/page/" .($page-2). "'>" .($page-2). "</a>";
+        if($page - 2 > 0)
+        {
+            $page2left = "<a href='/$uri/page/" .($page-2). "'>" .($page-2). "</a>";
         }
-        if($page - 1 > 0){$page1left = "<a href='/$uri/page/" .($page-1). "'>" .($page-1). "</a>";
+        if($page - 1 > 0)
+        {
+            $page1left = "<a href='/$uri/page/" .($page-1). "'>" .($page-1). "</a>";
         }
-        if($page + 2 <= $page_count){$page2right = "<a href='/$uri/page/" .($page+2). "'>" .($page+2). "</a>";
+        if($page + 2 <= $page_count)
+        {
+            $page2right = "<a href='/$uri/page/" .($page+2). "'>" .($page+2). "</a>";
         }
-        if($page + 1 <= $page_count){$page1right = "<a href='/$uri/page/" .($page+1). "'>" .($page+1). "</a>";
+        if($page + 1 <= $page_count)
+        {
+            $page1right = "<a href='/$uri/page/" .($page+1). "'>" .($page+1). "</a>";
         }
 
         $nav = $startpage.$back.$page2left.$page1left.'<a class="navActive">'.$page.'</a>'.$page1right.$page2right.$forward.$endpage;
         return $nav;
     }
-
 }
 ?>

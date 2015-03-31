@@ -1,70 +1,25 @@
 <?php
-class View{
 
-    private $forRender;
+class View
+{
     private $file;
-    private $data;
     private $mArray;
+    private $substitution;
+    private $data;
 
-    function __construct(){
+    function __construct()
+    {
+        $this->substitution = new Substitution();
         $this->file = DataCont::getInstance()->getPage();
         $this->mArray = DataCont::getInstance()->getmArray();
-        $this->data = $this->setFileTemplate($this->file);
-        $this->addToReplace($this->mArray);
-        $this->templateRender();
     }
 
-    public function setFileTemplate($template)
-{
-    if(is_file($template))
+    function drowPage()
     {
-        $this->file = file_get_contents($template);
-    }
-    else
-    {
-        throw new Exception('No template file');
-    }
-}
-    public function addToReplace($mArray)
-{
-    foreach($mArray as $key=>$val)
-    {
-        $this->forRender[$key] = $val;
-    }
-}
-
-    public function setReplace($key, $val)
-    {
-        $this->forRender[$key] = $val;
-        return true;
+        $this->data = $this->substitution->setFileTemplate($this->file);
+        $this->substitution->addToReplace($this->mArray);
+        $this->substitution->templateRender();
     }
 
-    public function templateRender()
-    {
-        //echo '<pre>';
-        //var_dump($this->forRender);
-        foreach($this->forRender as $key=>$val)
-        {
-            $this->file = preg_replace('/%#%' .$key. '%#%/i', $val, $this->file);
-        }
-        $default = '';
-        $this->file = preg_replace('/%#%(.*)%#%/Uis', $default, $this->file);
-        echo $this->file;
-    }
-/*    public function templateRender()
-    {
-        foreach($this->forRender as $key=>$val)
-        {
-            $this->file = str_replace($key, $val, $this->file);
-        }
-        echo $this->file;
-    }*/
-
-/*    function render(){
-        //ob_start();
-        include(__DIR__.'/'.$this->file);
-        //var_dump($this->file.'this view');
-        //return ob_get_clean();
-    }*/
 }
 ?>

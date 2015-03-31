@@ -1,136 +1,136 @@
 <?php
-class HomeCntr{
-    function indexAction(){
+class HomeCntr
+{
+    private $fc;
+    private $myPdo;
+    private $data;
+    private $dataPalette;
+    private $dataPaletteNav;
 
-        $fc = FrontCntr::getInstance();
-        $params = $fc->getParams();
-        if(isset($params[page]))
-        {
-            $page = (int)$params[page];
-            if($page < 1) $page = 1;
-        }else{
-            $page = 1;
-        }
-        $perpage = 6;
-        //var_dump($params);
-        $myPdo = MyPdo::getInstance();
+    public function __construct()
+    {
+        $this->fc = FrontCntr::getInstance();
+        $this->myPdo = MyPdo::getInstance();
+        $this->data = DataCont::getInstance();
+        $this->dataPalette = new Palette();
+    }
 
+    function indexAction()
+    {
+        $params = $this->fc->getParams();
+        $nav = new PaletteNav($params);
+        $start_pos = $nav->getStartPage();
+        $perpage = $nav->getPerPage();
+        $page = $nav->getPageNav();
+        $page_count = $nav->getPageCount();
+        $uri = $nav->getUriPageNav();
 
-
-        $count = $myPdo->select('COUNT(book_id) as count_rows')
-            ->table('books')
-            ->where('visible', '1')
-            ->query()
-            ->commit();
-
-        $count_rows = $count[0][count_rows];
-        $page_count = ceil($count_rows / $perpage);
-        if(!$page_count) $page_count = 1;
-        if($page > $page_count) {$page = $page_count;}
-        $start_pos = ($page - 1) * $perpage;
-        $mainPage = $myPdo->select('book_id, book_name, img, price, visible')
+        $mainPage = $this->myPdo->select('book_id, book_name, img, price, visible')
             ->table('books')
             ->where('visible','1')
             ->limit($start_pos, $perpage)
             ->query()
             ->commit();
 
-        $dataPalette = new Palette();
-        $dataMainPage = ($dataPalette->mainPage($mainPage));
+        $dataMainPage = $this->dataPalette->mainPage($mainPage);
+        $dataNavPage = $this->dataPalette->navBar($uri, $page, $page_count);
 
+        $this->data->setmArray('TITLE', 'Books');
+        $this->data->setmArray('BOOKLIST', $dataMainPage);
+        $this->data->setmArray('PAGENAV', $dataNavPage);
+        $this->data->setPage('lib/views/main.html');
+        $this->data->setData($params);
+    }
 
+    function sortAction()
+    {
+        $params = $this->fc->getParams();
+        if(isset($params[author]))
+        {
+            $author = abs((int)$params[author]);
+            $sortPage = $this->myPdo->select('book_id, book_name, img, price, visible')
+                ->table("books, authors INNER JOIN book_a WHERE books.book_id = book_a.b_id and authors.authors_id = book_a.a_id and visible='1' and authors_id='$author'")
+                //->where('visible','1')
+                //->limit($start_pos, $perpage)
+                ->query()
+                ->commit();
+        }
+        elseif(isset($params[genre]))
+        {
+            $genre = abs((int)$params[genre]);
+            $sortPage = $this->myPdo->select('book_id, book_name, img, price, visible')
+                ->table("books, genre INNER JOIN book_g WHERE books.book_id = book_g.b_id and genre.genre_id = book_g.g_id and visible='1' and genre_id=$genre")
+                //->where('visible','1')
+                //->limit($start_pos, $perpage)
+                ->query()
+                ->commit();
+        }
 
+        $dataSortPage = ($this->dataPalette->mainPage($sortPage));
 
-        $dataNavPage = ($dataPalette->pageNav($page, $page_count));
-
-        $data = DataCont::getInstance();
-        $data->setmArray('TITLE', 'Books');
-        $data->setmArray('BOOKLIST', $dataMainPage);
-        $data->setmArray('PAGENAV', $dataNavPage);
-        $data->setPage('lib/views/main.html');
-        $data->setData($params);
-//        $arr = array(1=>'mimi',2=>'bl');
- //       $data->setData($arr);
-//../views/main.html
-//        $view = new View();
-//       $view->name = $params['name'];
-//        $result = $view->render('../views/main.html');
-//        $fc->setBody($result);
+        $this->data->setmArray('TITLE', 'Books');
+        $this->data->setmArray('BOOKLIST', $dataSortPage);
+        $this->data->setPage('lib/views/main.html');
+        $this->data->setData($params);
     }
 
     function authorsAction()
     {
-        $fc = FrontCntr::getInstance();
-        $params = $fc->getParams();
-        $data = DataCont::getInstance();
-        $myPdo = MyPdo::getInstance();
+        $params = $this->fc->getParams();
 
-        $authorsPage = $myPdo->select('DISTINCT authors_name, authors_id')
+        $authorsPage = $this->myPdo->select('DISTINCT authors_name, authors_id')
             ->table("books, authors INNER JOIN book_a WHERE books.book_id = book_a.b_id and authors.authors_id = book_a.a_id and visible='1' ORDER BY authors_name")
             //->where('visible', '1')
             ->query()
             ->commit();
 
-        $dataPalette = new Palette();
-        $authorsPage = ($dataPalette->authorsPage($authorsPage));
+        $authorsPage = ($this->dataPalette->authorsPage($authorsPage));
 
-        $data->setmArray('TITLE', 'Authors');
-        $data->setmArray('BOOKLIST', $authorsPage);
-        $data->setPage('lib/views/main.html');
-        $data->setData($params);
+        $this->data->setmArray('TITLE', 'Authors');
+        $this->data->setmArray('BOOKLIST', $authorsPage);
+        $this->data->setPage('lib/views/main.html');
+        $this->data->setData($params);
 
     }
 
     function genresAction()
     {
-        $fc = FrontCntr::getInstance();
-        $params = $fc->getParams();
-        $data = DataCont::getInstance();
-        $myPdo = MyPdo::getInstance();
-
-        $genresPage = $myPdo->select('DISTINCT genre_name, genre_id')
+        $params = $this->fc->getParams();
+        $genresPage = $this->myPdo->select('DISTINCT genre_name, genre_id')
             ->table("books, genre INNER JOIN book_g WHERE books.book_id = book_g.b_id and genre.genre_id = book_g.g_id and visible='1'")
             //->where('visible', '1')
             ->query()
             ->commit();
 
-        $dataPalette = new Palette();
-        $genresPage = ($dataPalette->genresPage($genresPage));
+        $genresPage = ($this->dataPalette->genresPage($genresPage));
 
-        $data->setmArray('TITLE', 'Genres');
-        $data->setmArray('BOOKLIST', $genresPage);
-        $data->setPage('lib/views/main.html');
-        $data->setData($params);
+        $this->data->setmArray('TITLE', 'Genres');
+        $this->data->setmArray('BOOKLIST', $genresPage);
+        $this->data->setPage('lib/views/main.html');
+        $this->data->setData($params);
 
     }
 
     function detailsAction()
     {
-        $fc = FrontCntr::getInstance();
-        $params = $fc->getParams();
+        $params = $this->fc->getParams();
         $book_id = abs((int)$params[id]);
-        $data = DataCont::getInstance();
-        $myPdo = MyPdo::getInstance();
         if($book_id)
         {
-            $detailsPage = $myPdo->select('DISTINCT book_id, price, book_name, img, content, GROUP_CONCAT(DISTINCT authors_name) as authors_name, GROUP_CONCAT(DISTINCT genre_name) as genre_name')
+            $detailsPage = $this->myPdo->select('DISTINCT book_id, price, book_name, img, content, GROUP_CONCAT(DISTINCT authors_name) as authors_name, GROUP_CONCAT(DISTINCT genre_name) as genre_name')
                 ->table("books, authors, genre INNER JOIN book_a, book_g WHERE books.book_id = book_a.b_id and authors.authors_id = book_a.a_id and books.book_id = book_g.b_id and genre.genre_id = book_g.g_id and book_id = $book_id and visible='1' GROUP BY book_name")
                 //->where('visible', '1')
                 ->query()
                 ->commit();
         }
 
-        $dataPalette = new Palette();
-        $detailsPage = ($dataPalette->detailsPage($detailsPage[0]));
+        $detailsPage = ($this->dataPalette->detailsPage($detailsPage[0]));
 
-        $data->setmArray('TITLE', 'Details');
-        $data->setmArray('BOOKLIST', $detailsPage);
-        $data->setPage('lib/views/main.html');
-        $data->setData($params);
-
+        $this->data->setmArray('TITLE', 'Details');
+        $this->data->setmArray('BOOKLIST', $detailsPage);
+        $this->data->setPage('lib/views/main.html');
+        $this->data->setData($params);
     }
-
-
 
     function formAction()
     {
