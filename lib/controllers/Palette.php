@@ -10,10 +10,10 @@ class Palette
         {
             $data.='<div align="center" id="contentIndex">';
             $data.='<div id=contenrInfo>';
-            $data.='<p><a href="/Home/details/id/'.$books['book_id'].'" class="nameBook">'.$books['book_name'].'</a></p>';
-            $data.='<a href="/Home/details/id/'.$books['book_id'].'" class="nameBook"><img src="/lib/views/user_files/img/'.$books['img'].'"></a>';
+            $data.='<p><a href="'.PATH.'/Home/details/id/'.$books['book_id'].'" class="nameBook">'.$books['book_name'].'</a></p>';
+            $data.='<a href="'.PATH.'/Home/details/id/'.$books['book_id'].'" class="nameBook"><img src="'.PATH.'/lib/views/user_files/img/'.$books['img'].'"></a>';
             $data.='<p><br><span id="priceBook">'.$books['price'].' $</span></p>';
-            $data.='<br><p><a href="/Home/details/id/'.$books['book_id'].'" id="detailsBook">Details</a></p>';
+            $data.='<br><p><a href="'.PATH.'/Home/details/id/'.$books['book_id'].'" id="detailsBook">Details</a></p>';
             $data.='</div></div>';
         }
         return $data;
@@ -27,7 +27,7 @@ class Palette
         $data.='<ul class="authorsCol">';
         foreach($arr as $authors)
         {
-            $data.='<li><a href="/Home/sort/author/'.$authors['authors_id'].'">'.$authors['authors_name'].'</a></li>';
+            $data.='<li><a href="'.PATH.'/Home/sort/author/'.$authors['authors_id'].'">'.$authors['authors_name'].'</a></li>';
         }
         $data.='</ul></div>';
         return $data;
@@ -41,7 +41,7 @@ class Palette
         $data.='<ul class="genreCol">';
         foreach($arr as $genres)
         {
-            $data.='<li><a href="/Home/sort/genre/'.$genres['genre_id'].'">'.$genres['genre_name'].'</a></li>';
+            $data.='<li><a href="'.PATH.'/Home/sort/genre/'.$genres['genre_id'].'">'.$genres['genre_name'].'</a></li>';
         }
         $data.='</ul></div>';
         return $data;
@@ -53,13 +53,13 @@ class Palette
         $data.='<div id="bookDetails">';
         $data.='<h1>'.$arr['book_name'].'</h1>';
         $data.='<div class="productDetails">';
-        $data.='<img src="/lib/views/user_files/img/'.$arr['img'].'"></div>';
+        $data.='<img src="'.PATH.'/lib/views/user_files/img/'.$arr['img'].'"></div>';
         $data.='<div id="detailsText">';
         $data.='<h2>Product Details</h2>';
         $data.='<p class="detailsfirst"><b>Author: </b>'.$arr['authors_name'].'</p>';
         $data.='<p><b>Genre: </b>'.$arr['genre_name'].'</p>';
-        $data.='<p><b>Paperback</b>: 192 pages</p><p><b>Language:</b> English</p><br></div>';
-        $data.='<div id="formbuy">          <!--form for mail to admin-->
+        //$data.='<p><b>Paperback</b>: 192 pages</p><p><b>Language:</b> English</p><br></div>';
+      /*  $data.='<div id="formbuy">          <!--form for mail to admin-->
                     <form method="POST" name="formmail">
                         <p>Quantity
                             <input type="number" autocomplete="off" max="999" min="1" maxlength="3" value="1" name="quantity" class="quantity">
@@ -71,6 +71,7 @@ class Palette
                     <div><p><input type="submit" name="sendmail" value="Send" id="submitMail"  maxlength="1000"></p></div>
                     </form>
                 </div>';
+		*/
         $data.=$arr['content'].'</div></div>';
         return $data;
     }
@@ -89,35 +90,35 @@ class Palette
 
         if($page > 1)
         {
-            $back = "<a href='/$uri/page/" .($page-1). "'>&lt;</a>";
+            $back = "<a href='".PATH."/$uri/page/" .($page-1). "'>&lt;</a>";
         }
         if($this->page < $this->page_count)
         {
-            $forward = "<a href='/$uri/page/" .($page+1). "'>&gt;</a>";
+            $forward = "<a href='".PATH."/$uri/page/" .($page+1). "'>&gt;</a>";
         }
         if($page > 3)
         {
-            $startpage = "<a href='/$uri/page/1'>&laquo;</a>";
+            $startpage = "<a href='".PATH."/$uri/page/1'>&laquo;</a>";
         }
         if($page < $page_count-2)
         {
-            $endpage = "<a href='/$uri/page/{$page_count}'>&raquo;</a>";
+            $endpage = "<a href='".PATH."/$uri/page/{$page_count}'>&raquo;</a>";
         }
         if($page - 2 > 0)
         {
-            $page2left = "<a href='/$uri/page/" .($page-2). "'>" .($page-2). "</a>";
+            $page2left = "<a href='".PATH."/$uri/page/" .($page-2). "'>" .($page-2). "</a>";
         }
         if($page - 1 > 0)
         {
-            $page1left = "<a href='/$uri/page/" .($page-1). "'>" .($page-1). "</a>";
+            $page1left = "<a href='".PATH."/$uri/page/" .($page-1). "'>" .($page-1). "</a>";
         }
         if($page + 2 <= $page_count)
         {
-            $page2right = "<a href='/$uri/page/" .($page+2). "'>" .($page+2). "</a>";
+            $page2right = "<a href='".PATH."/$uri/page/" .($page+2). "'>" .($page+2). "</a>";
         }
         if($page + 1 <= $page_count)
         {
-            $page1right = "<a href='/$uri/page/" .($page+1). "'>" .($page+1). "</a>";
+            $page1right = "<a href='".PATH."/$uri/page/" .($page+1). "'>" .($page+1). "</a>";
         }
 
         $nav = $startpage.$back.$page2left.$page1left.'<a class="navActive">'.$page.'</a>'.$page1right.$page2right.$forward.$endpage;

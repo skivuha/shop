@@ -1,5 +1,4 @@
 <?php
-
 class View
 {
     private $file;
@@ -20,6 +19,5 @@ class View
         $this->substitution->addToReplace($this->mArray);
         $this->substitution->templateRender();
     }
-
 }
 ?>

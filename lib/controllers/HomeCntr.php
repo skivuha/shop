@@ -26,7 +26,7 @@ class HomeCntr
         $uri = $nav->getUriPageNav();
 
         $mainPage = $this->myPdo->select('book_id, book_name, img, price, visible')
-            ->table('books')
+            ->table('shop_books')
             ->where('visible','1')
             ->limit($start_pos, $perpage)
             ->query()
@@ -49,7 +49,7 @@ class HomeCntr
         {
             $author = abs((int)$params[author]);
             $sortPage = $this->myPdo->select('book_id, book_name, img, price, visible')
-                ->table("books, authors INNER JOIN book_a WHERE books.book_id = book_a.b_id and authors.authors_id = book_a.a_id and visible='1' and authors_id='$author'")
+                ->table("shop_books, shop_authors INNER JOIN shop_book_a WHERE shop_books.book_id = shop_book_a.b_id and shop_authors.authors_id = shop_book_a.a_id and visible='1' and authors_id='$author'")
                 //->where('visible','1')
                 //->limit($start_pos, $perpage)
                 ->query()
@@ -59,7 +59,7 @@ class HomeCntr
         {
             $genre = abs((int)$params[genre]);
             $sortPage = $this->myPdo->select('book_id, book_name, img, price, visible')
-                ->table("books, genre INNER JOIN book_g WHERE books.book_id = book_g.b_id and genre.genre_id = book_g.g_id and visible='1' and genre_id=$genre")
+                ->table("shop_books, shop_genre INNER JOIN shop_book_g WHERE shop_books.book_id = shop_book_g.b_id and shop_genre.genre_id = shop_book_g.g_id and visible='1' and genre_id=$genre")
                 //->where('visible','1')
                 //->limit($start_pos, $perpage)
                 ->query()
@@ -79,7 +79,7 @@ class HomeCntr
         $params = $this->fc->getParams();
 
         $authorsPage = $this->myPdo->select('DISTINCT authors_name, authors_id')
-            ->table("books, authors INNER JOIN book_a WHERE books.book_id = book_a.b_id and authors.authors_id = book_a.a_id and visible='1' ORDER BY authors_name")
+            ->table("shop_books, shop_authors INNER JOIN shop_book_a WHERE shop_books.book_id = shop_book_a.b_id and shop_authors.authors_id = shop_book_a.a_id and visible='1' ORDER BY authors_name")
             //->where('visible', '1')
             ->query()
             ->commit();
@@ -97,7 +97,7 @@ class HomeCntr
     {
         $params = $this->fc->getParams();
         $genresPage = $this->myPdo->select('DISTINCT genre_name, genre_id')
-            ->table("books, genre INNER JOIN book_g WHERE books.book_id = book_g.b_id and genre.genre_id = book_g.g_id and visible='1'")
+            ->table("shop_books, shop_genre INNER JOIN shop_book_g WHERE shop_books.book_id = shop_book_g.b_id and shop_genre.genre_id = shop_book_g.g_id and visible='1'")
             //->where('visible', '1')
             ->query()
             ->commit();
@@ -118,7 +118,7 @@ class HomeCntr
         if($book_id)
         {
             $detailsPage = $this->myPdo->select('DISTINCT book_id, price, book_name, img, content, GROUP_CONCAT(DISTINCT authors_name) as authors_name, GROUP_CONCAT(DISTINCT genre_name) as genre_name')
-                ->table("books, authors, genre INNER JOIN book_a, book_g WHERE books.book_id = book_a.b_id and authors.authors_id = book_a.a_id and books.book_id = book_g.b_id and genre.genre_id = book_g.g_id and book_id = $book_id and visible='1' GROUP BY book_name")
+                ->table("shop_books, shop_authors, shop_genre INNER JOIN shop_book_a, shop_book_g WHERE shop_books.book_id = shop_book_a.b_id and shop_authors.authors_id = shop_book_a.a_id and shop_books.book_id = shop_book_g.b_id and shop_genre.genre_id = shop_book_g.g_id and book_id = $book_id and visible='1' GROUP BY book_name")
                 //->where('visible', '1')
                 ->query()
                 ->commit();

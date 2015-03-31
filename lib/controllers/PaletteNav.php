@@ -68,20 +68,18 @@ class PaletteNav
 
     private function countRow()
     {
-        $count = $this->myPdo->select('COUNT(book_id) as count_rows')->table('books')->where('visible', '1')->query()->commit();
+        $count = $this->myPdo->select('COUNT(book_id) as count_rows')->table('shop_books')->where('visible', '1')->query()->commit();
         return $count[0]['count_rows'];
     }
-
-
 
     function pageNav()
     {
         $request = $_SERVER['REQUEST_URI'];
         $splits = explode('/', trim($request, '/'));
-        $controller = !empty($splits[0]) ? ucfirst($splits[0]) . 'Cntr' : 'Home';
-        $action = !empty($splits[1]) ? $splits[1] . 'Action' : 'index';
+        $controller = !empty($splits[3]) ? ucfirst($splits[3]) . 'Cntr' : 'Home';
+        $action = !empty($splits[4]) ? $splits[4] . 'Action' : 'index';
         $params = $this->fc->getParams();
-        if(!$splits[0])
+        if(!$splits[3])
         {
             $this->uri = '';
             $this->uri.="$controller/$action";
@@ -89,7 +87,7 @@ class PaletteNav
         else
         {
             $this->uri = '';
-            $this->uri.="$splits[0]/$splits[1]";
+            $this->uri.="$splits[3]/$splits[4]";
             foreach($params as $key => $value)
             {
                 if($key != 'page' ) $this->uri .= "/$key/$value";
