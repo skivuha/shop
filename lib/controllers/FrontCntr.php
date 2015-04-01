@@ -98,14 +98,14 @@ class FrontCntr
         return $this->_action;
     }
 
-    public function getBody()
-    {
-        return $this->_body;
-    }
+//    public function getBody()
+//    {
+//        return $this->_body;
+//    }
 
-    public function setBody($body)
-    {
-        $this->_body = $body;
-    }
+//    public function setBody($body)
+//    {
+//        $this->_body = $body;
+//    }
 }
 ?>

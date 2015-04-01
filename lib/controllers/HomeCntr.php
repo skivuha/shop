@@ -45,180 +45,37 @@ class HomeCntr
     function sortAction()
     {
         $params = $this->fc->getParams();
-        if(isset($params[author]))
-        {
-            $author = abs((int)$params[author]);
-            $sortPage = $this->myPdo->select('book_id, book_name, img, price, visible')
-            //$sortPage = $this->myPdo->select('book_id, book_name, img, price, visible')
-            ->table("shop_books, shop_authors INNER JOIN shop_book_a WHERE shop_books.book_id = shop_book_a.b_id and shop_authors.authors_id = shop_book_a.a_id and visible='1' and authors_id='$author'")
-            //->table("shop_books, shop_authors")
-              //  ->join('shop_book_a')
-                //->where(array('shop_books.book_id' => 'shop_book_a.b_id' , 'shop_authors.authors_id' => 'shop_book_a.a_id', 'visible'=>'1', 'authors_id'=>$author))
-                //->limit($start_pos, $perpage)
-                ->query()
-                ->commit();
-
-            //var_dump($sortPage);
-        }
-        elseif(isset($params[genre]))
-        {
-            $genre = abs((int)$params[genre]);
-            $sortPage = $this->myPdo->select('book_id, book_name, img, price, visible')
-                ->table("shop_books, shop_genre INNER JOIN shop_book_g WHERE shop_books.book_id = shop_book_g.b_id and shop_genre.genre_id = shop_book_g.g_id and visible='1' and genre_id=$genre")
-                //->where('visible','1')
-                //->limit($start_pos, $perpage)
-                ->query()
-                ->commit();
-        }
-
-        $dataSortPage = ($this->dataPalette->mainPage($sortPage));
-
-        $this->data->setmArray('TITLE', 'Books');
-        $this->data->setmArray('BOOKLIST', $dataSortPage);
+        $this->data->setParam($params);
         $this->data->setPage('lib/views/main.html');
-        $this->data->setData($params);
+        $this->data->setFlag($this->fc->getAction());
+
+//        $dataSortPage = ($this->dataPalette->mainPage($sortPage));
+
+
+//        $this->data->setmArray('BOOKLIST', $dataSortPage);
+
+//        $this->data->setData($params);
     }
 
     function authorsAction()
     {
-        $params = $this->fc->getParams();
-
-        $authorsPage = $this->myPdo->select('DISTINCT authors_name, authors_id')
-            ->table("shop_books, shop_authors INNER JOIN shop_book_a WHERE shop_books.book_id = shop_book_a.b_id and shop_authors.authors_id = shop_book_a.a_id and visible='1' ORDER BY authors_name")
-            //->where('visible', '1')
-            ->query()
-            ->commit();
-
-        $authorsPage = ($this->dataPalette->authorsPage($authorsPage));
-
-        $this->data->setmArray('TITLE', 'Authors');
-        $this->data->setmArray('BOOKLIST', $authorsPage);
         $this->data->setPage('lib/views/main.html');
-        $this->data->setData($params);
-
+        $this->data->setFlag($this->fc->getAction());
     }
 
     function genresAction()
     {
-        $params = $this->fc->getParams();
-        $genresPage = $this->myPdo->select('DISTINCT genre_name, genre_id')
-            ->table("shop_books, shop_genre INNER JOIN shop_book_g WHERE shop_books.book_id = shop_book_g.b_id and shop_genre.genre_id = shop_book_g.g_id and visible='1'")
-            //->where('visible', '1')
-            ->query()
-            ->commit();
-
-        $genresPage = ($this->dataPalette->genresPage($genresPage));
-
-        $this->data->setmArray('TITLE', 'Genres');
-        $this->data->setmArray('BOOKLIST', $genresPage);
         $this->data->setPage('lib/views/main.html');
-        $this->data->setData($params);
-
+        $this->data->setFlag($this->fc->getAction());
     }
 
     function detailsAction()
     {
         $params = $this->fc->getParams();
         $book_id = abs((int)$params[id]); //validator
-
-/*            $detailsPage = $this->myPdo->select('DISTINCT book_id, price, book_name, img, content, GROUP_CONCAT(DISTINCT authors_name) as authors_name, GROUP_CONCAT(DISTINCT genre_name) as genre_name')
-                ->table("shop_books, shop_authors, shop_genre INNER JOIN shop_book_a, shop_book_g WHERE shop_books.book_id = shop_book_a.b_id and shop_authors.authors_id = shop_book_a.a_id and shop_books.book_id = shop_book_g.b_id and shop_genre.genre_id = shop_book_g.g_id and book_id = $book_id and visible='1' GROUP BY book_name")
-                //->where('visible', '1')
-                ->query()
-                ->commit();
-*/
-
-     //   $detailsPage = ($this->dataPalette->detailsPage($detailsPage[0]));
-
-//        $this->data->setmArray('TITLE', 'Details');
-        $this->data->setmArray('BOOKLIST', $detailsPage);
         $this->data->setPage('lib/views/main.html');
-//        $this->data->setData($params);
-    }
-
-    function formAction()
-    {
-        $data = DataCont::getInstance();
-        $check = new Validator();
-        //$check->checkForm($_POST['user']);
-        $data_post = $check->clearDataArr($_POST);
-        if('' === $data_post['password'])
-        {
-            $data->setmArray('ERROR_PASS', 'Field is empty');
-            $pass = false;
-        }
-        else
-        {
-            if( false === $check->checkPass($data_post['password']))
-            {
-                $data->setmArray('ERROR_PASS', 'Wrong data');
-                $pass = false;
-            }
-            else
-            {
-                $pass = $data_post['password'];
-            }
-        }
-
-        if('' === $data_post['user'])
-        {
-            $data->setmArray('ERROR_NAME', 'Field is empty');
-            $name = false;
-        }
-        else
-        {
-            if( false === $check->checkForm($data_post['user']))
-            {
-                $data->setmArray('ERROR_NAME', 'Wrong data');
-                $name = false;
-            }
-            else
-            {
-                $name = $data_post['user'];
-            }
-        }
-
-
-        //$data->setmArray('error_name', $check->getErrors());
-        //$name = $check->getValue();
-        //$check->checkPass($_POST['password']);
-        //$data->setmArray('error_pass', $check->getErrors());
-        //$pass = $check->getValue();
-        $data->setmArray('TITLE', 'Booker');
-        $data->setPage('lib/views/main.html');
-        if (false !== $name && false !== $pass)
-        {
-            //$link = new MyPdo();
-            //$name = $link->checkUser($name);
-            if (false === $name)
-            {
-                $data->setmArray('ERROR_FORM', 'Wrong name or password');
-            }
-            else
-            {
-                $pass=md5($name['key_user'].$pass);
-                if ( $name['passwd_user'] == $pass)
-                {
-                    $_SESSION['user_id'] = $name['id_user'];
-                    $_SESSION['login_user'] = $name['login_user'];
-       /*             if (isset($save_me)) and 'yes' == $save_me)
-                    {
-                        $cookie_code = generateCode;
-
-                    }*/
-                //    $sess = Session::getInstance();
-               //     $b = $sess->setSession($name, md5('lalala'));
-                //    $a = $sess->getSession($name);
-                    //var_dump($_SESSION);
-                    $data->setPage('lib/views/calendar.html');
-                }
-                else
-                {
-                    $data->setmArray('%ERROR_FORM%', 'Wrong name or password');
-                }
-            }
-        }
-
+        $this->data->setFlag($this->fc->getAction());
+        $this->data->setParam($book_id);
     }
 }
 

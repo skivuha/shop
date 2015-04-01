@@ -9,8 +9,33 @@ class Palette
         $this->data = DataCont::getInstance();
     }
 
-    function mainPage($arr)
+    function sort()
     {
+        $params = $this->data->getParam();
+        $this->data->setmArray('TITLE', 'Books');
+        if(isset($params[author]))
+        {
+            $author = abs((int)$params[author]);
+            $arr = $this->myPdo->select('book_id, book_name, img, price, visible')
+                //$sortPage = $this->myPdo->select('book_id, book_name, img, price, visible')
+                ->table("shop_books, shop_authors INNER JOIN shop_book_a WHERE shop_books.book_id = shop_book_a.b_id and shop_authors.authors_id = shop_book_a.a_id and visible='1' and authors_id='$author'")
+                //->table("shop_books, shop_authors")
+                //  ->join('shop_book_a')
+                //->where(array('shop_books.book_id' => 'shop_book_a.b_id' , 'shop_authors.authors_id' => 'shop_book_a.a_id', 'visible'=>'1', 'authors_id'=>$author))
+                //->limit($start_pos, $perpage)
+                ->query()
+                ->commit();
+        }
+        elseif(isset($params[genre]))
+        {
+            $genre = abs((int)$params[genre]);
+            $arr = $this->myPdo->select('book_id, book_name, img, price, visible')
+                ->table("shop_books, shop_genre INNER JOIN shop_book_g WHERE shop_books.book_id = shop_book_g.b_id and shop_genre.genre_id = shop_book_g.g_id and visible='1' and genre_id=$genre")
+
+                ->query()
+                ->commit();
+        }
+
     $data = '';
         foreach($arr as $books)
         {
@@ -25,8 +50,15 @@ class Palette
         return $data;
     }
 
-    function authorsPage($arr)
+    function authors()
     {
+        $this->data->setmArray('TITLE', 'Authors');
+        $arr = $this->myPdo->select('DISTINCT authors_name, authors_id')
+            ->table("shop_books, shop_authors INNER JOIN shop_book_a WHERE shop_books.book_id = shop_book_a.b_id and shop_authors.authors_id = shop_book_a.a_id and visible='1' ORDER BY authors_name")
+            //->where('visible', '1')
+            ->query()
+            ->commit();
+
         $data = '';
         $data.= '<div id="authors">';
         $data.='<h2>Authors</h2>';
@@ -39,8 +71,14 @@ class Palette
         return $data;
     }
 
-    function genresPage($arr)
+    function genres()
     {
+        $this->data->setmArray('TITLE', 'Genres');
+        $arr = $this->myPdo->select('DISTINCT genre_name, genre_id')
+            ->table("shop_books, shop_genre INNER JOIN shop_book_g WHERE shop_books.book_id = shop_book_g.b_id and shop_genre.genre_id = shop_book_g.g_id and visible='1'")
+            //->where('visible', '1')
+            ->query()
+            ->commit();
         $data = '';
         $data.= '<div id="genre"> ';
         $data.='<h2>Genre</h2>';
@@ -53,7 +91,7 @@ class Palette
         return $data;
     }
 
-    function detailsPage($book_id)
+    function details($book_id)
     {
         $this->data->setmArray('TITLE', 'Details');
         $arr = $this->myPdo->select('DISTINCT book_id, price, book_name, img, content, GROUP_CONCAT(DISTINCT authors_name) as authors_name, GROUP_CONCAT(DISTINCT genre_name) as genre_name')
@@ -72,20 +110,6 @@ class Palette
         $data.='<h2>Product Details</h2>';
         $data.='<p class="detailsfirst"><b>Author: </b>'.$arr['authors_name'].'</p>';
         $data.='<p><b>Genre: </b>'.$arr['genre_name'].'</p>';
-        //$data.='<p><b>Paperback</b>: 192 pages</p><p><b>Language:</b> English</p><br></div>';
-      /*  $data.='<div id="formbuy">          <!--form for mail to admin-->
-                    <form method="POST" name="formmail">
-                        <p>Quantity
-                            <input type="number" autocomplete="off" max="999" min="1" maxlength="3" value="1" name="quantity" class="quantity">
-                                <span> pcs.</span></p>
-                        <p><label>First name: <input type="text" name="firstname" maxlength="10"></label></p>
-                        <p><label>Last name: <input type="text" name="lastname" maxlength="20"></label></p>
-                        <p><label for="adress">Adress </label></p>
-                            <textarea name="text" cols="33" rows="2" id="adress"></textarea></p>
-                    <div><p><input type="submit" name="sendmail" value="Send" id="submitMail"  maxlength="1000"></p></div>
-                    </form>
-                </div>';
-		*/
         $data.=$arr['content'].'</div></div>';
         return $data;
     }

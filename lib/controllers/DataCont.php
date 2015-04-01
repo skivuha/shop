@@ -5,6 +5,8 @@ class DataCont
     private $page;
     private $data;
     private $mArray;
+    private $flag;
+    private $param;
 
 
     public static function getInstance()
@@ -36,8 +38,22 @@ class DataCont
         $this->mArray[$key] = $val;
     }
 
+    public function setFlag($val)
+    {
+        $this->flag = $val;
+    }
+
+    public function setParam($val)
+    {
+        $this->param = $val;
+    }
+
     public function getPage(){
         return $this->page;
+    }
+
+    public function getFlag(){
+        return $this->flag;
     }
 
     public function getData(){
@@ -46,6 +62,10 @@ class DataCont
 
     public function getmArray(){
         return $this->mArray;
+    }
+
+    public function getParam(){
+        return $this->param;
     }
 }
 ?>
