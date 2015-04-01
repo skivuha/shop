@@ -1,20 +1,9 @@
 <?php
 class Substitution
 {
-
     private $forRender;
     private $file;
-    private $data;
-    private $mArray;
 
- /*   function __construct(){
-        $this->file = DataCont::getInstance()->getPage();
-        $this->mArray = DataCont::getInstance()->getmArray();
-        $this->data = $this->setFileTemplate($this->file);
-        $this->addToReplace($this->mArray);
-        $this->templateRender();
-    }
-*/
     public function setFileTemplate($template)
 {
     if(is_file($template))
@@ -42,8 +31,6 @@ class Substitution
 
     public function templateRender()
     {
-        //echo '<pre>';
-        //var_dump($this->forRender);
         foreach($this->forRender as $key=>$val)
         {
             $this->file = preg_replace('/%#%' .$key. '%#%/i', $val, $this->file);
@@ -52,20 +39,5 @@ class Substitution
         $this->file = preg_replace('/%#%(.*)%#%/Uis', $default, $this->file);
         echo $this->file;
     }
-/*    public function templateRender()
-    {
-        foreach($this->forRender as $key=>$val)
-        {
-            $this->file = str_replace($key, $val, $this->file);
-        }
-        echo $this->file;
-    }*/
-
-/*    function render(){
-        //ob_start();
-        include(__DIR__.'/'.$this->file);
-        //var_dump($this->file.'this view');
-        //return ob_get_clean();
-    }*/
 }
 ?>

@@ -28,8 +28,8 @@ class FrontCntr
         //выбор контроллера
         $this->_controller = !empty($splits[CONTROLLER]) ? ucfirst($splits[CONTROLLER]) . 'Cntr' : 'HomeCntr';
         //выбор экшена
-       // $this->_action = !empty($splits[1]) ? $splits[1] . 'Action' : 'indexAction';
-        if (!empty($splits[ACTION]))
+        $this->_action = !empty($splits[ACTION]) ? $splits[ACTION] . 'Action' : 'indexAction';
+   /*     if (!empty($splits[ACTION]))
         {
             $this->_action = $splits[ACTION].'Action';
         }
@@ -43,7 +43,7 @@ class FrontCntr
             {
                 $this->_action = 'indexAction';
             }
-        }
+        }*/
         //если есть параметры и значения
         if (!empty($splits[PARAM])) {
             $keys = $values = array();
@@ -98,14 +98,5 @@ class FrontCntr
         return $this->_action;
     }
 
-//    public function getBody()
-//    {
-//        return $this->_body;
-//    }
-
-//    public function setBody($body)
-//    {
-//        $this->_body = $body;
-//    }
 }
 ?>

@@ -1,18 +1,61 @@
 <?php
-class Palette
+class PaletteMain
 {
     private $myPdo;
     private $data;
+    public $nav;
+
     public function __construct()
     {
         $this->myPdo = MyPdo::getInstance();
         $this->data = DataCont::getInstance();
     }
 
+    function bookCreate($arr)
+    {
+        $data = '';
+        foreach($arr as $books)
+        {
+            $data.='<div align="center" id="contentIndex">';
+            $data.='<div id=contenrInfo>';
+            $data.='<p><a href="'.PATH.'/Home/details/id/'.$books['book_id'].'" class="nameBook">'.$books['book_name'].'</a></p>';
+            $data.='<a href="'.PATH.'/Home/details/id/'.$books['book_id'].'" class="nameBook"><img src="'.PATH.'/lib/views/user_files/img/'.$books['img'].'"></a>';
+            $data.='<p><br><span id="priceBook">'.$books['price'].' $</span></p>';
+            $data.='<p><a href="'.PATH.'/Home/details/id/'.$books['book_id'].'" id="detailsBook">Details</a></p>';
+            $data.='</div></div>';
+        }
+        return $data;
+    }
+
+    public function getNav()
+    {
+        return $this->nav;
+    }
+
+    function index()
+    {
+        $params = $this->data->getParam();
+        $nav = new PaletteNav($params);
+        $start_pos = $nav->getStartPage();
+        $perpage = $nav->getPerPage();
+        $page = $nav->getPageNav();
+        $page_count = $nav->getPageCount();
+        $uri = $nav->getUriPageNav();
+        $this->navBar($uri, $page, $page_count);
+
+        $arr = $this->myPdo->select('book_id, book_name, img, price, visible')
+            ->table('shop_books')
+            ->where(array('visible'=>1))
+            ->limit($start_pos, $perpage)
+            ->query()
+            ->commit();
+
+        return $this->bookCreate($arr);
+    }
+
     function sort()
     {
         $params = $this->data->getParam();
-        $this->data->setmArray('TITLE', 'Books');
         if(isset($params[author]))
         {
             $author = abs((int)$params[author]);
@@ -35,24 +78,12 @@ class Palette
                 ->query()
                 ->commit();
         }
+        return $this->bookCreate($arr);
 
-    $data = '';
-        foreach($arr as $books)
-        {
-            $data.='<div align="center" id="contentIndex">';
-            $data.='<div id=contenrInfo>';
-            $data.='<p><a href="'.PATH.'/Home/details/id/'.$books['book_id'].'" class="nameBook">'.$books['book_name'].'</a></p>';
-            $data.='<a href="'.PATH.'/Home/details/id/'.$books['book_id'].'" class="nameBook"><img src="'.PATH.'/lib/views/user_files/img/'.$books['img'].'"></a>';
-            $data.='<p><br><span id="priceBook">'.$books['price'].' $</span></p>';
-            $data.='<br><p><a href="'.PATH.'/Home/details/id/'.$books['book_id'].'" id="detailsBook">Details</a></p>';
-            $data.='</div></div>';
-        }
-        return $data;
     }
 
     function authors()
     {
-        $this->data->setmArray('TITLE', 'Authors');
         $arr = $this->myPdo->select('DISTINCT authors_name, authors_id')
             ->table("shop_books, shop_authors INNER JOIN shop_book_a WHERE shop_books.book_id = shop_book_a.b_id and shop_authors.authors_id = shop_book_a.a_id and visible='1' ORDER BY authors_name")
             //->where('visible', '1')
@@ -73,7 +104,6 @@ class Palette
 
     function genres()
     {
-        $this->data->setmArray('TITLE', 'Genres');
         $arr = $this->myPdo->select('DISTINCT genre_name, genre_id')
             ->table("shop_books, shop_genre INNER JOIN shop_book_g WHERE shop_books.book_id = shop_book_g.b_id and shop_genre.genre_id = shop_book_g.g_id and visible='1'")
             //->where('visible', '1')
@@ -99,6 +129,7 @@ class Palette
             //->where('visible', '1')
             ->query()
             ->commit();
+
         $arr = $arr[0];
 
         $data = '';
@@ -159,8 +190,8 @@ class Palette
             $page1right = "<a href='".PATH."/$uri/page/" .($page+1). "'>" .($page+1). "</a>";
         }
 
-        $nav = $startpage.$back.$page2left.$page1left.'<a class="navActive">'.$page.'</a>'.$page1right.$page2right.$forward.$endpage;
-        return $nav;
+        $this->nav = $startpage.$back.$page2left.$page1left.'<a class="navActive">'.$page.'</a>'.$page1right.$page2right.$forward.$endpage;
+        return $this->nav;
     }
 }
 ?>

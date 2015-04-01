@@ -1,7 +1,75 @@
 <?php
 class RegestrationCntr
 {
-    public function indexAction()
+    private $fc;
+    private $data;
+    private $check;
+
+    public function __construct()
+    {
+        $this->fc = FrontCntr::getInstance();
+        $this->data = DataCont::getInstance();
+        $this->check = new Validator();
+        $this->data->setFlag($this->fc->getAction());
+    }
+
+    function indexAction()
+    {
+        $this->data->setPage('lib/views/regestration.html');
+    }
+
+    function adduserAction()
+    {
+        if(isset($_POST))
+        {
+            $data_post = $this->check->clearDataArr($_POST);
+            if('' === $data_post['password'])
+            {
+                $this->data->setmArray('ERROR_PASS', 'Field is empty');
+                $pass = false;
+            }
+            else
+            {
+                if( false === $this->check->checkPass($data_post['password']))
+                {
+                    $this->data->setmArray('ERROR_PASS', 'Wrong data');
+                    $pass = false;
+                }
+                else
+                {
+                    $pass = $data_post['password'];
+                }
+            }
+            if('' === $data_post['username'])
+            {
+                $this->data->setmArray('ERROR_NAME', 'Field is empty');
+                $name = false;
+            }
+            else
+            {
+                if( false === $this->check->checkForm($data_post['username']))
+                {
+                    $this->data->setmArray('ERROR_NAME', 'Wrong data');
+                    $name = false;
+                }
+                else
+                {
+                    $name = $data_post['username'];
+                }
+            }
+        }
+        $this->data->setPage('lib/views/regestration.html');
+        if (false !== $name && false !== $pass)
+        {
+            //запрос в базу на проверку есть ли такой логин
+
+
+        }
+    }
+
+
+
+    public function indexAction1()
     {
         $data = DataCont::getInstance();
         $check = new Validator();

@@ -3,14 +3,36 @@
 <head>
     <title>%#%TITLE%#%</title>
     <!--<link href="/lib/views/style.css" type="text/css" rel="stylesheet">-->
-	<link href="/lib/views/style.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link href="/lib/views/style.css" type="text/css" rel="stylesheet">
 </head>
 <body>
 <div id="wrapper">
     <div id="header">
         <div id="logo"><a href="/"></a></div>    <!--LOGO-->
-        <div id="buy">                   <!--admin-->
-            <a href="/admin/"  class="adminlogin">For admin's!</a>
+        <div id="buy">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label class="sr-only" for="exampleInputEmail3">Email address</label>
+                    <input type="email" class="form-control" id="exampleInputEmail3" placeholder="Enter email">
+                    <label class="sr-only" for="exampleInputPassword3">Password</label>
+                    <input type="password" class="form-control" id="exampleInputPassword3" placeholder="Password">
+                </div>
+                <div id="rememberMe">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"> Remember me
+                    </label>
+                </div>
+
+                <input type="submit" class="btn btn-default btn-xs" value="Sign in">
+                    <div>
+                        <label>
+                            <a href="/Regestration/index/">Regestration</a>
+                        </label>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
     <ul id="menu" >             <!--menu-->
