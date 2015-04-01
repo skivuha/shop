@@ -27,7 +27,7 @@ class HomeCntr
 
         $mainPage = $this->myPdo->select('book_id, book_name, img, price, visible')
             ->table('shop_books')
-            ->where('visible','1')
+            ->where(array('visible'=>1))
             ->limit($start_pos, $perpage)
             ->query()
             ->commit();
@@ -49,11 +49,16 @@ class HomeCntr
         {
             $author = abs((int)$params[author]);
             $sortPage = $this->myPdo->select('book_id, book_name, img, price, visible')
-                ->table("shop_books, shop_authors INNER JOIN shop_book_a WHERE shop_books.book_id = shop_book_a.b_id and shop_authors.authors_id = shop_book_a.a_id and visible='1' and authors_id='$author'")
-                //->where('visible','1')
+            //$sortPage = $this->myPdo->select('book_id, book_name, img, price, visible')
+            ->table("shop_books, shop_authors INNER JOIN shop_book_a WHERE shop_books.book_id = shop_book_a.b_id and shop_authors.authors_id = shop_book_a.a_id and visible='1' and authors_id='$author'")
+            //->table("shop_books, shop_authors")
+              //  ->join('shop_book_a')
+                //->where(array('shop_books.book_id' => 'shop_book_a.b_id' , 'shop_authors.authors_id' => 'shop_book_a.a_id', 'visible'=>'1', 'authors_id'=>$author))
                 //->limit($start_pos, $perpage)
                 ->query()
                 ->commit();
+
+            //var_dump($sortPage);
         }
         elseif(isset($params[genre]))
         {
@@ -114,22 +119,21 @@ class HomeCntr
     function detailsAction()
     {
         $params = $this->fc->getParams();
-        $book_id = abs((int)$params[id]);
-        if($book_id)
-        {
-            $detailsPage = $this->myPdo->select('DISTINCT book_id, price, book_name, img, content, GROUP_CONCAT(DISTINCT authors_name) as authors_name, GROUP_CONCAT(DISTINCT genre_name) as genre_name')
+        $book_id = abs((int)$params[id]); //validator
+
+/*            $detailsPage = $this->myPdo->select('DISTINCT book_id, price, book_name, img, content, GROUP_CONCAT(DISTINCT authors_name) as authors_name, GROUP_CONCAT(DISTINCT genre_name) as genre_name')
                 ->table("shop_books, shop_authors, shop_genre INNER JOIN shop_book_a, shop_book_g WHERE shop_books.book_id = shop_book_a.b_id and shop_authors.authors_id = shop_book_a.a_id and shop_books.book_id = shop_book_g.b_id and shop_genre.genre_id = shop_book_g.g_id and book_id = $book_id and visible='1' GROUP BY book_name")
                 //->where('visible', '1')
                 ->query()
                 ->commit();
-        }
+*/
 
-        $detailsPage = ($this->dataPalette->detailsPage($detailsPage[0]));
+     //   $detailsPage = ($this->dataPalette->detailsPage($detailsPage[0]));
 
-        $this->data->setmArray('TITLE', 'Details');
+//        $this->data->setmArray('TITLE', 'Details');
         $this->data->setmArray('BOOKLIST', $detailsPage);
         $this->data->setPage('lib/views/main.html');
-        $this->data->setData($params);
+//        $this->data->setData($params);
     }
 
     function formAction()

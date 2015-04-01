@@ -26,13 +26,12 @@ class FrontCntr
         //сприлим по /
         $splits = explode('/', trim($request, '/'));
         //выбор контроллера
-//        $this->_controller = !empty($splits[0]) ? ucfirst($splits[0]) . 'Cntr' : 'HomeCntr';
-        $this->_controller = !empty($splits[3]) ? ucfirst($splits[3]) . 'Cntr' : 'HomeCntr';
+        $this->_controller = !empty($splits[CONTROLLER]) ? ucfirst($splits[CONTROLLER]) . 'Cntr' : 'HomeCntr';
         //выбор экшена
        // $this->_action = !empty($splits[1]) ? $splits[1] . 'Action' : 'indexAction';
-        if (!empty($splits[4]))
+        if (!empty($splits[ACTION]))
         {
-            $this->_action = $splits[4].'Action';
+            $this->_action = $splits[ACTION].'Action';
         }
         else
         {
@@ -46,10 +45,10 @@ class FrontCntr
             }
         }
         //если есть параметры и значения
-        if (!empty($splits[5])) {
+        if (!empty($splits[PARAM])) {
             $keys = $values = array();
-            for ($i = 5, $cnt = count($splits); $i < $cnt; $i++) {
-                if ($i % 2 != 0) {
+            for ($i = PARAM, $cnt = count($splits); $i < $cnt; $i++) {
+                if (0 == $i % 2) {
                     //четное параметр
                     $keys[] = $splits[$i];
                 } else {

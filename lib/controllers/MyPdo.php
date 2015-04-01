@@ -9,6 +9,7 @@ class MyPdo
     protected $table;
     protected $where;
     protected $is;
+    protected $whereArr;
     protected $order;
     protected $delete;
     protected $update;
@@ -18,6 +19,7 @@ class MyPdo
     protected $query;
     protected $limit_start;
     protected $limit_end;
+    protected $join;
 
     private function __construct()
     {
@@ -113,12 +115,23 @@ class MyPdo
         return $this;
     }
 
-    /*
-    *where
-    *
-    *@param val: takes value coll.
-    */
-    public function where($is, $val)
+    public function join($val)
+    {
+        if(trim($val)=='')
+        {
+            $this->queryError.= "Error. Table is empty!.<br>";
+            return $this;
+        }
+        else
+        {
+            $val= $this->protect($val);
+            $this->join = $val;
+        }
+        return $this;
+    }
+
+
+    /*public function where($is, $val)
     {
         if(trim($val)=='' || trim($is)=='')
         {
@@ -132,13 +145,31 @@ class MyPdo
             $this->where=$val;
         }
         return $this;
-    }
-    /*
-    *limit
-    *
-    *@param val: takes value coll.
-    */
+    }*/
 
+/*
+*where
+*
+*@param val: takes value coll.
+*/
+    public function where($arr)
+{
+    if(!is_array($arr))
+    {
+        $this->queryError.="Error. Wrong parametre WHERE<br>";
+        return $this;
+    }
+    else
+    {
+        $this->whereArr = $arr;
+    }
+    return $this;
+}
+/*
+*limit
+*
+*@param val: takes value coll.
+*/
     public function limit($start, $end)
     {
         if(trim($end)=='' || trim($start)=='')
@@ -212,10 +243,30 @@ class MyPdo
         {
             $set="SET $this->old = :set";
         }
-        if(strlen($this->is)!=0)
+        if(count($this->whereArr)!=0)
         {
-            $where="WHERE $this->is = :where";
+            if(count($this->whereArr) === 1)
+            {
+                foreach ($this->whereArr as $key => $val)
+                {
+                    $where = "WHERE $key = :$key";
+                }
+            }
+            else
+            {
+                $where .= "WHERE ";
+                foreach ($this->whereArr as $key => $val)
+                {
+                    $where .= "$key = :$key AND ";
+                }
+                $where = substr($where, 0, -4);
+            }
         }
+
+        //if(strlen($this->is)!=0)
+        //{
+        //    $where="WHERE $this->is = :where";
+        //}
         if(strlen($this->order)!=0)
         {
             $order="ORDER BY :order";
@@ -228,8 +279,11 @@ class MyPdo
         {
             $this->select = "SELECT $this->select FROM ";
         }
-
-        $this->query = $this->select.$this->delete.$this->insert.$this->update.$this->table.' '.$set.' '.$where.' '.$order.' '.$limit;
+        if(strlen($this->join)!=0)
+        {
+            $this->join = "INNER JOIN $this->join";
+        }
+        $this->query = $this->select.$this->delete.$this->insert.$this->update.$this->table.' '.$this->join.' '.$set.' '.$where.' '.$order.' '.$limit;
         return $this;
     }
 
@@ -267,6 +321,13 @@ class MyPdo
         {
             $stmt->bindParam(':where',$this->where);
         }
+        if(!empty($this->whereArr))
+        {
+            foreach($this->whereArr as $key=>$val)
+            {
+                $stmt->bindParam(':'.$key,$val,PDO::PARAM_STR);
+            }
+        }
         if(strlen($this->order) !=0)
         {
             $stmt->bindParam(':order',$this->order);
@@ -277,6 +338,7 @@ class MyPdo
             $stmt->bindValue(':end',(int)$this->limit_end,PDO::PARAM_INT);
         }
         $err=$stmt->execute();
+
         if($err===false)
         {
             $this->queryError = 'Wrong data!';

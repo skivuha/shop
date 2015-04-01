@@ -1,7 +1,13 @@
 <?php
 class Palette
 {
+    private $myPdo;
     private $data;
+    public function __construct()
+    {
+        $this->myPdo = MyPdo::getInstance();
+        $this->data = DataCont::getInstance();
+    }
 
     function mainPage($arr)
     {
@@ -47,8 +53,16 @@ class Palette
         return $data;
     }
 
-    function detailsPage($arr)
+    function detailsPage($book_id)
     {
+        $this->data->setmArray('TITLE', 'Details');
+        $arr = $this->myPdo->select('DISTINCT book_id, price, book_name, img, content, GROUP_CONCAT(DISTINCT authors_name) as authors_name, GROUP_CONCAT(DISTINCT genre_name) as genre_name')
+            ->table("shop_books, shop_authors, shop_genre INNER JOIN shop_book_a, shop_book_g WHERE shop_books.book_id = shop_book_a.b_id and shop_authors.authors_id = shop_book_a.a_id and shop_books.book_id = shop_book_g.b_id and shop_genre.genre_id = shop_book_g.g_id and book_id = $book_id and visible='1' GROUP BY book_name")
+            //->where('visible', '1')
+            ->query()
+            ->commit();
+        $arr = $arr[0];
+
         $data = '';
         $data.='<div id="bookDetails">';
         $data.='<h1>'.$arr['book_name'].'</h1>';

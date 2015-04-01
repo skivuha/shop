@@ -20,9 +20,9 @@ class PaletteNav
 
     function pageFromParams($params)
     {
-        if(isset($params[page]))
+        if(isset($params['page']))
         {
-            $page = abs((int)$params[page]);
+            $page = abs((int)$params['page']);
             if($page < 1) $page = 1;
         }
         else
@@ -68,7 +68,7 @@ class PaletteNav
 
     private function countRow()
     {
-        $count = $this->myPdo->select('COUNT(book_id) as count_rows')->table('shop_books')->where('visible', '1')->query()->commit();
+        $count = $this->myPdo->select('COUNT(book_id) as count_rows')->table('shop_books')->where(array('visible'=>1))->query()->commit();
         return $count[0]['count_rows'];
     }
 
@@ -76,18 +76,20 @@ class PaletteNav
     {
         $request = $_SERVER['REQUEST_URI'];
         $splits = explode('/', trim($request, '/'));
-        $controller = !empty($splits[3]) ? ucfirst($splits[3]) . 'Cntr' : 'Home';
-        $action = !empty($splits[4]) ? $splits[4] . 'Action' : 'index';
+        $controller = !empty($splits[CONTROLLER]) ? ucfirst($splits[CONTROLLER]) . 'Cntr' : 'Home';
+        $action = !empty($splits[ACTION]) ? $splits[ACTION] . 'Action' : 'index';
         $params = $this->fc->getParams();
-        if(!$splits[3])
+        if(!$splits[CONTROLLER])
         {
             $this->uri = '';
             $this->uri.="$controller/$action";
         }
         else
         {
+            $nameController = $splits[CONTROLLER];
+            $nameAction = $splits[ACTION];
             $this->uri = '';
-            $this->uri.="$splits[3]/$splits[4]";
+            $this->uri.="$nameController/$nameAction";
             foreach($params as $key => $value)
             {
                 if($key != 'page' ) $this->uri .= "/$key/$value";

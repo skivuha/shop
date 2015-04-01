@@ -9,7 +9,7 @@
 	width: 766px;
 	margin: 0 auto;
 	outline: 0px solid #cc0000;
-	background-image: url(/~user2/PHP/shop/lib/views/img/bg.png);
+	background-image: url(/lib/views/img/bg.png);
 	background-repeat: repeat-y;
 	background-color: #3b4347;
 }
@@ -27,7 +27,7 @@
 	width: 233px;
 	height: 87px;
 	outline: 0px solid #cc0000;
-    background-image: url(/~user2/PHP/shop/lib/views/img/logo.png);
+    background-image: url(/lib/views/img/logo.png);
 	background-repeat: no-repeat;
 	position: absolute;
 	top: 22px;
@@ -64,7 +64,7 @@
 #menu{    /*menu*/
 	height: 63px;
 	outline: 0px solid #cc0000;
-    background-image: url(/~user2/PHP/shop/lib/views/img/navBg.png);
+    background-image: url(/lib/views/img/navBg.png);
 	background-repeat: no-repeat;
 	background-position: 22px 0;
     
@@ -82,7 +82,7 @@
 
 .firstMenu{         /*first link menu*/
 	margin-left: 90px;
-    background-image: url(/~user2/PHP/shop/lib/views/img/navRaz.png);
+    background-image: url(/lib/views/img/navRaz.png);
     padding-left: 40px;
     background-position: left;
     background-repeat: no-repeat;
@@ -95,7 +95,7 @@
 	font:20px Arial, sans-serif;
 	color:#ffffff;
 	padding-right: 70px;
-    background-image: url(/~user2/PHP/shop/lib/views/img/navRaz.png);
+    background-image: url(/lib/views/img/navRaz.png);
 	background-repeat: no-repeat;
 	background-position: right;
 }
@@ -119,7 +119,7 @@
 	width: 12px;
 	height: 13px;
 	position: absolute;
-    background-image: url(/~user2/PHP/shop/lib/views/img/cornerL.png);
+    background-image: url(/lib/views/img/cornerL.png);
 	background-repeat: no-repeat;
 	left: 0px;
 }
@@ -128,7 +128,7 @@
 	width: 14px;
 	height: 13px;
 	position: absolute;
-    background-image: url(/~user2/PHP/shop/lib/views/img/cornerR.png);
+    background-image: url(/lib/views/img/cornerR.png);
 	background-repeat: no-repeat;
 	right: 0px;
 }
@@ -315,7 +315,7 @@
 
 .firstMenuDetails{
 	margin-left: 55px;
-    background-image: url(/~user2/PHP/shop/lib/views/img/navRaz.png);
+    background-image: url(/lib/views/img/navRaz.png);
     padding-left: 30px;
     background-position: left;
     background-repeat: no-repeat;
