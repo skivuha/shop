@@ -4,11 +4,13 @@ class PaletteMain
     private $myPdo;
     private $data;
     public $nav;
+    private $session;
 
     public function __construct()
     {
         $this->myPdo = MyPdo::getInstance();
         $this->data = DataCont::getInstance();
+        $this->session = Session::getInstance();
     }
 
     function bookCreate($arr)
@@ -144,6 +146,17 @@ class PaletteMain
         return $data;
     }
 
+    function formExit()
+    {
+
+        $data = '<form action="/Home/logout/" method="post"><div id="exit"><span>Hello <span id="nameSession">'.$this->session->getSession('login_user').'</span></span>
+        <input type="submit" class="btn btn-default btn-xs" value="Exit" name="exit"></div>
+        <a href="#"><span class="glyphicon glyphicon-shopping-cart"> (0)</span></a></form>';
+        return $data;
+    }
+
+    function logout(){}
+
     function formLogin()
     {
         $data = '';
@@ -153,7 +166,7 @@ class PaletteMain
         $data .='<input type="email" class="form-control" id="exampleInputEmail3" placeholder="Enter email" name="email">';
         $data .='<label class="sr-only" for="exampleInputPassword3">Password</label>';
         $data .='<input type="password" class="form-control" id="exampleInputPassword3" placeholder="Password" name="password">';
-        $data .='</div><div id="rememberMe"><div class="checkbox"><label><input type="checkbox"> Remember me</label></div>';
+        $data .='</div><div id="rememberMe"><div class="checkbox"><label><input type="checkbox" name="remember"> Remember me</label></div>';
         $data .='<input type="submit" class="btn btn-default btn-xs" value="Sign in" name="signin">';
         $data .='<div><label><a href="/Regestration/index/">Regestration</a></label></div></div></form>';
         return $data;

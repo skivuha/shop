@@ -36,6 +36,10 @@ class View
             {
                 $this->mArray['LOGINFORM'] = $this->palletMain->formLogin();
             }
+            else
+            {
+                $this->mArray['LOGINFORM'] = $this->palletMain->formExit();
+            }
 
         }
         elseif('regestration' === $file)

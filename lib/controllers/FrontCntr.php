@@ -76,6 +76,8 @@ class FrontCntr
             $method = $rc->getMethod($this->getAction());
             // передаем управление конктретному контроллеру
             $method->invoke($controller);
+
+            new Check();
             //}
             $view = new View();
             $view->drowPage();

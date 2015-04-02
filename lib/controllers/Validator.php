@@ -40,7 +40,7 @@ class Validator
     {
         $this->value = '';
         $val = $this->clearData($val);
-        if(!preg_match("/^[a-z0-9_-]{6,18}$/", $val))
+        if(!preg_match("/^[a-zA-Z0-9_-]{6,18}$/", $val))
         {
             return false;
         }

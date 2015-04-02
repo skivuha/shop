@@ -46,6 +46,12 @@
     position: absolute;
 }
 
+#exit input{
+    color: #fff;
+    background-color: #cc0000;
+    padding: 2px 15px;
+}
+
 .admin input{           /*admin*/
     padding: 1px;
     margin-bottom: 2px;
@@ -327,7 +333,7 @@
     background-color: #cc0;
     padding: 5px 30px!important;
     -moz-border-radius: 5px;
-    -webkit-border-radius: 5px; 
+    -webkit-border-radius: 5px;
 }
 
 #formbuy .quantity{
@@ -411,4 +417,10 @@
 
 #buy span{
     color: #cc0000;
+}
+#exampleInputPassword3{
+    margin-left: 10px;
+}
+#nameSession{
+    color: rgb(146, 163, 0) !important;
 }

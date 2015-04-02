@@ -24,6 +24,7 @@ class RegestrationCntr
 
 
 
+
     function adduserAction()
     {
         if(isset($_POST))

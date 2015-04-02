@@ -20,13 +20,7 @@ class Session
 
     public function setSession($key, $val)
     {
-        if(!isset($_SESSION[$key]))
-        {
             $_SESSION[$key]=$val;
-            return 'Session created';
-        }
-        else return 'Session exist';
-
     }
 
     public function getSession($key)
