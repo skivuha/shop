@@ -74,7 +74,6 @@ class PaletteMain
             $genre = abs((int)$params[genre]);
             $arr = $this->myPdo->select('book_id, book_name, img, price, visible')
                 ->table("shop_books, shop_genre INNER JOIN shop_book_g WHERE shop_books.book_id = shop_book_g.b_id and shop_genre.genre_id = shop_book_g.g_id and visible='1' and genre_id=$genre")
-
                 ->query()
                 ->commit();
         }
@@ -142,6 +141,21 @@ class PaletteMain
         $data.='<p class="detailsfirst"><b>Author: </b>'.$arr['authors_name'].'</p>';
         $data.='<p><b>Genre: </b>'.$arr['genre_name'].'</p>';
         $data.=$arr['content'].'</div></div>';
+        return $data;
+    }
+
+    function formLogin()
+    {
+        $data = '';
+        $data .='<form class="form-inline" method="POST">';
+        $data .='<div class="form-group">';
+        $data .='<label class="sr-only" for="exampleInputEmail3">Email address</label>';
+        $data .='<input type="email" class="form-control" id="exampleInputEmail3" placeholder="Enter email" name="email">';
+        $data .='<label class="sr-only" for="exampleInputPassword3">Password</label>';
+        $data .='<input type="password" class="form-control" id="exampleInputPassword3" placeholder="Password" name="password">';
+        $data .='</div><div id="rememberMe"><div class="checkbox"><label><input type="checkbox"> Remember me</label></div>';
+        $data .='<input type="submit" class="btn btn-default btn-xs" value="Sign in" name="signin">';
+        $data .='<div><label><a href="/Regestration/index/">Regestration</a></label></div></div></form>';
         return $data;
     }
 

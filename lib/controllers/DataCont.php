@@ -7,6 +7,7 @@ class DataCont
     private $mArray;
     private $flag;
     private $param;
+    private $user;
 
 
     public static function getInstance()
@@ -38,6 +39,11 @@ class DataCont
         $this->mArray[$key] = $val;
     }
 
+    public function setUser($val)
+    {
+        $this->user = $val;
+    }
+
     public function setFlag($val)
     {
         $this->flag = $val;
@@ -66,6 +72,10 @@ class DataCont
 
     public function getParam(){
         return $this->param;
+    }
+
+    public function getUser(){
+        return $this->user;
     }
 }
 ?>

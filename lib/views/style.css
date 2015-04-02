@@ -42,7 +42,7 @@
 
 #buy{    /*admin*/
     right: 23px;
-    top: 30px;
+    top: 10px;
     position: absolute;
 }
 
@@ -406,5 +406,9 @@
 /*end genre*/
 
 #formVal span{
+    color: #cc0000;
+}
+
+#buy span{
     color: #cc0000;
 }

@@ -8,6 +8,7 @@ class View
     private $flag;
     private $palletMain;
     private $param;
+    private $user;
 
     function __construct()
     {
@@ -19,6 +20,7 @@ class View
         $this->flag = $this->data->getFlag();
         $this->param = $this->data->getParam();
         $this->mArray = $this->data->getmArray();
+        $this->user = $this->data->getUser();
     }
 
     function choisePalett()
@@ -30,17 +32,21 @@ class View
         {
             $this->mArray['BOOKLIST'] = $this->palletMain->$flag($this->param);
             $this->mArray['TITLE'] = ucfirst($flag);
+            if(false === $this->user)
+            {
+                $this->mArray['LOGINFORM'] = $this->palletMain->formLogin();
+            }
+
         }
         elseif('regestration' === $file)
         {
             $this->mArray['BOOKLIST'] = $this->palletAuth->$flag($this->param);
             $this->mArray['TITLE'] = ucfirst($flag);
         }
-        if ('index' === $this->flag && 'main' === $file)
+        if (('index' === $this->flag || 'logon' === $this->flag) && 'main' === $file)
         {
             $this->mArray['PAGENAV'] = $this->palletMain->getNav();
         }
-
 
     }
 

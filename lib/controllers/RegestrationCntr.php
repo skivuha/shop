@@ -22,6 +22,8 @@ class RegestrationCntr
         $this->data->setPage('lib/views/regestration.html');
     }
 
+
+
     function adduserAction()
     {
         if(isset($_POST))
@@ -85,12 +87,12 @@ class RegestrationCntr
         {
             $arr = $this->myPdo->select('login_user')
                 ->table('shop_users')
-                ->where(array('login_user'=>$name))
+                ->where(array('mail_user'=>$email))
                 ->query()
                 ->commit();
             if(!empty($arr))
             {
-                $this->data->setmArray('ERROR_NAME', 'login already exists');
+                $this->data->setmArray('ERROR_NAME', 'E-mail already exists');
                 return false;
             }
             else
@@ -103,13 +105,12 @@ class RegestrationCntr
                     ->commit();
                if($arr)
                {
-                   $this->data->setPage('lib/views/main.html');
-                   $this->data->setFlag('index');
+                   header("Location: /");
                    return true;
                }
                 else
                 {
-                    $this->data->setmArray('ERROR_NAME', 'An error occurred while registering a new user. Contact the Administration.');
+                    $this->data->setmArray('STATUS', 'An error occurred while registering a new user. Contact the Administration.');
                     return false;
                 }
             }

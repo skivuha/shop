@@ -2,7 +2,7 @@
 
 define('SALT', "mimimi");
 //колличество товаров на странице
-define('PERPAGE', 6);
+define('PERPAGE', 9);
 
 define('DB_HOST', 'localhost');
 //define('DB_LOGIN', 'user2');
