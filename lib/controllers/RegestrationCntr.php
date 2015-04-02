@@ -4,11 +4,15 @@ class RegestrationCntr
     private $fc;
     private $data;
     private $check;
+    private $myPdo;
+    private $encode;
 
     public function __construct()
     {
         $this->fc = FrontCntr::getInstance();
+        $this->myPdo = MyPdo::getInstance();
         $this->data = DataCont::getInstance();
+        $this->encode = new Encode();
         $this->check = new Validator();
         $this->data->setFlag($this->fc->getAction());
     }
@@ -40,6 +44,7 @@ class RegestrationCntr
                     $pass = $data_post['password'];
                 }
             }
+
             if('' === $data_post['username'])
             {
                 $this->data->setmArray('ERROR_NAME', 'Field is empty');
@@ -57,69 +62,63 @@ class RegestrationCntr
                     $name = $data_post['username'];
                 }
             }
-        }
-        $this->data->setPage('lib/views/regestration.html');
-        if (false !== $name && false !== $pass)
+
+            if('' === $data_post['email'])
+            {
+                $this->data->setmArray('ERROR_EMAIL', 'Field is empty');
+                $email = false;
+            }
+            else
+            {
+                if( false === $this->check->checkEmail($data_post['email']))
+                {
+                    $this->data->setmArray('ERROR_EMAIL', 'Wrong data');
+                    $email = false;
+                }
+                else
+                {
+                    $email = $data_post['email'];
+                }
+            }
+            $this->data->setPage('lib/views/regestration.html');
+        if (false !== $name && false !== $pass && false !== $email)
         {
-            //запрос в базу на проверку есть ли такой логин
-
-
+            $arr = $this->myPdo->select('login_user')
+                ->table('shop_users')
+                ->where(array('login_user'=>$name))
+                ->query()
+                ->commit();
+            if(!empty($arr))
+            {
+                $this->data->setmArray('ERROR_NAME', 'login already exists');
+                return false;
+            }
+            else
+            {
+                $key_user = $this->encode->generateCode($name);
+                $pass = md5($key_user.$pass.SALT);
+                $arr = $this->myPdo->insert()
+                    ->table("shop_users SET login_user = '$name', password_user = '$pass', mail_user = '$email', key_user = '$key_user'")
+                    ->query()
+                    ->commit();
+               if($arr)
+               {
+                   $this->data->setPage('lib/views/main.html');
+                   $this->data->setFlag('index');
+                   return true;
+               }
+                else
+                {
+                    $this->data->setmArray('ERROR_NAME', 'An error occurred while registering a new user. Contact the Administration.');
+                    return false;
+                }
+            }
         }
+        }
+
     }
 
-
-
-    public function indexAction1()
-    {
-        $data = DataCont::getInstance();
-        $check = new Validator();
-        //$check->checkForm($_POST['user']);
-        $data_post = $check->clearDataArr($_POST);
-        if('' === $data_post['password'])
-        {
-            $data->setmArray('ERROR_PASS', 'Field is empty');
-            $pass = false;
-        }
-        else
-        {
-            if( false === $check->checkPass($data_post['password']))
-            {
-                $data->setmArray('ERROR_PASS', 'Wrong data');
-                $pass = false;
-            }
-            else
-            {
-                $pass = $data_post['password'];
-            }
-        }
-
-        if('' === $data_post['user'])
-        {
-            $data->setmArray('ERROR_NAME', 'Field is empty');
-            $name = false;
-        }
-        else
-        {
-            if( false === $check->checkForm($data_post['user']))
-            {
-                $data->setmArray('ERROR_NAME', 'Wrong data');
-                $name = false;
-            }
-            else
-            {
-                $name = $data_post['user'];
-            }
-        }
-
-
-        //$data->setmArray('error_name', $check->getErrors());
-        //$name = $check->getValue();
-        //$check->checkPass($_POST['password']);
-        //$data->setmArray('error_pass', $check->getErrors());
-        //$pass = $check->getValue();
-        $data->setmArray('TITLE', 'Booker');
-        $data->setPage('lib/views/main.html');
-        if (false !== $name && false !== $pass)
+/*        if (false !== $name && false !== $pass)
         {
             //$link = new MyPdo();
             //$name = $link->checkUser($name);
@@ -143,7 +142,7 @@ class RegestrationCntr
                     //     $b = $sess->setSession($name, md5('lalala'));
                     //    $a = $sess->getSession($name);
                     //var_dump($_SESSION);
-                    $data->setPage('lib/views/calendar.html');
+              /*      $data->setPage('lib/views/calendar.html');
                 }
                 else
                 {
@@ -151,6 +150,6 @@ class RegestrationCntr
                 }
             }
         }
-    }
+    }*/
 }
 ?>

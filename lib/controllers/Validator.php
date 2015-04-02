@@ -50,6 +50,20 @@ class Validator
         }
     }
 
+    public function checkEmail($val)
+    {
+        $this->value = '';
+        $val = $this->clearData($val);
+        if(!filter_var($val, FILTER_VALIDATE_EMAIL))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
     public function getValue(){
         return $this->value;
     }

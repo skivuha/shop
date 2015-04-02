@@ -349,16 +349,19 @@ class MyPdo
             if(trim($this->delete)!= '')
             {
                 $arr = 'Query OK. Data delete.';
+                $this->defaultVar();
                 return $arr;
             }
             if(trim($this->update)!= '')
             {
                 $arr = 'Query OK. Data update.';
+                $this->defaultVar();
                 return $arr;
             }
             if(trim($this->insert)!= '')
             {
                 $arr = 'Query OK. Data insert.';
+                $this->defaultVar();
                 return $arr;
             }
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -376,7 +379,7 @@ class MyPdo
     {
         $this->select='';
         $this->table='';
-        $this->where='';
+        unset($this->whereArr);
         $this->is='';
         $this->order='';
         $this->delete='';
