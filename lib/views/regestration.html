@@ -1,43 +1,60 @@
 <!DOCTYPE html>
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <link href="/lib/views/style.css" type="text/css" rel="stylesheet">
-    <title>%#%TITLE%#%</title>
-</head>
-<body>
-    <div class="container well col-sm-4 col-sm-offset-4">
-        %#%STATUS%#%
-    <form action="/Regestration/adduser/" class="simple-form" name="frm" id="formVal" method="POST">
-        <div class="row">
-            <div>
-                <label>Name: <span>%#%ERROR_NAME%#%</span></label>
-                <input type="text" class="form-control" required name="username" />
+<html>
+    <head>
+        <title>%#%TITLE%#%</title>
+        <!--<link href="/lib/views/style.css" type="text/css" rel="stylesheet">-->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+        <link href="/lib/views/style.css" type="text/css" rel="stylesheet">
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="header">
+                <div id="logo"><a href="/"></a></div>    <!--LOGO-->
+                <div id="buy">
+                    %#%LOGINFORM%#%
+                </div>
             </div>
-        </div>
-        <br />
-        <div class="row">
-            <div>
-                <label>Password: <span>%#%ERROR_PASS%#%</span></label>
-                <input type="password" class="form-control" required name="password" />
+            <div id="content"> 
+                <div>&nbsp;</div> 
+                <h2>Regestration</h2>           <!--content-->
+                <!-- content -->
+                <div class="container well col-sm-4 col-sm-offset-4">
+                    %#%STATUS%#%
+                    <form action="/Regestration/adduser/" class="simple-form" name="frm" id="formVal" method="POST">
+                        <div class="row">
+                            <div>
+                                <label>Name: <span>%#%ERROR_NAME%#%</span></label>
+                                <input type="text" class="form-control" required name="username" />
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div>
+                                <label>Password: <span>%#%ERROR_PASS%#%</span></label>
+                                <input type="password" class="form-control" required name="password" />
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div>
+                                <label>E-mail: <span>%#%ERROR_EMAIL%#%</span></label>
+                                <input type="email" class="form-control" required id="email" name="email" />
+                            </div>
+                        </div>
+                        <br />
+                        <br />
+                        <div class="row col-sm-offset-3">
+                            <div>
+                                <button class="btn btn-default" type="reset">Reset</button>
+                                <button class="btn btn-default">Send</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- content -->
+                <div class="reviews"></div>             <!--cleaning-->
             </div>
+            <div class="reviews"></div>             <!--cleaning-->
         </div>
-        <br />
-        <div class="row">
-            <div>
-                <label>E-mail: <span>%#%ERROR_EMAIL%#%</span></label>
-                <input type="email" class="form-control" required id="email" name="email" />
-            </div>
-        </div>
-        <br />
-        <br />
-        <div class="row col-sm-offset-3">
-            <div>
-                <button class="btn btn-default" type="reset">Reset</button>
-                <button class="btn btn-default">Send</button>
-            </div>
-        </div>
-    </form>
-</div>
-</body>
+    </body>
 </html>

@@ -150,8 +150,8 @@ class PaletteMain
     {
 
         $data = '<form action="/Home/logout/" method="post"><div id="exit"><span>Hello <span id="nameSession">'.$this->session->getSession('login_user').'</span></span>
-        <input type="submit" class="btn btn-default btn-xs" value="Exit" name="exit"></div>
-        <a href="#"><span class="glyphicon glyphicon-shopping-cart"> (0)</span></a></form>';
+        <input type="submit" class="btn btn-default btn-xs" value="Exit" name="exit"></div></form>
+        <a href="/Cart/index"><span class="glyphicon glyphicon-shopping-cart"> (0)</span></a>';
         return $data;
     }
 

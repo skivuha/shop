@@ -47,6 +47,12 @@ class View
             $this->mArray['BOOKLIST'] = $this->palletAuth->$flag($this->param);
             $this->mArray['TITLE'] = ucfirst($flag);
         }
+        elseif('cart' === $file)
+        {
+            $this->mArray['LISTCHOISEBOOK'] = $this->palletAuth->$flag($this->param);
+            $this->mArray['LOGINFORM'] = $this->palletMain->formExit();
+            $this->mArray['TITLE'] = ucfirst($flag);
+        }
         if (('index' === $this->flag || 'logon' === $this->flag) && 'main' === $file)
         {
             $this->mArray['PAGENAV'] = $this->palletMain->getNav();

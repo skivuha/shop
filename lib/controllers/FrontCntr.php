@@ -63,6 +63,7 @@ class FrontCntr
     //роутер
     public function route()
     {
+        new Check();
         //проверяем контроллер на существование данного класса
         if (class_exists($this->getCntr())) {
             //делаем экземпляр класса рефлекшн класс
@@ -76,9 +77,8 @@ class FrontCntr
             $method = $rc->getMethod($this->getAction());
             // передаем управление конктретному контроллеру
             $method->invoke($controller);
-
-            new Check();
             //}
+
             $view = new View();
             $view->drowPage();
 

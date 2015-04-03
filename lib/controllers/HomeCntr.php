@@ -60,14 +60,16 @@ class HomeCntr
 
     function logoutAction()
     {
-        $this->session->removeSession('id_user');
-        $this->session->removeSession('mail_user');
-        $this->session->removeSession('login_user');
+        session_destroy();
+        $this->data->setUser(false);
+        //unset($_COOKIE["code_user"]);
         //setcookie("code_user", '', time()-3600);
-        $this->cookie->remove('code_user');
-        $params = $this->fc->getParams();
-        $this->data->setParam($params);
-        $this->data->setPage('lib/views/main.html');
+        //header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+        //header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+        //header("Cache-Control: no-cache, must-revalidate");
+
+        //$this->cookie->remove('code_user');
+        header("Location: /");
     }
 
     function logon()

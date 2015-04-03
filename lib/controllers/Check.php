@@ -2,7 +2,7 @@
 class Check
 {
     private $data;
-    private $fc;
+    //private $fc;
     private $valid;
     private $cookie;
     private $session;
@@ -10,7 +10,7 @@ class Check
 
     public function __construct()
     {
-        $this->fc = FrontCntr::getInstance();
+        //$this->fc = FrontCntr::getInstance();
         $this->data = DataCont::getInstance();
         $this->valid = new Validator();
         $this->cookie = new Cookie();
