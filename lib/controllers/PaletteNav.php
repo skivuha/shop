@@ -79,7 +79,7 @@ class PaletteNav
         $controller = !empty($splits[CONTROLLER]) ? ucfirst($splits[CONTROLLER]) . 'Cntr' : 'Home';
         $action = !empty($splits[ACTION]) ? $splits[ACTION] . 'Action' : 'index';
         $params = $this->fc->getParams();
-        if(!$splits[CONTROLLER])
+        if(!$splits[CONTROLLER] || !$splits[ACTION])
         {
             $this->uri = '';
             $this->uri.="$controller/$action";

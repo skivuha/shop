@@ -2,7 +2,7 @@
 class Check
 {
     private $data;
-    //private $fc;
+    private $fc;
     private $valid;
     private $cookie;
     private $session;
@@ -10,7 +10,7 @@ class Check
 
     public function __construct()
     {
-        //$this->fc = FrontCntr::getInstance();
+        $this->fc = FrontCntr::getInstance();
         $this->data = DataCont::getInstance();
         $this->valid = new Validator();
         $this->cookie = new Cookie();
@@ -31,7 +31,7 @@ class Check
             if (isset($_COOKIE['code_user']))
             {
                 $code_user=$this->valid->clearData($_COOKIE['code_user']);
-                $arr = $this->myPdo->select('id_user, mail_user, password_user, key_user, login_user')->table('shop_users')->where(array('code_user' => $code_user))->query()->commit();
+                $arr = $this->myPdo->select('id_user, mail_user, key_user, login_user')->table('shop_users')->where(array('code_user' => $code_user))->query()->commit();
                 if(!empty($arr))
                 {
                     $this->session->setSession('id_user',$arr[0]['id_user']);

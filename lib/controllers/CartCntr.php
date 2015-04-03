@@ -15,7 +15,18 @@ class CartCntr
 
     function indexAction()
     {
+        $params = abs((int)($_SESSION['id_user']));
+        $this->data->setVal($params);
         $this->data->setPage('lib/views/cart.html');
+    }
+
+    function deleteAction()
+    {
+        $params = $this->fc->getParams();
+        $id = abs((int)($params['id']));
+        $this->data->setVal($id);
+        $this->data->setPage('lib/views/cart.html');
+        header("Location: /Cart/index/");
     }
 
     function valid()
@@ -25,5 +36,7 @@ class CartCntr
             header("Location: /");
         }
     }
+
+
 }
 ?>

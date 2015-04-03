@@ -13,7 +13,7 @@ class Cookie
 
     public function remove($key)
     {
-        setcookie($key, '', 1);
+        setcookie($key, '', -1,'/');
     }
 }
 ?>

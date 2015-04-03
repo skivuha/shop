@@ -8,6 +8,7 @@ class DataCont
     private $flag;
     private $param;
     private $user;
+    private $val;
 
 
     public static function getInstance()
@@ -49,6 +50,11 @@ class DataCont
         $this->flag = $val;
     }
 
+    public function setVal($val)
+    {
+        $this->val = $val;
+    }
+
     public function setParam($val)
     {
         $this->param = $val;
@@ -76,6 +82,10 @@ class DataCont
 
     public function getUser(){
         return $this->user;
+    }
+
+    public function getVal(){
+        return $this->val;
     }
 }
 ?>

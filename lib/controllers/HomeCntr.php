@@ -17,20 +17,17 @@ class HomeCntr
             $this->myPdo = MyPdo::getInstance();
             $this->session = Session::getInstance();
             $this->cookie = new Cookie();
+            if($_POST)
+            {
+                $this->logon();
+            }
     }
 
     function indexAction()
     {
-        if($_POST)
-        {
-            $this->logon();
-        }
-        else
-        {
         $params = $this->fc->getParams();
         $this->data->setParam($params);
         $this->data->setPage('lib/views/main.html');
-        }
     }
 
     function sortAction()
@@ -63,13 +60,16 @@ class HomeCntr
         session_destroy();
         $this->data->setUser(false);
         //unset($_COOKIE["code_user"]);
-        //setcookie("code_user", '', time()-3600);
+        //setcookie("code_user", "",-1,'/');
+        $this->cookie->remove('code_user');
+        header("Location: /");
+
         //header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
         //header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
         //header("Cache-Control: no-cache, must-revalidate");
 
         //$this->cookie->remove('code_user');
-        header("Location: /");
+
     }
 
     function logon()

@@ -9,12 +9,14 @@ class View
     private $palletMain;
     private $param;
     private $user;
+    private $palletCart;
 
     function __construct()
     {
         $this->substitution = new Substitution();
         $this->palletMain = new PaletteMain();
         $this->palletAuth = new PalletAuth();
+        $this->palletCart = new PalletCart();
         $this->data = DataCont::getInstance();
         $this->file = $this->data->getPage();
         $this->flag = $this->data->getFlag();
@@ -49,7 +51,7 @@ class View
         }
         elseif('cart' === $file)
         {
-            $this->mArray['LISTCHOISEBOOK'] = $this->palletAuth->$flag($this->param);
+            $this->mArray['LISTCHOISEBOOK'] = $this->palletCart->$flag($this->param);
             $this->mArray['LOGINFORM'] = $this->palletMain->formExit();
             $this->mArray['TITLE'] = ucfirst($flag);
         }
