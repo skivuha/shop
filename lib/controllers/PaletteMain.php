@@ -64,10 +64,13 @@ class PaletteMain
         $id_user = abs((int)($_SESSION['id_user']));
         $id_book = $this->data->getVal();
         $quantity = 1;
-        $this->myPdo->insert()
-            ->table("shop_cart SET user_id = '$id_user', book_id = '$id_book',quantity = '$quantity', status = '0'")
+        $check = $this->myPdo->select('cart_id')
+            ->table("shop_cart WHERE user_id = '$id_user' AND  book_id = '$id_book' AND status = '0'")
             ->query()
             ->commit();
+        if(0 === count($check)) {
+            $this->myPdo->insert()->table("shop_cart SET user_id = '$id_user', book_id = '$id_book',quantity = '$quantity', status = '0'")->query()->commit();
+        }
     }
 
     function index()
@@ -183,33 +186,35 @@ class PaletteMain
     function formExit()
     {
 
-        $data = '<form action="/Home/logout/" method="post"><div id="exit"><span>Hello <span id="nameSession">'.$this->session->getSession('login_user').'</span></span>
+        $data = '<form action="/Regestration/logout/" method="post"><div id="exit"><span>Hello <span id="nameSession">'.$this->session->getSession('login_user').'</span></span>
         <input type="submit" class="btn btn-default btn-xs" value="Exit" name="exit"></div></form>
-        <a href="/Cart/index"><span class="glyphicon glyphicon-shopping-cart"> (0)</span></a>';
+        <a href="/Cart/index"><span class="glyphicon glyphicon-shopping-cart"> My cart</span></a><br>
+        <a href="/Order/index/"><span class="glyphicon glyphicon-home"> My cabinet</span></a>';
         return $data;
     }
 
-    function logout(){}
+
 
     function formLogin()
     {
-       // $data = '<div id="exit"><span>Hello, <span id="nameSession">guest!</span></span></div>
-      //  <a href="/Cart/index"><span class="glyphicon glyphicon-shopping-cart"> My cart</span></a><br>
-      //  <a href="/Order/index"><span class="glyphicon glyphicon-home"> My cabinet</span></a>';
+        $data = '<div id="exit"><span>Hello, <span id="nameSession">guest!</span></span></div>
+        <a href="/Cart/index"><span class="glyphicon glyphicon-shopping-cart"> My cart</span></a><br>
+        <a href="/Regestration/logon/"><span class="glyphicon glyphicon-home"> My cabinet</span></a>';
 
 
 
 
-        $data = '';
-        $data .='<form class="form-inline" method="POST">';
-        $data .='<div class="form-group">';
-        $data .='<label class="sr-only" for="exampleInputEmail3">Email address</label>';
-        $data .='<input type="email" class="form-control" id="exampleInputEmail3" placeholder="Enter email" name="email">';
-        $data .='<label class="sr-only" for="exampleInputPassword3">Password</label>';
-        $data .='<input type="password" class="form-control" id="exampleInputPassword3" placeholder="Password" name="password">';
-        $data .='</div><div id="rememberMe"><div class="checkbox"><label><input type="checkbox" name="remember"> Remember me</label></div>';
-        $data .='<input type="submit" class="btn btn-default btn-xs" value="Sign in" name="signin">';
-        $data .='<div><label><a href="/Regestration/index/">Regestration</a></label></div></div></form>';
+    //   $data = '';
+    //    $data .='<form class="form-inline" method="POST">';
+    //    $data .='<div class="form-group">';
+     //   $data .='<label class="sr-only" for="exampleInputEmail3">Email address</label>';
+    //    $data .='<input type="email" class="form-control" id="exampleInputEmail3" placeholder="Enter email" name="email">';
+     //   $data .='<label class="sr-only" for="exampleInputPassword3">Password</label>';
+    //    $data .='<input type="password" class="form-control" id="exampleInputPassword3" placeholder="Password" name="password">';
+    //    $data .='</div><div id="rememberMe"><div class="checkbox"><label><input type="checkbox" name="remember"> Remember me</label></div>';
+    //   $data .='<input type="submit" class="btn btn-default btn-xs" value="Sign in" name="signin">';
+     //   $data .='<div><label><a href="/Regestration/index/">Regestration</a></label></div></div></form>';
+
         return $data;
     }
 

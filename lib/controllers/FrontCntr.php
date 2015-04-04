@@ -65,14 +65,21 @@ class FrontCntr
     {
         new Check();
         //проверяем контроллер на существование данного класса
-        if (class_exists($this->getCntr())) {
+        if (class_exists($this->getCntr()))
+        {
             //делаем экземпляр класса рефлекшн класс
             $rc = new ReflectionClass($this->getCntr());
             // наш ли это контроллер
             //if($rc->implementsInterface('iController')){
             //проверяем на наличие нужного метода
             if ($rc->hasMethod($this->getAction()))
+            {
                 $controller = $rc->newInstance();
+            }
+            else
+            {
+                header('Location: /');
+            }
             //получаем метод этого объекта
             $method = $rc->getMethod($this->getAction());
             // передаем управление конктретному контроллеру

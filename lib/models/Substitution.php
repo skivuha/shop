@@ -35,6 +35,10 @@ class Substitution
         {
             $this->file = preg_replace('/%#%' .$key. '%#%/i', $val, $this->file);
         }
+        foreach($this->forRender as $key=>$val)
+        {
+            $this->file = preg_replace('/%#%' .$key. '%#%/i', $val, $this->file);
+        }
         $default = '';
         $this->file = preg_replace('/%#%(.*)%#%/Uis', $default, $this->file);
         echo $this->file;

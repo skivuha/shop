@@ -40,7 +40,7 @@ class PalletCart
                 $total += $val['price']*$val['quantity'];
                 $data.='<tr><td>'.$cnt.'</td><td class="book_id" name="'.$val['book_id'].'">'.$val['book_name'].'</td><td><span class="down glyphicon glyphicon-menu-left"></span><span class="quantity">'.$val['quantity'].'</span><span class="up glyphicon glyphicon-menu-right"></span></td><td class="price">'.$val['price']*$val['quantity'].'</td><td><span class="deleteFromCart" name="'.$val['cart_id'].'">X</span></td></tr>';
             }
-        $data.='</table><hr><p id="totalPrice"><span>Total: <span  class="totalSum">'.$total.'</span> $</span><a href="/Order/index/">';
+        $data.='</table><hr><p id="totalPrice"><span>Total: <span  class="totalSum">'.$total.'</span> $</span><a href="/Checkout/index/">';
         if( 0 === $cnt)
         {
             $data.='<input type="submit" class="btn btn-default btn-xs" value="Buy" name="buyTooOrder" disabled />';

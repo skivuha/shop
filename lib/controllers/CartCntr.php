@@ -11,7 +11,7 @@ class CartCntr
         $this->data = DataCont::getInstance();
         $this->data->setFlag($this->fc->getAction());
         $this->myPdo = MyPdo::getInstance();
-        $this->valid();
+        //$this->valid();
 
     }
 
@@ -36,13 +36,7 @@ class CartCntr
         $this->data->setPage('lib/views/cart.html');
     }
 
-    function valid()
-    {
-        if(false == $this->data->getUser())
-        {
-            header("Location: /");
-        }
-    }
+
     function ajax()
     {
         $arr = $this->myPdo->select('book_id, book_name, img, price, visible')->table('shop_books')->where(array('visible' => 1))->limit(0, 1)->query()->commit();

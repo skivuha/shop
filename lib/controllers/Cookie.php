@@ -3,7 +3,7 @@ class Cookie
 {
     public function add($key, $val)
     {
-        setcookie($key, $val, time()+3600*24*7);
+        setcookie($key, $val, time()+3600*24*7, '/');
     }
 
     public function read($key)

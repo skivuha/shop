@@ -13,7 +13,7 @@ class AjaxCntr
         $this->cookie = new Cookie();
     }
 
-    function indexAction()
+/*    function indexAction()
     {
         $arr = $this->myPdo->select('book_id, book_name, img, price, visible')->table('shop_books')->where(array('visible' => 1))->limit(0, 6)->query()->commit();
 
@@ -21,7 +21,7 @@ class AjaxCntr
         $json_response = json_encode($arr);
         echo json_decode($json_response);
     }
-
+*/
     function addQuantityAction()
     {
         $params = $this->fc->getParams();
@@ -29,7 +29,7 @@ class AjaxCntr
         $quantity = abs((int)($params['quantity']));
         $id_user = abs((int)($_SESSION['id_user']));
 
-        $arr = $this->myPdo->update()
+        $this->myPdo->update()
             ->table("shop_cart SET quantity = '$quantity' where user_id = '$id_user' and book_id = '$book_id'")
             ->query()
             ->commit();
@@ -43,8 +43,6 @@ class AjaxCntr
             ->table("shop_cart where cart_id = '$id'")
             ->query()
             ->commit();
-        //$this->data->setPage('lib/views/cart.html');
-        //header("Location: /Cart/index/");
     }
 }
 ?>

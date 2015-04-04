@@ -64,15 +64,9 @@ class HomeCntr
         header("Location: /");
     }
 
-    function logoutAction()
-    {
-        session_destroy();
-        $this->data->setUser(false);
-        $this->cookie->remove('code_user');
-        header("Location: /");
-    }
 
-    function logon()
+
+/*    function logon()
     {
         $this->data->setUser(false);
         $this->data->setPage('lib/views/main.html');
@@ -138,6 +132,6 @@ class HomeCntr
                 }
             }
         }
-    }
+    }*/
 }
 ?>
