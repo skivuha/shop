@@ -193,6 +193,13 @@ class PaletteMain
 
     function formLogin()
     {
+       // $data = '<div id="exit"><span>Hello, <span id="nameSession">guest!</span></span></div>
+      //  <a href="/Cart/index"><span class="glyphicon glyphicon-shopping-cart"> My cart</span></a><br>
+      //  <a href="/Order/index"><span class="glyphicon glyphicon-home"> My cabinet</span></a>';
+
+
+
+
         $data = '';
         $data .='<form class="form-inline" method="POST">';
         $data .='<div class="form-group">';

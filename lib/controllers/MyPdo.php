@@ -284,6 +284,8 @@ class MyPdo
             $this->join = "INNER JOIN $this->join";
         }
         $this->query = $this->select.$this->delete.$this->insert.$this->update.$this->table.' '.$this->join.' '.$set.' '.$where.' '.$order.' '.$limit;
+        //var_dump($this->query);
+       // die();
         return $this;
     }
 

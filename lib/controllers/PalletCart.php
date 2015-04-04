@@ -16,7 +16,7 @@ class PalletCart
     function index()
     {
         $id_user = $this->data->getVal();
-        $arr = $this->myPdo->select('cart_id, quantity, book_name, price')
+        $arr = $this->myPdo->select('cart_id, quantity, book_name, price, shop_books.book_id')
             ->table("shop_users, shop_books INNER JOIN shop_cart WHERE id_user = '$id_user' AND shop_books.book_id = shop_cart.book_id and shop_users.id_user = shop_cart.user_id and status = '0'")
            //->table("shop_users, shop_books INNER JOIN shop_cart")
             //->where(array("`shop_users.id_user`" => "`shop_cart.user_id`", "`shop_books.book_id`" => "`shop_cart.book_id`", 'user_id'=>$id_user))
@@ -37,10 +37,10 @@ class PalletCart
         foreach($arr as $key=>$val)
             {
                 $cnt++;
-                $total += $val['price'];
-                $data.='<tr><td>'.$cnt.'</td><td>'.$val['book_name'].'</td><td><a href="#"> < </a>'.$val['quantity'].'<a href="/Ajax/addQuantity/"> > </a></td><td>'.$val['price'].' $</td><td><a href="/Cart/delete/id/'.$val['cart_id'].'">X</a></td></tr>';
+                $total += $val['price']*$val['quantity'];
+                $data.='<tr><td>'.$cnt.'</td><td class="book_id" name="'.$val['book_id'].'">'.$val['book_name'].'</td><td><span class="down glyphicon glyphicon-menu-left"></span><span class="quantity">'.$val['quantity'].'</span><span class="up glyphicon glyphicon-menu-right"></span></td><td class="price">'.$val['price']*$val['quantity'].'</td><td><span class="deleteFromCart" name="'.$val['cart_id'].'">X</span></td></tr>';
             }
-        $data.='</table><hr><p id="totalPrice"><span >Total: '.$total.' $</span><a href="/Order/index/">';
+        $data.='</table><hr><p id="totalPrice"><span>Total: <span  class="totalSum">'.$total.'</span> $</span><a href="/Order/index/">';
         if( 0 === $cnt)
         {
             $data.='<input type="submit" class="btn btn-default btn-xs" value="Buy" name="buyTooOrder" disabled />';

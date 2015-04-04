@@ -24,13 +24,27 @@ class AjaxCntr
 
     function addQuantityAction()
     {
+        $params = $this->fc->getParams();
+        $book_id = abs((int)($params['id']));
+        $quantity = abs((int)($params['quantity']));
+        $id_user = abs((int)($_SESSION['id_user']));
+
         $arr = $this->myPdo->update()
-            ->table("shop_cart SET quantity = quantity + 1 where user_id = '15'")
+            ->table("shop_cart SET quantity = '$quantity' where user_id = '$id_user' and book_id = '$book_id'")
             ->query()
             ->commit();
-# JSON-encode the response
-        $json_response = json_encode($arr);
-        echo json_decode($json_response);
+    }
+
+    function deleteAction()
+    {
+        $params = $this->fc->getParams();
+        $id = abs((int)($params['id']));
+        $this->myPdo->delete()
+            ->table("shop_cart where cart_id = '$id'")
+            ->query()
+            ->commit();
+        //$this->data->setPage('lib/views/cart.html');
+        //header("Location: /Cart/index/");
     }
 }
 ?>

@@ -453,3 +453,13 @@
     margin-left: 30px;
     padding: 3px 15px;
 }
+
+.deleteFromCart{
+    cursor: pointer;
+}
+.up{
+    cursor: pointer;
+}
+.down{
+    cursor: pointer;
+}
