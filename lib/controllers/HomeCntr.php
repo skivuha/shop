@@ -55,21 +55,21 @@ class HomeCntr
         $this->data->setParam($book_id);
     }
 
+    function addAction()
+    {
+        $params = $this->fc->getParams();
+        $id = abs((int)($params['id']));
+        $this->data->setVal($id);
+        $this->data->setPage('lib/views/main.html');
+        header("Location: /");
+    }
+
     function logoutAction()
     {
         session_destroy();
         $this->data->setUser(false);
-        //unset($_COOKIE["code_user"]);
-        //setcookie("code_user", "",-1,'/');
         $this->cookie->remove('code_user');
         header("Location: /");
-
-        //header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-        //header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-        //header("Cache-Control: no-cache, must-revalidate");
-
-        //$this->cookie->remove('code_user');
-
     }
 
     function logon()

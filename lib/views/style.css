@@ -215,6 +215,25 @@
     -webkit-border-radius: 3px 3px 3px 3px;
 }
 
+#buyBook{               /*buy*/
+    background-color: #2284be;
+    color: #fff;
+    margin-left: 10px;
+    padding: 0 3px 0 3px;
+    -moz-border-radius: 3px 3px 3px 3px;
+    -webkit-border-radius: 3px 3px 3px 3px;
+}
+
+#toCart{               /*toCart*/
+    background-color: #be3921;
+    color: #fff;
+    margin-left: 10px;
+    padding: 0 3px 0 3px;
+    -moz-border-radius: 3px 3px 3px 3px;
+    -webkit-border-radius: 3px 3px 3px 3px;
+}
+
+
 .pager{                 /*nav*/
     text-align: center;
     border-top: 1px solid #ebf1f4;
@@ -423,4 +442,14 @@
 }
 #nameSession{
     color: rgb(146, 163, 0) !important;
+}
+
+#totalPrice{
+    text-align: right;
+    margin-right: 65px;
+}
+
+#totalPrice input{
+    margin-left: 30px;
+    padding: 3px 15px;
 }

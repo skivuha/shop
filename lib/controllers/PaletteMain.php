@@ -15,14 +15,39 @@ class PaletteMain
 
     function bookCreate($arr)
     {
+        $buy = array();
+        $id_user = abs((int)($this->session->getSession('id_user')));
+        if(0 === $id_user)
+        {
+            //session
+        }
+        else {
+            $buy = $this->myPdo->select('book_id')->table("shop_cart WHERE user_id = '$id_user'")->query()->commit();
+        }
         $data = '';
         foreach($arr as $books)
         {
+            $cnt = 0;
             $data.='<div align="center" id="contentIndex">';
             $data.='<div id=contenrInfo>';
             $data.='<p><a href="'.PATH.'/Home/details/id/'.$books['book_id'].'" class="nameBook">'.$books['book_name'].'</a></p>';
             $data.='<a href="'.PATH.'/Home/details/id/'.$books['book_id'].'" class="nameBook"><img src="'.PATH.'/lib/views/user_files/img/'.$books['img'].'"></a>';
-            $data.='<p><br><span id="priceBook">'.$books['price'].' $</span></p>';
+            $data.='<p><span id="priceBook">'.$books['price'].' $</span></p>';
+            foreach($buy as $val)
+            {
+                if($val['book_id'] === $books['book_id'])
+                {
+                    $cnt++;
+                }
+            }
+            if(false == $cnt)
+            {
+                $data .= '<p><a href="' . PATH . '/Home/add/id/' . $books['book_id'] . '" id="buyBook">Buy</a></p>';
+            }
+            else
+            {
+                $data .= '<p><a href="' . PATH . '/Cart/index/" id="toCart">To cart</a></p>';
+            }
             $data.='<p><a href="'.PATH.'/Home/details/id/'.$books['book_id'].'" id="detailsBook">Details</a></p>';
             $data.='</div></div>';
         }
@@ -32,6 +57,17 @@ class PaletteMain
     public function getNav()
     {
         return $this->nav;
+    }
+
+    function add()
+    {
+        $id_user = abs((int)($_SESSION['id_user']));
+        $id_book = $this->data->getVal();
+        $quantity = 1;
+        $this->myPdo->insert()
+            ->table("shop_cart SET user_id = '$id_user', book_id = '$id_book',quantity = '$quantity', status = '0'")
+            ->query()
+            ->commit();
     }
 
     function index()
@@ -51,7 +87,6 @@ class PaletteMain
             ->limit($start_pos, $perpage)
             ->query()
             ->commit();
-
         return $this->bookCreate($arr);
     }
 
@@ -124,7 +159,6 @@ class PaletteMain
 
     function details($book_id)
     {
-        $this->data->setmArray('TITLE', 'Details');
         $arr = $this->myPdo->select('DISTINCT book_id, price, book_name, img, content, GROUP_CONCAT(DISTINCT authors_name) as authors_name, GROUP_CONCAT(DISTINCT genre_name) as genre_name')
             ->table("shop_books, shop_authors, shop_genre INNER JOIN shop_book_a, shop_book_g WHERE shop_books.book_id = shop_book_a.b_id and shop_authors.authors_id = shop_book_a.a_id and shop_books.book_id = shop_book_g.b_id and shop_genre.genre_id = shop_book_g.g_id and book_id = $book_id and visible='1' GROUP BY book_name")
             //->where('visible', '1')

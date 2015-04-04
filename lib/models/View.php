@@ -10,6 +10,8 @@ class View
     private $param;
     private $user;
     private $palletCart;
+    private $cntr;
+    private $palletOrder;
 
     function __construct()
     {
@@ -17,8 +19,10 @@ class View
         $this->palletMain = new PaletteMain();
         $this->palletAuth = new PalletAuth();
         $this->palletCart = new PalletCart();
+        $this->palletOrder = new PalletOrder();
         $this->data = DataCont::getInstance();
         $this->file = $this->data->getPage();
+        $this->cntr = $this->data->getCntr();
         $this->flag = $this->data->getFlag();
         $this->param = $this->data->getParam();
         $this->mArray = $this->data->getmArray();
@@ -55,6 +59,12 @@ class View
             $this->mArray['LOGINFORM'] = $this->palletMain->formExit();
             $this->mArray['TITLE'] = ucfirst($flag);
         }
+        elseif('order' === $file)
+        {
+            $this->mArray['ORDER'] = $this->palletOrder->$flag($this->param);
+            $this->mArray['LOGINFORM'] = $this->palletMain->formExit();
+            $this->mArray['TITLE'] = ucfirst($flag);
+        }
         if (('index' === $this->flag || 'logon' === $this->flag) && 'main' === $file)
         {
             $this->mArray['PAGENAV'] = $this->palletMain->getNav();
@@ -64,10 +74,16 @@ class View
 
     function drowPage()
     {
-        $this->data = $this->substitution->setFileTemplate($this->file);
-        $this->choisePalett();
-        $this->substitution->addToReplace($this->mArray);
-        $this->substitution->templateRender();
+        if($this->cntr != 'AjaxCntr') {
+            $this->data = $this->substitution->setFileTemplate($this->file);
+            $this->choisePalett();
+            $this->substitution->addToReplace($this->mArray);
+            $this->substitution->templateRender();
+        }
+        else
+        {
+             echo 'lalala';
+        }
     }
 }
 ?>

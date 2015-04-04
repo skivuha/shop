@@ -3,12 +3,14 @@ class CartCntr
 {
     private $fc;
     private $data;
+    private $myPdo;
 
     public function __construct()
     {
         $this->fc = FrontCntr::getInstance();
         $this->data = DataCont::getInstance();
         $this->data->setFlag($this->fc->getAction());
+        $this->myPdo = MyPdo::getInstance();
         $this->valid();
 
     }
@@ -29,6 +31,11 @@ class CartCntr
         header("Location: /Cart/index/");
     }
 
+    function buyAction()
+    {
+        $this->data->setPage('lib/views/cart.html');
+    }
+
     function valid()
     {
         if(false == $this->data->getUser())
@@ -36,7 +43,11 @@ class CartCntr
             header("Location: /");
         }
     }
-
+    function ajax()
+    {
+        $arr = $this->myPdo->select('book_id, book_name, img, price, visible')->table('shop_books')->where(array('visible' => 1))->limit(0, 1)->query()->commit();
+        echo json_encode($arr);
+    }
 
 }
 ?>

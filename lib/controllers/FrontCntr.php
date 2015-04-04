@@ -78,10 +78,8 @@ class FrontCntr
             // передаем управление конктретному контроллеру
             $method->invoke($controller);
             //}
-
             $view = new View();
             $view->drowPage();
-
         }
     }
 
@@ -99,6 +97,5 @@ class FrontCntr
     {
         return $this->_action;
     }
-
 }
 ?>
