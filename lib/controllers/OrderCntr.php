@@ -12,6 +12,8 @@ class OrderCntr
 
     function indexAction()
     {
+        $params = abs((int)($_SESSION['id_user']));
+        $this->data->setVal($params);
         $this->data->setPage('lib/views/order.html');
     }
 

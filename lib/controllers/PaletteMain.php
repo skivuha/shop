@@ -22,7 +22,7 @@ class PaletteMain
             //session
         }
         else {
-            $buy = $this->myPdo->select('book_id')->table("shop_cart WHERE user_id = '$id_user'")->query()->commit();
+            $buy = $this->myPdo->select('book_id')->table("shop_cart WHERE user_id = '$id_user' and status = '0'")->query()->commit();
         }
         $data = '';
         foreach($arr as $books)

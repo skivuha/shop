@@ -181,9 +181,9 @@ class RegestrationCntr
                 $key_user = $this->encode->generateCode($name);
                 $pass = md5($key_user.$pass.SALT);
                 $arr = $this->myPdo->insert()
-                    ->table("shop_users SET login_user = '$name', password_user = '$pass', mail_user = '$email', key_user = '$key_user'")
-                    ->query()
-                    ->commit();
+                ->table("shop_users SET login_user = '$name', password_user = '$pass', mail_user = '$email', key_user = '$key_user'")
+                ->query()
+                ->commit();
                if($arr)
                {
                    header("Location: /Regestration/logon/");

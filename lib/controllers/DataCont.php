@@ -10,6 +10,7 @@ class DataCont
     private $user;
     private $val;
     private $cntr;
+    private $post;
 
 
     public static function getInstance()
@@ -66,6 +67,11 @@ class DataCont
         $this->param = $val;
     }
 
+    public function setPost($val)
+    {
+        $this->post = $val;
+    }
+
     public function getPage(){
         return $this->page;
     }
@@ -96,6 +102,10 @@ class DataCont
 
     public function getCntr(){
         return $this->cntr;
+    }
+
+    public function getPost(){
+        return $this->post;
     }
 }
 ?>

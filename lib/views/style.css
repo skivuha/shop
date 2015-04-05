@@ -463,3 +463,13 @@
 .down{
     cursor: pointer;
 }
+
+.orderList{
+    margin: 0px 10px;
+}
+#sum{
+    margin-left: 90px;
+}
+#status{
+    margin-left: 245px;
+}

@@ -87,13 +87,12 @@ class View
             {
                 $this->mArray['LOGINFORM'] = $this->palletMain->formExit();
             }
-
             $this->mArray['CHECKOUT'] = $this->palletCheck->$flag($this->param);
             $this->mArray['TITLE'] = ucfirst($flag);
         }
         elseif('order' === $file)
         {
-            $this->mArray['ORDER'] = $this->palletOrder->$flag($this->param);
+            $this->mArray['ORDERLIST'] = $this->palletOrder->$flag($this->param);
             $this->mArray['LOGINFORM'] = $this->palletMain->formExit();
             $this->mArray['TITLE'] = ucfirst($flag);
         }

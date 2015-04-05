@@ -20,6 +20,7 @@ class MyPdo
     protected $limit_start;
     protected $limit_end;
     protected $join;
+    public $lastId;
 
     private function __construct()
     {
@@ -340,7 +341,7 @@ class MyPdo
             $stmt->bindValue(':end',(int)$this->limit_end,PDO::PARAM_INT);
         }
         $err=$stmt->execute();
-
+        $this->lastId = $this->db->lastInsertId();
         if($err===false)
         {
             $this->queryError = 'Wrong data!';
@@ -373,6 +374,7 @@ class MyPdo
                 $arr = $row;
             }
             $this->defaultVar();
+
             return $arr;
         }
     }
