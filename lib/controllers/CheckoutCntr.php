@@ -1,5 +1,5 @@
 <?php
-class CheckoutCntr
+class CheckoutCntr implements iController
 {
     private $fc;
     private $myPdo;

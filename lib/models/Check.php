@@ -16,7 +16,17 @@ class Check
         $this->cookie = new Cookie();
         $this->session = Session::getInstance();
         $this->myPdo = MyPdo::getInstance();
+        $this->lang();
         $this->check();
+    }
+
+    private function lang()
+    {
+        if(!isset($_COOKIE['lang']))
+        {
+            $this->cookie->add('lang', 'en');
+        }
+        $this->data->setLang($_COOKIE['lang']);
     }
 
     private function check()

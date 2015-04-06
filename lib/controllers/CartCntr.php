@@ -1,5 +1,5 @@
 <?php
-class CartCntr
+class CartCntr implements iController
 {
     private $fc;
     private $data;

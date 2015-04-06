@@ -64,6 +64,11 @@ class Validator
         }
     }
 
+    public function numCheck($val)
+    {
+        return $this->value = abs((int)($val));
+    }
+        
     public function getValue(){
         return $this->value;
     }

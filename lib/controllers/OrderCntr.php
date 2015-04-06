@@ -1,5 +1,5 @@
 <?php
-class OrderCntr
+class OrderCntr implements iController
 {
     public function __construct()
     {

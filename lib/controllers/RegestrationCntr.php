@@ -1,5 +1,5 @@
 <?php
-class RegestrationCntr
+class RegestrationCntr implements iController
 {
     private $fc;
     private $data;
@@ -17,10 +17,6 @@ class RegestrationCntr
         $this->data->setFlag($this->fc->getAction());
         $this->session = Session::getInstance();
         $this->cookie = new Cookie();
-/*        if($_POST[auth])
-        {
-            $this->logon();
-        }*/
     }
 
     function indexAction()
@@ -199,39 +195,5 @@ class RegestrationCntr
         }
         $this->data->setPage('lib/views/regestration.html');
     }
-
-/*        if (false !== $name && false !== $pass)
-        {
-            //$link = new MyPdo();
-            //$name = $link->checkUser($name);
-            if (false === $name)
-            {
-                $data->setmArray('ERROR_FORM', 'Wrong name or password');
-            }
-            else
-            {
-                $pass=md5($name['key_user'].$pass);
-                if ( $name['passwd_user'] == $pass)
-                {
-                    $_SESSION['user_id'] = $name['id_user'];
-                    $_SESSION['login_user'] = $name['login_user'];
-                    /*             if (isset($save_me)) and 'yes' == $save_me)
-                                 {
-                                     $cookie_code = generateCode;
-
-                                 }*/
-                    //    $sess = Session::getInstance();
-                    //     $b = $sess->setSession($name, md5('lalala'));
-                    //    $a = $sess->getSession($name);
-                    //var_dump($_SESSION);
-              /*      $data->setPage('lib/views/calendar.html');
-                }
-                else
-                {
-                    $data->setmArray('%ERROR_FORM%', 'Wrong name or password');
-                }
-            }
-        }
-    }*/
 }
 ?>

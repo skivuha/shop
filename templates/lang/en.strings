@@ -1,0 +1,235 @@
+<?xml version="1.0"?>
+<ISTRINGTABLE LANG="en">
+    <ISTRING>
+        <KEY>%LANG_EDIT/DELETE%</KEY>
+        <VALUE>edit / delete</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_PAGE_DOSE_NOT_EXIST%</KEY>
+        <VALUE>Page not found!</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_AUTHORS%</KEY>
+        <VALUE>Authors</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_JANRES%</KEY>
+        <VALUE>Janres</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_BOOKS%</KEY>
+        <VALUE>All Books</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_ENTER%</KEY>
+        <VALUE>Login</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_ADD_AUTHOR%</KEY>
+        <VALUE>add author</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_ADD_JANRE%</KEY>
+        <VALUE>add janre</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_ADD_BOOK%</KEY>
+        <VALUE>add book</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_USERS%</KEY>
+        <VALUE>users</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_ORDERS%</KEY>
+        <VALUE>orders</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_WELCOME%</KEY>
+        <VALUE>Welcome</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_MY_CARD%</KEY>
+        <VALUE>My Card</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_MY_ORDERS%</KEY>
+        <VALUE>My Orders</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_LOGOUT%</KEY>
+        <VALUE>Logout</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_RU%</KEY>
+        <VALUE>ru</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_EN%</KEY>
+        <VALUE>en</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_FR%</KEY>
+        <VALUE>fr</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_LOGIN%</KEY>
+        <VALUE>username</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_PASS%</KEY>
+        <VALUE>password</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_ADMIN_PANEL%</KEY>
+        <VALUE>admin panel</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_USER_PANEL%</KEY>
+        <VALUE>home</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_ENTER_LOGIN%</KEY>
+        <VALUE>Login</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_ENTER_PASSWORD%</KEY>
+        <VALUE>Password</VALUE>
+    </ISTRING>
+
+
+
+
+
+
+
+
+
+
+    <ISTRING>
+        <KEY>%LANG_SELECT_AUTHOR%</KEY>
+        <VALUE>Select Author</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_SELECT_JANRE%</KEY>
+        <VALUE>Select Janre</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_SELECT_BOOK%</KEY>
+        <VALUE>Select Book</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_SELECT_USER%</KEY>
+        <VALUE>Select User</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_ADD%</KEY>
+        <VALUE>Add</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_EDIT%</KEY>
+        <VALUE>Edit</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_DELETE%</KEY>
+        <VALUE>Delete</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_REGISTER%</KEY>
+        <VALUE>Registration</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_BOOK_TITLE%</KEY>
+        <VALUE>Title</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_BOOK_AUTHORS%</KEY>
+        <VALUE>Authors</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_BOOK_JANRES%</KEY>
+        <VALUE>Janres</VALUE>
+    </ISTRING>
+
+
+
+
+
+
+
+
+
+
+
+    <ISTRING>
+        <KEY>%LANG_BOOK_DESCRIPTION%</KEY>
+        <VALUE>Description</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_BOOK_PRICE%</KEY>
+        <VALUE>Price</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_BOOK_DISCOUNT%</KEY>
+        <VALUE>Discount</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_ADD_TO_CARD%</KEY>
+        <VALUE>Add to card</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_SAVE%</KEY>
+        <VALUE>Save changes</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_MAKE_A_ORDER%</KEY>
+        <VALUE>Order</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_ORDER_DATE%</KEY>
+        <VALUE>Ordered</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_ORDER_SUMM%</KEY>
+        <VALUE>Summ</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_ORDER_BOOKS%</KEY>
+        <VALUE>Books</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_ORDER_STATUS%</KEY>
+        <VALUE>Status</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_ORDER_STATUS_0%</KEY>
+        <VALUE>Not read</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_ORDER_STATUS_1%</KEY>
+        <VALUE>Read</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_ORDER_STATUS_2%</KEY>
+        <VALUE>Confirmed</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_ORDER_STATUS_3%</KEY>
+        <VALUE>Sent</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>%LANG_EMAIL%</KEY>
+        <VALUE>Email</VALUE>
+    </ISTRING>
+   
+
+
+
+
+
+
+
+
+
+
+</ISTRINGTABLE>

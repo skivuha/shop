@@ -3,6 +3,7 @@ class Cookie
 {
     public function add($key, $val)
     {
+        $_COOKIE[$key]=$val;
         setcookie($key, $val, time()+3600*24*7, '/');
     }
 

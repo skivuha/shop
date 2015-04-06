@@ -13,6 +13,7 @@ class View
     private $cntr;
     private $palletOrder;
     private $palletCheck;
+    private $lang;
 
     function __construct()
     {
@@ -29,7 +30,7 @@ class View
         $this->param = $this->data->getParam();
         $this->mArray = $this->data->getmArray();
         $this->user = $this->data->getUser();
-
+        $this->lang = $this->data->getLang();
     }
 
     function choisePalett()
@@ -101,20 +102,17 @@ class View
             $this->mArray['PAGENAV'] = $this->palletMain->getNav();
         }
 
+        var_dump($this->lang);
+        $langObj = new Lang($this->lang);
+
     }
 
     function drowPage()
     {
-//        if($this->cntr != 'AjaxCntr') {
             $this->data = $this->substitution->setFileTemplate($this->file);
             $this->choisePalett();
             $this->substitution->addToReplace($this->mArray);
             $this->substitution->templateRender();
- //       }
- //       else
- //       {
- //            echo 'lalala';
- //       }
     }
 }
 ?>

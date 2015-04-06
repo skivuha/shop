@@ -1,5 +1,5 @@
 <?php
-class HomeCntr
+class HomeCntr implements iController
 {
     private $fc;
     private $data;

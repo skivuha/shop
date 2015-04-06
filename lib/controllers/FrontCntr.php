@@ -45,7 +45,7 @@ class FrontCntr
             }
         }*/
         //если есть параметры и значения
-        if (!empty($splits[PARAM])) {
+        if (!empty($splits[PARAM]) && !empty($splits[PARAM + 1])) {
             $keys = $values = array();
             for ($i = PARAM, $cnt = count($splits); $i < $cnt; $i++) {
                 if (0 == $i % 2) {
@@ -56,7 +56,13 @@ class FrontCntr
                     $values[] = $splits[$i];
                 }
             }
+            if(count($keys) == count($values)){
             $this->_params = array_combine($keys, $values);
+            }
+            else
+            {
+                header('Location: /');
+            }
         }
     }
 
@@ -70,7 +76,7 @@ class FrontCntr
             //делаем экземпляр класса рефлекшн класс
             $rc = new ReflectionClass($this->getCntr());
             // наш ли это контроллер
-            //if($rc->implementsInterface('iController')){
+            if($rc->implementsInterface('iController')){
             //проверяем на наличие нужного метода
             if ($rc->hasMethod($this->getAction()))
             {
@@ -84,10 +90,20 @@ class FrontCntr
             $method = $rc->getMethod($this->getAction());
             // передаем управление конктретному контроллеру
             $method->invoke($controller);
-            //}
-            $view = new View();
-            $view->drowPage();
+            }
+            else
+            {
+                header('Location: /');
+            }
+
         }
+        else
+        {
+            header('Location: /');
+        }
+        $view = new View();
+        $view->drowPage();
+        
     }
 
     public function getParams()

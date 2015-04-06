@@ -1,5 +1,5 @@
 <?php
-class AjaxCntr
+class AjaxCntr implements iController
 {
     public function __construct()
     {
