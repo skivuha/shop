@@ -11,7 +11,6 @@ class PaletteMain
         $this->myPdo = MyPdo::getInstance();
         $this->data = DataCont::getInstance();
         $this->session = Session::getInstance();
-        $this->cookie = new Cookie();
     }
 
     function bookCreate($arr)
@@ -20,11 +19,7 @@ class PaletteMain
         $id_user = abs((int)($this->session->getSession('id_user')));
         if(0 === $id_user)
         {
-            $cart_cookie = $this->cookie->read('cart');
-            if(null != $cart_cookie)
-            {
-            $buy = unserialize($cart_cookie);
-            }
+
         }
         else {
             $buy = $this->myPdo->select('book_id')->table("shop_cart WHERE user_id = '$id_user' and status = '0'")->query()->commit();
@@ -38,9 +33,9 @@ class PaletteMain
             $data.='<p><a href="'.PATH.'/Home/details/id/'.$books['book_id'].'" class="nameBook">'.$books['book_name'].'</a></p>';
             $data.='<a href="'.PATH.'/Home/details/id/'.$books['book_id'].'" class="nameBook"><img src="'.PATH.'/lib/views/user_files/img/'.$books['img'].'"></a>';
             $data.='<p><span id="priceBook">'.$books['price'].' $</span></p>';
-            foreach($buy as $key=>$val)
+            foreach($buy as $val)
             {
-                if($val['book_id'] == $books['book_id'])
+                if($val['book_id'] === $books['book_id'])
                 {
                     $cnt++;
                 }
@@ -69,44 +64,15 @@ class PaletteMain
         //$id_user = abs((int)($_SESSION['id_user']));
         $id_user = $this->data->getIdUser();
         $id_book = $this->data->getVal();
-        if(true === $this->data->getUser())
-        {
+        //if(true === $this->data->getUser())
+        //{
             //$quantity = 1;
             $check = $this->myPdo->select('cart_id')->table("shop_cart WHERE user_id = '$id_user' AND  book_id = '$id_book' AND status = '0'")->query()->commit();
             if (0 === count($check))
             {
                 $this->myPdo->insert()->table("shop_cart SET user_id = '$id_user', book_id = '$id_book', status = '0'")->query()->commit();
             }
-        }
-        else
-        {
-            $book = $this->myPdo->select('price, book_name')->table("shop_books WHERE book_id = $id_book")
-            ->query()
-            ->commit();
-
-            $check = $this->cookie->read('cart');
-
-            if(NULL !== $check)
-            {
-                $check_book = unserialize($check);
-
-                foreach($check_book as $key => $val)
-                {
-                    if($id_book === $val['book_id'])
-                    {
-                        return false;
-                    }
-                }
-                $check_book[] = array('book_id'=>$id_book, 'quantity'=>1, 'price'=>$book[0]['price'], 'book_name'=>$book[0]['book_name']);
-                $arr = serialize($check_book);
-                $this->cookie->add('cart', $arr);
-            }
-            else
-            {
-                $arr = serialize(array(array('book_id'=>$id_book, 'quantity'=>1, 'price'=>$book[0]['price'], 'book_name'=>$book[0]['book_name'])));
-                $this->cookie->add('cart', $arr);
-            }
-        }
+        //}
     }
 
     function index()
@@ -222,7 +188,10 @@ class PaletteMain
     function formExit()
     {
 
-        $data = '<form action="/Regestration/logout/" method="post"><div id="exit"><a href="/Cart/index"><span>en</span></a><span> / </span><a href="/Cart/index"><span>ru</span></a><br>
+        $data = '
+<div id="exit">
+<form action="" method="post"><input type="submit" value="en" name="leng"><span></span><span><input type="submit" value="ru" name="leng"></span></form>
+<form action="/Regestration/logout/" method="post">
         <span>Hello <span id="nameSession">'.$this->session->getSession('login_user').'</span></span>
         <input type="submit" class="btn btn-default btn-xs" value="Exit" name="exit"></div></form>
         <a href="/Cart/index"><span class="glyphicon glyphicon-shopping-cart"> My cart</span></a><br>
@@ -234,7 +203,8 @@ class PaletteMain
 
     function formLogin()
     {
-        $data = '<div id="exit"><a href="/Cart/index"><span>en</span></a><span> / </span><a href="/Cart/index"><span>ru</span></a><br>
+        $data = '<span><a href="/admin/">For admin!</a></span>
+<div id="exit"><form action="" method="post"><input type="submit" value="en" name="leng"><span></span><span><input type="submit" value="ru" name="leng"></span></form>
         <span>Hello, <span id="nameSession">guest!</span></span></div>
         <a href="/Cart/index"><span class="glyphicon glyphicon-shopping-cart"> My cart</span></a><br>
         <a href="/Regestration/logon/"><span class="glyphicon glyphicon-home"> My cabinet</span></a>';

@@ -18,6 +18,7 @@ class Check
         $this->myPdo = MyPdo::getInstance();
         $this->lang();
         $this->check();
+        $this->choiseLang();
     }
 
     private function lang()
@@ -27,6 +28,22 @@ class Check
             $this->cookie->add('lang', 'en');
         }
         $this->data->setLang($_COOKIE['lang']);
+    }
+
+    private function choiseLang()
+    {
+        $post_clear = $this->valid->clearDataArr($_POST);
+        if('ru' === $post_clear['leng'])
+        {
+            $this->cookie->add('lang', 'ru');
+            $this->data->setLang($_COOKIE['lang']);
+        }
+        elseif('en' === $post_clear['leng'])
+        {
+            $this->cookie->add('lang', 'en');
+            $this->data->setLang($_COOKIE['lang']);
+        }
+        //var_dump($_SESSION);
     }
 
     private function check()

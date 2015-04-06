@@ -41,11 +41,12 @@ class Substitution
         }
         foreach($this->forRender as $key=>$val)
         {
-            $this->file = preg_replace('/###' .$key. '###/i', $val, $this->file);
+            $this->file = preg_replace('/###LANG_' .$key. '###/i', $val, $this->file);
         }
 
         $default = '';
         $this->file = preg_replace('/%#%(.*)%#%/Uis', $default, $this->file);
+        header("Content-Type: text/html; charset = UTF-8");
         echo $this->file;
     }
 }

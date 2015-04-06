@@ -8,9 +8,10 @@ class CheckoutCntr implements iController
 
     public function __construct()
     {
+        $this->data = DataCont::getInstance();
+        $this->checkUser();
         $this->fc = FrontCntr::getInstance();
         $this->myPdo = MyPdo::getInstance();
-        $this->data = DataCont::getInstance();
         $this->data->setFlag($this->fc->getAction());
         $this->validator = new Validator();
     }
@@ -41,6 +42,14 @@ class CheckoutCntr implements iController
             $this->data->setVal($params);
             $this->data->setPost($radio);
             $this->data->setPage('lib/views/checkout.html');
+        }
+    }
+
+    private function checkUser()
+    {
+        if(false === $this->data->getUser())
+        {
+            header("Location: /Regestration/logon/");
         }
     }
 }

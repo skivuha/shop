@@ -7,8 +7,9 @@ class CartCntr implements iController
 
     public function __construct()
     {
-        $this->fc = FrontCntr::getInstance();
         $this->data = DataCont::getInstance();
+        $this->checkUser();
+        $this->fc = FrontCntr::getInstance();
         $this->data->setFlag($this->fc->getAction());
         $this->myPdo = MyPdo::getInstance();
 
@@ -42,5 +43,12 @@ class CartCntr implements iController
         echo json_encode($arr);
     }
 
+    private function checkUser()
+    {
+        if(false === $this->data->getUser())
+        {
+            header("Location: /Regestration/logon/");
+        }
+    }
 }
 ?>

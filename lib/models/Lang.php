@@ -25,16 +25,12 @@ class Lang
             }
         }
         $this->data = array_combine($lang_key, $lang_value);
-        var_dump($this->data);
+        return true;
     }
 
-    public function getLang($key)
+    public function getLangArr()
     {
-        foreach ($this->data as $key => $val) {
-            foreach ($val as $key => $val) {
-
-            }
-        }
+        return $this->data;
     }
 }
 ?>

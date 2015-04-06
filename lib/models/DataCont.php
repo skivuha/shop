@@ -12,7 +12,6 @@ class DataCont
     private $cntr;
     private $post;
     private $id_user;
-    private $cart_cookie;
     private $lang;
 
 
@@ -48,11 +47,6 @@ class DataCont
     public function setUser($val)
     {
         $this->user = $val;
-    }
-
-    public function setCartCookie($val)
-    {
-        $this->cart_cookie = $val;
     }
 
     public function setLang($val)
@@ -128,10 +122,6 @@ class DataCont
 
     public function getIdUser(){
         return $this->id_user;
-    }
-
-    public function getCartCookie(){
-        return $this->cart_cookie;
     }
 
     public function getLang(){

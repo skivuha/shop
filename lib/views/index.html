@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>%#%TITLE%#%</title>
+    <!--<link href="/lib/views/style.css" type="text/css" rel="stylesheet">-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link href="/lib/views/style.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<div id="wrapper">
+    <div id="header">
+        <div id="logo"><a href="/"></a></div>    <!--LOGO-->
+        <div id="buy">
+            <span>%#%ERRORLOGIN%#%&nbsp</span>
+            %#%LOGINFORM%#%
+        </div>
+    </div>
+    <ul id="menu" >             <!--menu-->
+        <li class="firstMenu"><a href="/">###LANG_BOOK###</a></li>
+        <li><a href="/Home/authors/">###LANG_AUTHORS###</a></li>
+        <li><a href="/Home/genres">###LANG_GENRE###</a></li>
+    </ul>
+    <div id="content">             <!--content-->
+        <div id="cornerL"></div>
+        <div id="cornerR"></div>
+        <!-- content -->
+        %#%BOOKLIST%#%
+        <!-- content -->
+        <div class="reviews"></div>             <!--cleaning-->
+        <div class="pager">                     <!--pager menu-->
+            %#%PAGENAV%#%
+        </div>
+    </div>
+    <div class="reviews"           ></div>             <!--cleaning-->
+</div>
+</body>
+</html>

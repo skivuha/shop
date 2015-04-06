@@ -3,11 +3,11 @@ class OrderCntr implements iController
 {
     public function __construct()
     {
-        $this->fc = FrontCntr::getInstance();
         $this->data = DataCont::getInstance();
+        $this->valid();
+        $this->fc = FrontCntr::getInstance();
         $this->data->setFlag($this->fc->getAction());
         $this->myPdo = MyPdo::getInstance();
-        $this->valid();
     }
 
     function indexAction()
@@ -21,7 +21,7 @@ class OrderCntr implements iController
     {
         if(false == $this->data->getUser())
         {
-            header("Location: /");
+            header("Location: /Regestration/logon/");
         }
     }
 }

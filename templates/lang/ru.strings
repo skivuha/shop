@@ -1,64 +1,15 @@
-<?xml version="1.0" encoding="windows-1251"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ISTRINGTABLE LANG="en">
-     <ISTRING>
-        <KEY>%LANG_EDIT/DELETE%</KEY>
-        <VALUE>изменить/удалить</VALUE>
-    </ISTRING>
-   <ISTRING>
-        <KEY>%LANG_ADD_AUTHOR%</KEY>
-        <VALUE>добавить автора</VALUE>
-    </ISTRING>
     <ISTRING>
-        <KEY>%LANG_ADD_JANRE%</KEY>
-        <VALUE>добавить жанр</VALUE>
+        <KEY>BOOK</KEY>
+        <VALUE>РљРЅРёРіРё</VALUE>
     </ISTRING>
-    <ISTRING>
-        <KEY>%LANG_ADD_BOOK%</KEY>
-        <VALUE>добавить книгу</VALUE>
+	<ISTRING>
+        <KEY>AUTHORS</KEY>
+        <VALUE>РђРІС‚РѕСЂС‹</VALUE>
     </ISTRING>
-    <ISTRING>
-        <KEY>%LANG_USERS%</KEY>
-        <VALUE>пользователи</VALUE>
-    </ISTRING>
-    <ISTRING>
-        <KEY>%LANG_ORDERS%</KEY>
-        <VALUE>заказы</VALUE>
-    </ISTRING>
-
-
-
-    <ISTRING>
-        <KEY>%LANG_WELCOME%</KEY>
-        <VALUE>Добро пожаловать</VALUE>
-    </ISTRING>
-    <ISTRING>
-        <KEY>%LANG_MY_CARD%</KEY>
-        <VALUE>Моя корзина</VALUE>
-    </ISTRING>
-    <ISTRING>
-        <KEY>%LANG_MY_ORDERS%</KEY>
-        <VALUE>Мои заказы</VALUE>
-    </ISTRING>
-    <ISTRING>
-        <KEY>%LANG_LOGOUT%</KEY>
-        <VALUE>Выход</VALUE>
-    </ISTRING>
-	
-    <ISTRING>
-        <KEY>%LANG_RU%</KEY>
-        <VALUE>рус</VALUE>
-    </ISTRING>
-    <ISTRING>
-        <KEY>%LANG_EN%</KEY>
-        <VALUE>англ</VALUE>
-    </ISTRING>
-	
-    <ISTRING>
-        <KEY>%LANG_LOGIN%</KEY>
-        <VALUE>логин</VALUE>
-    </ISTRING>
-    <ISTRING>
-        <KEY>%LANG_PASS%</KEY>
-        <VALUE>пароль</VALUE>
+	<ISTRING>
+        <KEY>GENRE</KEY>
+        <VALUE>Р–Р°РЅСЂС‹</VALUE>
     </ISTRING>
 </ISTRINGTABLE>

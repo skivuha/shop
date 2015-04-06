@@ -17,10 +17,6 @@ class HomeCntr implements iController
             $this->myPdo = MyPdo::getInstance();
             $this->session = Session::getInstance();
             $this->cookie = new Cookie();
-            if($_POST)
-            {
-                $this->logon();
-            }
     }
 
     function indexAction()
@@ -57,83 +53,22 @@ class HomeCntr implements iController
 
     function addAction()
     {
-        $params = $this->fc->getParams();
-        $id = abs((int)($params['id']));
-        $id_user = abs((int)($_SESSION['id_user']));
-        $this->data->setIdUser($id_user);
-        $this->data->setVal($id);
-        $this->data->setPage('lib/views/main.html');
-        header("Location: /");
-    }
 
-
-
-/*    function logon()
-    {
-        $this->data->setUser(false);
-        $this->data->setPage('lib/views/main.html');
-        if (isset($_POST)) {
-            $data_post = $this->check->clearDataArr($_POST);
-            if ('' === $data_post['password']) {
-                $this->data->setmArray('ERRORLOGIN', 'Field is empty');
-                $pass = false;
-            } else {
-                if (false === $this->check->checkPass($data_post['password'])) {
-                    $this->data->setmArray('ERRORLOGIN', 'Wrong data');
-                    $pass = false;
-                } else {
-                    $pass = $data_post['password'];
-                }
-            }
-
-            if ('' === $data_post['email']) {
-                $this->data->setmArray('ERRORLOGIN', 'Field is empty');
-                $email = false;
-            } else {
-                if (false === $this->check->checkEmail($data_post['email'])) {
-                    $this->data->setmArray('ERRORLOGIN', 'Wrong data');
-                    $email = false;
-                } else {
-                    $email = $data_post['email'];
-                }
-            }
-
-            if (false !== $pass && false !== $email) {
-                $arr = $this->myPdo->select('id_user, mail_user, password_user, key_user, login_user')->table('shop_users')->where(array('mail_user' => $email))->query()->commit();
-                if (empty($arr)) {
-                    $this->data->setmArray('ERRORLOGIN', 'Wrong e-mail or password');
-                    //return false;
-                }
-                else
-                {
-                    $password = md5($arr[0]['key_user'].$pass.SALT);
-                    if($arr[0]['password_user'] === $password)
-                    {
-                        $this->session->setSession('id_user',$arr[0]['id_user']);
-                        $this->session->setSession('mail_user',$arr[0]['mail_user']);
-                        $this->session->setSession('login_user',$arr[0]['login_user']);
-
-                        if(isset($data_post['remember']) && 'on' === $data_post['remember'])
-                        {
-                            $encode = new Encode();
-                            $code_user = $encode->generateCode($arr[0]['mail_user']);
-                            $this->myPdo->update()
-                                ->table("shop_users SET code_user = '$code_user' where mail_user = '$email'")
-                                ->query()
-                                ->commit();
-                            $this->cookie->add('code_user', $code_user);
-                        }
-                        $this->data->setUser(true);
-                        $this->data->setPage('lib/views/main.html');
-                    }
-                    else
-                    {
-                        $this->data->setmArray('ERRORLOGIN', 'Wrong e-mail or password');
-                        //return false;
-                    }
-                }
-            }
+        if(true === $this->data->getUser())
+        {
+            $params = $this->fc->getParams();
+            $id = abs((int)($params['id']));
+            $id_user = abs((int)($_SESSION['id_user']));
+            $this->data->setIdUser($id_user);
+            $this->data->setVal($id);
+            $this->data->setPage('lib/views/main.html');
+            header("Location: /");
         }
-    }*/
+        else
+        {
+            header("Location: /Regestration/logon/");
+        }
+
+    }
 }
 ?>

@@ -14,6 +14,7 @@ class View
     private $palletOrder;
     private $palletCheck;
     private $lang;
+    private $langArr;
 
     function __construct()
     {
@@ -101,10 +102,8 @@ class View
         {
             $this->mArray['PAGENAV'] = $this->palletMain->getNav();
         }
-
-        var_dump($this->lang);
         $langObj = new Lang($this->lang);
-
+        $this->langArr = $langObj->getLangArr();
     }
 
     function drowPage()
@@ -112,6 +111,7 @@ class View
             $this->data = $this->substitution->setFileTemplate($this->file);
             $this->choisePalett();
             $this->substitution->addToReplace($this->mArray);
+            $this->substitution->addToReplace($this->langArr);
             $this->substitution->templateRender();
     }
 }
