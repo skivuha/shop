@@ -1,5 +1,5 @@
 <?php
-class PalletAuth
+class PalletAuth implements iPallet
 {
     private $myPdo;
     private $data;
@@ -10,7 +10,9 @@ class PalletAuth
         $this->data = DataCont::getInstance();
     }
 
-
+    public function index()
+    {}
+    
     public function adduser()
     {
         $data = '

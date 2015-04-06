@@ -19,7 +19,7 @@ class CartCntr implements iController
     {
         $params = abs((int)($_SESSION['id_user']));
         $this->data->setVal($params);
-        $this->data->setPage('lib/views/cart.html');
+        $this->data->setPage('templates/cart.html');
     }
 
     function deleteAction()
@@ -27,7 +27,7 @@ class CartCntr implements iController
         $params = $this->fc->getParams();
         $id = abs((int)($params['id']));
         $this->data->setVal($id);
-        $this->data->setPage('lib/views/cart.html');
+        $this->data->setPage('templates/cart.html');
         header("Location: /Cart/index/");
     }
 

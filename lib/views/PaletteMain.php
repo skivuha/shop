@@ -1,5 +1,5 @@
 <?php
-class PaletteMain
+class PaletteMain implements iPallet
 {
     private $myPdo;
     private $data;
@@ -30,8 +30,8 @@ class PaletteMain
             $cnt = 0;
             $data.='<div align="center" id="contentIndex">';
             $data.='<div id=contenrInfo>';
-            $data.='<p><a href="'.PATH.'/Home/details/id/'.$books['book_id'].'" class="nameBook">'.$books['book_name'].'</a></p>';
-            $data.='<a href="'.PATH.'/Home/details/id/'.$books['book_id'].'" class="nameBook"><img src="'.PATH.'/lib/views/user_files/img/'.$books['img'].'"></a>';
+            $data.='<p><a href="/Home/details/id/'.$books['book_id'].'" class="nameBook">'.$books['book_name'].'</a></p>';
+            $data.='<a href="/Home/details/id/'.$books['book_id'].'" class="nameBook"><img src="'.SRC_IMG.$books['img'].'"></a>';
             $data.='<p><span id="priceBook">'.$books['price'].' $</span></p>';
             foreach($buy as $val)
             {
@@ -42,13 +42,13 @@ class PaletteMain
             }
             if(false == $cnt)
             {
-                $data .= '<p><a href="' . PATH . '/Home/add/id/' . $books['book_id'] . '" id="buyBook">Buy</a></p>';
+                $data .= '<p><a href="/Home/add/id/' . $books['book_id'] . '" id="buyBook">Buy</a></p>';
             }
             else
             {
-                $data .= '<p><a href="' . PATH . '/Cart/index/" id="toCart">To cart</a></p>';
+                $data .= '<p><a href="/Cart/index/" id="toCart">To cart</a></p>';
             }
-            $data.='<p><a href="'.PATH.'/Home/details/id/'.$books['book_id'].'" id="detailsBook">Details</a></p>';
+            $data.='<p><a href="/Home/details/id/'.$books['book_id'].'" id="detailsBook">Details</a></p>';
             $data.='</div></div>';
         }
         return $data;
@@ -176,7 +176,7 @@ class PaletteMain
         $data.='<div id="bookDetails">';
         $data.='<h1>'.$arr['book_name'].'</h1>';
         $data.='<div class="productDetails">';
-        $data.='<img src="'.PATH.'/lib/views/user_files/img/'.$arr['img'].'"></div>';
+        $data.='<img src="'.SRC_IMG.$arr['img'].'"></div>';
         $data.='<div id="detailsText">';
         $data.='<h2>Product Details</h2>';
         $data.='<p class="detailsfirst"><b>Author: </b>'.$arr['authors_name'].'</p>';
@@ -203,7 +203,7 @@ class PaletteMain
 
     function formLogin()
     {
-        $data = '<span><a href="/admin/">For admin!</a></span>
+        $data = '<span><a href="/Admin/index">For admin!</a></span>
 <div id="exit"><form action="" method="post"><input type="submit" value="en" name="leng"><span></span><span><input type="submit" value="ru" name="leng"></span></form>
         <span>Hello, <span id="nameSession">guest!</span></span></div>
         <a href="/Cart/index"><span class="glyphicon glyphicon-shopping-cart"> My cart</span></a><br>

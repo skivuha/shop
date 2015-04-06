@@ -20,7 +20,7 @@ class CheckoutCntr implements iController
     {
         $params = abs((int)($_SESSION['id_user']));
         $this->data->setVal($params);
-        $this->data->setPage('lib/views/checkout.html');
+        $this->data->setPage('templates/checkout.html');
     }
 
     function confirmAction()
@@ -32,7 +32,7 @@ class CheckoutCntr implements iController
         if(0 === $radio)
         {
             $this->data->setmArray('ERROR', 'Choise payment method');
-            $this->data->setPage('lib/views/checkout.html');
+            $this->data->setPage('templates/checkout.html');
             $this->data->setFlag('indexAction');
             $this->data->setVal($params);
         }
@@ -41,7 +41,7 @@ class CheckoutCntr implements iController
             $params = abs((int)($_SESSION['id_user']));
             $this->data->setVal($params);
             $this->data->setPost($radio);
-            $this->data->setPage('lib/views/checkout.html');
+            $this->data->setPage('templates/checkout.html');
         }
     }
 

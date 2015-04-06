@@ -1,5 +1,5 @@
 <?php
-class PalletOrder
+class PalletOrder implements iPallet
 {
     private $myPdo;
     private $data;

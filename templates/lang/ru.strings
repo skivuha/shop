@@ -12,4 +12,20 @@
         <KEY>GENRE</KEY>
         <VALUE>Жанры</VALUE>
     </ISTRING>
+    <ISTRING>
+        <KEY>ORDER</KEY>
+        <VALUE>Заказы</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>CART</KEY>
+        <VALUE>Корзина</VALUE>
+    </ISTRING>
+   	<ISTRING>
+        <KEY>CHECKOUT_LANG</KEY>
+        <VALUE>Потверждение заказа</VALUE>
+    </ISTRING>
+       	<ISTRING>
+            <KEY>AUTHENTICATION</KEY>
+            <VALUE>Авторизация</VALUE>
+        </ISTRING>
 </ISTRINGTABLE>

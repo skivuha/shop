@@ -14,7 +14,7 @@ class OrderCntr implements iController
     {
         $params = abs((int)($_SESSION['id_user']));
         $this->data->setVal($params);
-        $this->data->setPage('lib/views/order.html');
+        $this->data->setPage('templates/order.html');
     }
 
     function valid()

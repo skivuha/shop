@@ -2,14 +2,30 @@
 <ISTRINGTABLE LANG="en">
     <ISTRING>
         <KEY>BOOK</KEY>
-        <VALUE>BOOK</VALUE>
+        <VALUE>Book</VALUE>
     </ISTRING>
 	<ISTRING>
         <KEY>AUTHORS</KEY>
-        <VALUE>AUTHORS</VALUE>
+        <VALUE>Authors</VALUE>
     </ISTRING>
 	<ISTRING>
         <KEY>GENRE</KEY>
-        <VALUE>GENRE</VALUE>
+        <VALUE>Genre</VALUE>
     </ISTRING>
+    <ISTRING>
+        <KEY>ORDER</KEY>
+        <VALUE>Order</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>CART</KEY>
+        <VALUE>Cart</VALUE>
+    </ISTRING>
+    <ISTRING>
+        <KEY>CHECKOUT_LANG</KEY>
+    <VALUE>Checkout</VALUE>
+    </ISTRING>
+           	<ISTRING>
+                <KEY>AUTHENTICATION</KEY>
+                <VALUE>Authentication</VALUE>
+            </ISTRING>
 </ISTRINGTABLE>

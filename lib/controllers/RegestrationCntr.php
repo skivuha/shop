@@ -21,7 +21,7 @@ class RegestrationCntr implements iController
 
     function indexAction()
     {
-        $this->data->setPage('lib/views/regestration.html');
+        $this->data->setPage('templates/regestration.html');
     }
 
     function logoutAction()
@@ -35,7 +35,7 @@ class RegestrationCntr implements iController
     function logonAction()
     {
         $this->data->setUser(false);
-        $this->data->setPage('lib/views/regestration.html');
+        $this->data->setPage('templates/regestration.html');
         if (isset($_POST['signin'])) {
             $data_post = $this->check->clearDataArr($_POST);
             if ('' === $data_post['password']) {
@@ -159,7 +159,7 @@ class RegestrationCntr implements iController
                     $email = $data_post['email'];
                 }
             }
-            $this->data->setPage('lib/views/regestration.html');
+            $this->data->setPage('templates/regestration.html');
         if (false !== $name && false !== $pass && false !== $email)
         {
             $arr = $this->myPdo->select('login_user')
@@ -193,7 +193,7 @@ class RegestrationCntr implements iController
             }
         }
         }
-        $this->data->setPage('lib/views/regestration.html');
+        $this->data->setPage('templates/regestration.html');
     }
 }
 ?>

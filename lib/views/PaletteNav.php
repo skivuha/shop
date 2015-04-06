@@ -1,5 +1,5 @@
 <?php
-class PaletteNav
+class PaletteNav implements iPallet
 {
     private $perpage = PERPAGE;
     private $myPdo;
@@ -18,6 +18,9 @@ class PaletteNav
         $this->pageNav();
     }
 
+    public function index()
+    {}
+    
     function pageFromParams($params)
     {
         if(isset($params['page']))
@@ -79,6 +82,9 @@ class PaletteNav
         $controller = !empty($splits[CONTROLLER]) ? ucfirst($splits[CONTROLLER]) . 'Cntr' : 'Home';
         $action = !empty($splits[ACTION]) ? $splits[ACTION] . 'Action' : 'index';
         $params = $this->fc->getParams();
+        if(!is_array($params)){
+            $params = array();
+        }
         if(!$splits[CONTROLLER] || !$splits[ACTION])
         {
             $this->uri = '';

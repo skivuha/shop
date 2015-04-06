@@ -1,5 +1,5 @@
 <?php
-class PalletCheck
+class PalletCheck implements iPallet
 {
     private $myPdo;
     private $data;

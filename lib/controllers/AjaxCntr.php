@@ -13,15 +13,6 @@ class AjaxCntr implements iController
         $this->cookie = new Cookie();
     }
 
-/*    function indexAction()
-    {
-        $arr = $this->myPdo->select('book_id, book_name, img, price, visible')->table('shop_books')->where(array('visible' => 1))->limit(0, 6)->query()->commit();
-
-# JSON-encode the response
-        $json_response = json_encode($arr);
-        echo json_decode($json_response);
-    }
-*/
     function addQuantityAction()
     {
         $params = $this->fc->getParams();
@@ -43,6 +34,9 @@ class AjaxCntr implements iController
             ->table("shop_cart where cart_id = '$id'")
             ->query()
             ->commit();
+    }
+    function indexAction()
+    {
     }
 }
 ?>

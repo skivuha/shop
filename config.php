@@ -10,6 +10,9 @@ define('DB_HOST', 'localhost');
 //define('DB_PASS','tuser2');
 //define('PATH', '/~user2/PHP/shop');
 
+define('SRC_IMG', '/user_files/img/');
+
+
 define('DB_NAME', 'book');
 define('DB_PASS', '');
 define('DB_LOGIN', 'root');

@@ -23,31 +23,31 @@ class HomeCntr implements iController
     {
         $params = $this->fc->getParams();
         $this->data->setParam($params);
-        $this->data->setPage('lib/views/main.html');
+        $this->data->setPage('templates/main.html');
     }
 
     function sortAction()
     {
         $params = $this->fc->getParams();
         $this->data->setParam($params);
-        $this->data->setPage('lib/views/main.html');
+        $this->data->setPage('templates/main.html');
     }
 
     function authorsAction()
     {
-        $this->data->setPage('lib/views/main.html');
+        $this->data->setPage('templates/main.html');
     }
 
     function genresAction()
     {
-        $this->data->setPage('lib/views/main.html');
+        $this->data->setPage('templates/main.html');
     }
 
     function detailsAction()
     {
         $params = $this->fc->getParams();
         $book_id = abs((int)$params['id']); //validator
-        $this->data->setPage('lib/views/main.html');
+        $this->data->setPage('templates/main.html');
         $this->data->setParam($book_id);
     }
 
@@ -61,7 +61,7 @@ class HomeCntr implements iController
             $id_user = abs((int)($_SESSION['id_user']));
             $this->data->setIdUser($id_user);
             $this->data->setVal($id);
-            $this->data->setPage('lib/views/main.html');
+            $this->data->setPage('templates/main.html');
             header("Location: /");
         }
         else

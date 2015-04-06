@@ -1,0 +1,1 @@
+<?php defined('BOOKS') or die('Access denied');?>

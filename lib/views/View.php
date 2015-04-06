@@ -15,12 +15,14 @@ class View
     private $palletCheck;
     private $lang;
     private $langArr;
+    private $palletAdmin;
 
     function __construct()
     {
         $this->substitution = new Substitution();
         $this->palletMain = new PaletteMain();
         $this->palletAuth = new PalletAuth();
+        $this->palletAdmin = new PalletAdmin();
         $this->palletCheck = new PalletCheck();
         $this->palletCart = new PalletCart();
         $this->palletOrder = new PalletOrder();
@@ -98,7 +100,21 @@ class View
             $this->mArray['LOGINFORM'] = $this->palletMain->formExit();
             $this->mArray['TITLE'] = ucfirst($flag);
         }
-        if (('index' === $this->flag || 'logon' === $this->flag) && 'main' === $file)
+        elseif('mainAdmin' === $file)
+        {
+            $this->mArray['BOOKLIST'] = $this->palletAdmin->$flag($this->param);
+            $this->mArray['TITLE'] = ucfirst($flag);
+            if(false === $this->user)
+            {
+                $this->mArray['LOGINFORM'] = $this->palletAdmin->formLogin();
+            }
+            else
+            {
+                $this->mArray['LOGINFORM'] = $this->palletAdmin->formExit();
+            }
+            $this->mArray['PAGENAV'] = $this->palletAdmin->getNav();
+        }
+        if (('index' === $this->flag || 'logon' === $this->flag) && 'main' === $file )
         {
             $this->mArray['PAGENAV'] = $this->palletMain->getNav();
         }
