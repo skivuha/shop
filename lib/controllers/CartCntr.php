@@ -11,7 +11,6 @@ class CartCntr
         $this->data = DataCont::getInstance();
         $this->data->setFlag($this->fc->getAction());
         $this->myPdo = MyPdo::getInstance();
-        //$this->valid();
 
     }
 

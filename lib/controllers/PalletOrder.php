@@ -27,7 +27,7 @@ class PalletOrder
                     </table>';
 
         foreach($arr as $key=>$val) {
-
+            $cnt_book = 1;
             $data .= '<div class="panel panel-default">
                     <div class="panel-heading orderHead">
 
@@ -43,10 +43,11 @@ class PalletOrder
             ->table("shop_book_order INNER JOIN shop_books ON shop_book_order.id_book = shop_books.book_id WHERE id_order = '$val[id_order]' ")
             ->query()
             ->commit();
-            $data.= '<table class="table table-striped"><th>Book name</th><th>Quantity</th><th>Price</th>';
+            $data.= '<table class="table table-striped"><th>#</th><th>Book name</th><th>Quantity</th><th>Price</th>';
             foreach($book as $key=>$val)
             {
-                $data.= '<tr><td>'.$val['book_name'].'</td><td>'.$val['quantity'].'</td><td>'.$val['price']*$val['quantity'].'</td></tr>';
+                $data.= '<tr><td>'.$cnt_book.'</td><td>'.$val['book_name'].'</td><td>'.$val['quantity'].'</td><td>'.$val['price']*$val['quantity'].'</td></tr>';
+                $cnt_book++;
             }
              $data.='</table></div></div></div>';
             $cnt ++;

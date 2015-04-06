@@ -11,6 +11,8 @@ class DataCont
     private $val;
     private $cntr;
     private $post;
+    private $id_user;
+    private $cart_cookie;
 
 
     public static function getInstance()
@@ -45,6 +47,16 @@ class DataCont
     public function setUser($val)
     {
         $this->user = $val;
+    }
+
+    public function setCartCookie($val)
+    {
+        $this->cart_cookie = $val;
+    }
+
+    public function setIdUser($val)
+    {
+        $this->id_user = $val;
     }
 
     public function setCntr($val)
@@ -106,6 +118,14 @@ class DataCont
 
     public function getPost(){
         return $this->post;
+    }
+
+    public function getIdUser(){
+        return $this->id_user;
+    }
+
+    public function getCartCookie(){
+        return $this->cart_cookie;
     }
 }
 ?>

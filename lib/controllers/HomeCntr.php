@@ -59,6 +59,8 @@ class HomeCntr
     {
         $params = $this->fc->getParams();
         $id = abs((int)($params['id']));
+        $id_user = abs((int)($_SESSION['id_user']));
+        $this->data->setIdUser($id_user);
         $this->data->setVal($id);
         $this->data->setPage('lib/views/main.html');
         header("Location: /");
