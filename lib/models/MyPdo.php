@@ -328,7 +328,7 @@ class MyPdo
         {
             foreach($this->whereArr as $key=>$val)
             {
-                $stmt->bindParam(':'.$key,$val,PDO::PARAM_STR);
+                $stmt->bindValue(':'.$key,$val,PDO::PARAM_STR);
             }
         }
         if(strlen($this->order) !=0)

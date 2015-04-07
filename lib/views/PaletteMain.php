@@ -51,6 +51,14 @@ class PaletteMain implements iPallet
             $data.='<p><a href="/~user2/PHP/shop/Home/details/id/'.$books['book_id'].'" id="detailsBook">Details</a></p>';
             $data.='</div></div>';
         }
+
+    /*    $pdoo=$this->myPdo->select('book_name, ')
+          ->table('shop_books, shop_authors, shop_book_a')
+          ->where(array('visible'=>'1', 'shop_authors.authors_id'=>'shop_book_a.a_id','authors_id' => '6','shop_books.book_id' =>'shop_book_a.b_id'))
+          ->query()
+          ->commit();
+        echo '<pre>';  
+        var_dump($pdoo);*/
         return $data;
     }
 
@@ -226,35 +234,35 @@ class PaletteMain implements iPallet
 
         if($page > 1)
         {
-            $back = "<a href='".PATH."/~user2/PHP/shop/$uri/page/" .($page-1). "'>&lt;</a>";
+            $back = "<a href='/~user2/PHP/shop/$uri/page/" .($page-1). "'>&lt;</a>";
         }
         if($this->page < $this->page_count)
         {
-            $forward = "<a href='".PATH."/~user2/PHP/shop/$uri/page/" .($page+1). "'>&gt;</a>";
+            $forward = "<a href='/~user2/PHP/shop/$uri/page/" .($page+1). "'>&gt;</a>";
         }
         if($page > 3)
         {
-            $startpage = "<a href='".PATH."/~user2/PHP/shop/$uri/page/1'>&laquo;</a>";
+            $startpage = "<a href='/~user2/PHP/shop/$uri/page/1'>&laquo;</a>";
         }
         if($page < $page_count-2)
         {
-            $endpage = "<a href='".PATH."/~user2/PHP/shop/$uri/page/{$page_count}'>&raquo;</a>";
+            $endpage = "<a href='/~user2/PHP/shop/$uri/page/{$page_count}'>&raquo;</a>";
         }
         if($page - 2 > 0)
         {
-            $page2left = "<a href='".PATH."/~user2/PHP/shop/$uri/page/" .($page-2). "'>" .($page-2). "</a>";
+            $page2left = "<a href='/~user2/PHP/shop/$uri/page/" .($page-2). "'>" .($page-2). "</a>";
         }
         if($page - 1 > 0)
         {
-            $page1left = "<a href='".PATH."/~user2/PHP/shop/$uri/page/" .($page-1). "'>" .($page-1). "</a>";
+            $page1left = "<a href='/~user2/PHP/shop/$uri/page/" .($page-1). "'>" .($page-1). "</a>";
         }
         if($page + 2 <= $page_count)
         {
-            $page2right = "<a href='".PATH."/~user2/PHP/shop/$uri/page/" .($page+2). "'>" .($page+2). "</a>";
+            $page2right = "<a href='/~user2/PHP/shop/$uri/page/" .($page+2). "'>" .($page+2). "</a>";
         }
         if($page + 1 <= $page_count)
         {
-            $page1right = "<a href='".PATH."/~user2/PHP/shop/$uri/page/" .($page+1). "'>" .($page+1). "</a>";
+            $page1right = "<a href='/~user2/PHP/shop/$uri/page/" .($page+1). "'>" .($page+1). "</a>";
         }
 
         $this->nav = $startpage.$back.$page2left.$page1left.'<a class="navActive">'.$page.'</a>'.$page1right.$page2right.$forward.$endpage;

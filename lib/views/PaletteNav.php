@@ -87,14 +87,14 @@ class PaletteNav implements iPallet
         }
         if(!$splits[CONTROLLER] || !$splits[ACTION])
         {
-            $this->uri = '/~user2/PHP/shop/';
+            $this->uri = '';
             $this->uri.="$controller/$action";
         }
         else
         {
             $nameController = $splits[CONTROLLER];
             $nameAction = $splits[ACTION];
-            $this->uri = '/~user2/PHP/shop/';
+            $this->uri = '';
             $this->uri.="$nameController/$nameAction";
             foreach($params as $key => $value)
             {
