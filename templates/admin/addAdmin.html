@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>%#%TITLE%#%</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link href="/templates/css/style.css" type="text/css" rel="stylesheet">
+    <link href="/templates/admin/style.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="scripts.js"></script>
+    <base href="/shop/" />
+
+<body>
+<div id="wrapper">             <!--wrapper-->
+    <div id="header">             <!--header-->
+        <div id="logo"><a href="/Admin/index/"></a></div>    <!--logo-->
+        <div id="buy">                   <!--admin-->
+            <a class="adminlogin">welcome admin |</a><a href="/" class="adminexit">exit</a>
+        </div>
+    </div>
+    <ul id="menu" >             <!--menu-->
+        <li class="firstMenu"><a href="/Admin/index/">Main</a></li>
+        <li><a href="/Admin/addbook">Add new book</a></li>
+        <li><a href="/Admin/editgenre/">Genge</a></li>
+        <li><a href="/Admin/editauthor/">Authors</a></li>
+    </ul>
+    <div id="content">             <!--content-->
+        <div id="cornerL"></div>
+        <div id="cornerR"></div>
+        <div id="formreg">
+            <h2>Add book</h2>
+
+            <!--zakaz book-->
+            <form action="" method="POST" enctype="multipart/form-data">
+                <p><label><h4>Book name
+                    <input type="text" name="book_name"></h4></label></p>
+                <p><label><h4>Price <input type="text" name="price"></h4></label></p>
+                <table id="table_reg">
+                    <tr>
+                        <th>
+                            <Label for='genre_name[]'><p id="btngenre"><h3>Genre</h3></p></Label>
+                            <select multiple required size="5" name="genre_name[]" class="btngenre">
+                                %#%LISTGANRE%#%
+                            </select>
+                        </th>
+                        <th>
+                            <Label for='authors_name[]'><p id="btnauthor"><h3>Author</h3></p></Label>
+                            <select multiple required size="5" name="authors_name[]" class="btnauthor">
+                                %#%LISTAUTHORS%#%
+                            </select>
+                        </th>
+                    </tr>
+                </table>
+                <p><h4>Image</h4> <input type="file" name="baseimg" class="galochka"></p>
+                <p><label for="content"><h4>Description</h4></label></p>
+                <textarea name="content" cols="94" rows="20" id="content"></textarea></p>
+                <div><p><input type="submit" name="submit" value="Save" id="submitMail" ></p></div>
+                <!--div submit buttom-->
+                <p><h4>Show: </h4></p>
+                <p><input type="radio" name="visible" value="1" checked="">Yes
+                    <input type="radio" name="visible" value="0">No</p>
+            </form>
+        </div>
+
+        <!-- content -->
+        <div class="reviews"></div>
+        <!--cleaning-->
+        <div class="pager">
+            <!--pager menu-->
+        </div>
+    </div>
+    <div class="reviews"></div>
+    <!--cleaning-->
+</div>
+</body>
+
+</html>

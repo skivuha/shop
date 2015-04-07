@@ -16,6 +16,7 @@ class View
     private $lang;
     private $langArr;
     private $palletAdmin;
+    private $post;
 
     function __construct()
     {
@@ -34,6 +35,7 @@ class View
         $this->mArray = $this->data->getmArray();
         $this->user = $this->data->getUser();
         $this->lang = $this->data->getLang();
+        $this->post = $this->data->getPost();
     }
 
     function choisePalett()
@@ -114,6 +116,29 @@ class View
             }
             $this->mArray['PAGENAV'] = $this->palletAdmin->getNav();
         }
+        elseif('addAdmin' === $file)
+        {
+            $this->mArray['LISTAUTHORS'] = $this->palletAdmin->listAuthors();
+            $this->mArray['LISTGANRE'] = $this->palletAdmin->listGenre();
+            if(true === $this->post)
+            {
+                $this->palletAdmin->addbook();
+                header('Location: /Admin/index/');
+            }
+        }
+
+        elseif('editAdmin' === $file)
+        {
+            $this->mArray['LISTAUTHORS'] = $this->palletAdmin->listAuthors();
+            $this->mArray['LISTGANRE'] = $this->palletAdmin->listGenre();
+            $this->palletAdmin->update();
+            if(true === $this->post)
+            {
+                $this->palletAdmin->update();
+                header('Location: /Admin/index/');
+            }
+        }
+
         if (('index' === $this->flag || 'logon' === $this->flag) && 'main' === $file )
         {
             $this->mArray['PAGENAV'] = $this->palletMain->getNav();

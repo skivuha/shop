@@ -44,15 +44,16 @@ class AdminCntr implements iController
 
     function editgenreAction()
     {
-        if(isset($_POST['name_genre']))
-        {
+        $params = $this->fc->getParams();
+        $id_genre = abs((int)$params['id']);
+        $this->data->setVal($id_genre);
+
+        if (isset($_POST['name_genre'])) {
             $clear_genre = $this->check->clearData($_POST['name_genre']);
-            if(empty($clear_genre))
-            {
+            if (empty($clear_genre)) {
                 header('Location: /Admin/editgenre/');
             }
-            else
-            {
+            else {
                 $this->data->setParam($clear_genre);
             }
         }
@@ -61,20 +62,23 @@ class AdminCntr implements iController
 
     function editauthorAction()
     {
-        if(isset($_POST['name_author']))
-        {
+        $params = $this->fc->getParams();
+        $id_author = abs((int)$params['id']);
+        $this->data->setVal($id_author);
+
+        if (isset($_POST['name_author'])) {
             $clear_author = $this->check->clearData($_POST['name_author']);
-            if(empty($clear_author))
-            {
+            if (empty($clear_author)) {
                 header('Location: /Admin/editauthor/');
             }
-            else
-            {
+            else {
                 $this->data->setParam($clear_author);
             }
         }
         $this->data->setPage('templates/admin/mainAdmin.html');
     }
+
+
 
     function genreDeleteAction()
     {
@@ -108,6 +112,22 @@ class AdminCntr implements iController
         $this->data->setParam($book_id);
     }
 
+    function addbookAction()
+    {
+        if (isset($_POST['submit']))
+        {
+            $this->data->setParam($_POST);
+            $this->data->setPost(true);
+        }
+        $this->data->setPage('templates/admin/addAdmin.html');
+    }
+
+    function updateAction()
+    {
+        $params = $this->fc->getParams();
+        $this->data->setVal($params['id']);
+        $this->data->setPage('templates/admin/editAdmin.html');
+    }
 
 
 

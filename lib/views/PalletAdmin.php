@@ -121,13 +121,26 @@ class PalletAdmin implements iPallet
 
     function editauthor()
     {
+        $id_author = $this->data->getVal();
+        if(0 !== $id_author)
+        {
+            $arr_edit = $this->myPdo->select('authors_name, authors_id')
+                ->table("shop_authors where authors_id = '$id_author'")
+                ->query()
+                ->commit();
+        }
+
         if(isset($_POST['name_author']))
         {
             $new_author = $this->data->getParam();
-            $this->myPdo->insert()
-                ->table("shop_authors SET authors_name = '$new_author'")
-                ->query()
-                ->commit();
+            if (0 !== $id_author)
+            {
+                $this->myPdo->update()->table("shop_authors SET authors_name = '$new_author' where authors_id = '$id_author'")->query()->commit();
+            }
+            else
+            {
+                $this->myPdo->insert()->table("shop_authors SET authors_name = '$new_author'")->query()->commit();
+            }
             header('Location: /Admin/editauthor/');
         }
         else
@@ -141,14 +154,14 @@ class PalletAdmin implements iPallet
         $data.= '<div id="genre"> ';
         $data.='<h2>Authors</h2>';
         $data.= '<form action="" method="post">
-   <p> Author: <input type="text" name="name_author">
+   <p> Author: <input type="text" name="name_author" value="'.$arr_edit[0]['authors_name'].'">
     <input type="submit" name="submit" value="Save"></p>
 </form>';
         $data.='<table class="table table-striped"><tr><th>#</th><th>Name</th><th>Delete</th><th>Edit</th></tr>';
         foreach($arr as $authors)
         {
             $data.='<tr><td>'.$cnt.'</td><td>'.$authors['authors_name'].'</td><td><a href="/Admin/authorDelete/id/'.$authors['authors_id'].'">X</a>
-            </td><td><a href="/Admin/authorEdit/id/'.$authors['authors_id'].'">Edit</a></td></tr>';
+            </td><td><a href="/Admin/editauthor/id/'.$authors['authors_id'].'">Edit</a></td></tr>';
             $cnt++;
         }
         $data.='</table></div>';}
@@ -157,13 +170,31 @@ class PalletAdmin implements iPallet
 
     function editgenre()
     {
+        $id_genre = $this->data->getVal();
+        if(0 !== $id_genre)
+        {
+            $arr_edit = $this->myPdo->select('genre_name, genre_id')
+                ->table("shop_genre where genre_id = '$id_genre'")
+                ->query()
+                ->commit();
+        }
+
+
         if(isset($_POST['name_genre']))
         {
             $new_genre = $this->data->getParam();
-            $this->myPdo->insert()
-                ->table("shop_genre SET genre_name = '$new_genre'")
-                ->query()
-                ->commit();
+            if(0 !== $id_genre)
+            {
+                $this->myPdo->update()
+                    ->table("shop_genre SET genre_name = '$new_genre' where genre_id = '$id_genre'")
+                    ->query()
+                    ->commit();
+            }
+            else
+            {
+
+                $this->myPdo->insert()->table("shop_genre SET genre_name = '$new_genre'")->query()->commit();
+            }
             header('Location: /Admin/editgenre/');
         }
         else
@@ -177,20 +208,155 @@ class PalletAdmin implements iPallet
         $data.= '<div id="genre"> ';
         $data.='<h2>Genre</h2>';
         $data.= '<form action="" method="post">
-   <p> Genre: <input type="text" name="name_genre">
+   <p> Genre: <input type="text" name="name_genre" value="'.$arr_edit[0]['genre_name'].'">
     <input type="submit" name="submit" value="Save"></p>
 </form>';
         $data.='<table class="table table-striped"><tr><th>#</th><th>Name</th><th>Delete</th><th>Edit</th></tr>';
         foreach($arr as $genres)
         {
             $data.='<tr><td>'.$cnt.'</td><td>'.$genres['genre_name'].'</td><td><a href="/Admin/genreDelete/id/'.$genres['genre_id'].'">X</a>
-            </td><td><a href="/Admin/genreEdit/id/'.$genres['genre_id'].'">Edit</a></td></tr>';
+            </td><td><a href="/Admin/editgenre/id/'.$genres['genre_id'].'">Edit</a></td></tr>';
             $cnt++;
         }
         $data.='</table></div>';
         }
         return $data;
     }
+
+    function addbook()
+    {
+        $list_param = $this->data->getParam();
+        $var = $this->myPdo->insert()
+            ->table("shop_books SET book_name = '$list_param[book_name]', price = '$list_param[price]', content = '$list_param[content]', visible = '$list_param[visible]'")
+            ->query()
+            ->commit();
+
+
+        $id = $this->myPdo->lastId;
+        $types = array("image/gif", "image/png", "image/jpeg", "image/pjpeg", "image/x-png"); // array extensions
+
+        if($_FILES['baseimg']['name']){
+            $baseimgExt = strtolower(preg_replace("#.+\.([a-z]+)$#i", "$1", $_FILES['baseimg']['name'])); //extensions image
+            $baseimgName = "{$id}.{$baseimgExt}"; // new name image
+            $baseingTmpName = $_FILES['baseimg']['tmp_name']; // tmp name image
+            $baseimgType = $_FILES['baseimg']['type']; // type img
+
+            if(move_uploaded_file($baseingTmpName, "user_files/tmp/$baseimgName")){
+                $this->resize("user_files/tmp/$baseimgName", "user_files/img/$baseimgName", 210, 316, $baseimgExt);
+                @unlink("user_files/tmp/$baseimgName");
+
+
+                $this->myPdo->update()
+                    ->table("shop_books SET img = '$baseimgName' where book_id = '$id'")
+                    ->query()
+                    ->commit();
+
+            }
+        }
+//Show authors
+        $author_name = $list_param['authors_name'];
+        foreach($author_name as $authors_name){
+            $rez = $this->myPdo->select('authors_id')
+                ->table("shop_authors WHERE authors_name='$authors_name'")
+                ->query()
+                ->commit();
+            $id_a = $rez[0]['authors_id'];
+            $this->myPdo->insert()
+                ->table("shop_book_a SET a_id = '$id_a', b_id = '$id'")
+                ->query()
+                ->commit();
+        }
+
+//Show genre
+        $genr_name = $list_param['genre_name'];
+        foreach($genr_name as $genre_name){
+            $rez = $this->myPdo->select('genre_id')
+                ->table("shop_genre WHERE genre_name='$genre_name'")
+                ->query()
+                ->commit();
+            $id_g = $rez[0]['genre_id'];
+            $this->myPdo->insert()->table("shop_book_g SET g_id = '$id_g', b_id = '$id'")->query()->commit();
+        }
+}
+
+    function update()
+    {
+        $id_book = $this->data->getVal();
+        var_dump($id_book);
+
+    }
+
+//resize images
+function resize($target, $dest, $wmax, $hmax, $ext){
+    list($w_orig, $h_orig) = getimagesize($target);
+    $ratio = $w_orig / $h_orig;
+    if(($wmax / $hmax) > $ratio){
+        $wmax = $hmax * $ratio;}
+    else{$hmax = $wmax / $ratio;}
+    $img = "";
+    switch($ext){
+        case("gif"):
+            $img = imagecreatefromgif($target);
+            break;
+        case("png"):
+            $img = imagecreatefrompng($target);
+            break;
+        default:
+            $img = imagecreatefromjpeg($target);
+    }
+    $newImg = imagecreatetruecolor($wmax, $hmax);
+    if($ext =="png"){
+        imagesavealpha($newImg, true);
+        $transPng = imagecolorallocatealpha($newImg,0,0,0,127);
+        imagefill($newImg,0,0,$transPng);
+    }
+    imagecopyresampled($newImg, $img, 0, 0, 0, 0, $wmax, $hmax, $w_orig, $h_orig);
+    switch($ext){
+        case("gif"):
+            imagegif($newImg, $dest);
+            break;
+        case("png"):
+            imagepng($newImg, $dest);
+            break;
+        default:
+            imagejpeg($newImg, $dest);
+            break;
+    }
+    imagedestroy($newImg);
+}
+
+
+
+
+    function listAuthors()
+    {
+        $authors = $this->myPdo->select('DISTINCT authors_name, authors_id')
+            ->table("shop_authors")
+            ->query()
+            ->commit();
+        $data = '';
+         foreach($authors as $val)
+         {
+            $data.='<option>'.$val['authors_name'].'</option>';
+         }
+        return $data;
+    }
+
+    function listGenre()
+    {
+        $authors = $this->myPdo->select('DISTINCT genre_name, genre_id')
+            ->table("shop_genre")
+            ->query()
+            ->commit();
+        $data = '';
+        foreach($authors as $val)
+        {
+            $data.='<option>'.$val['genre_name'].'</option>';
+        }
+        return $data;
+    }
+
+
 
     function details($book_id)
     {
