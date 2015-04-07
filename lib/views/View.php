@@ -123,7 +123,7 @@ class View
             if(true === $this->post)
             {
                 $this->palletAdmin->addbook();
-                header('Location: /Admin/index/');
+                header('Location: /~user2/PHP/shop/Admin/index/');
             }
         }
 
@@ -135,7 +135,7 @@ class View
             if(true === $this->post)
             {
                 $this->palletAdmin->update();
-                header('Location: /Admin/index/');
+                header('Location: /~user2/PHP/shop/Admin/index/');
             }
         }
 
