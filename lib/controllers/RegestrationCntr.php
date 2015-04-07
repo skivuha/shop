@@ -29,7 +29,7 @@ class RegestrationCntr implements iController
         session_destroy();
         $this->data->setUser(false);
         $this->cookie->remove('code_user');
-        header("Location: ./");
+        header("Location: /~user2/PHP/shop/");
     }
 
     function logonAction()
@@ -88,7 +88,7 @@ class RegestrationCntr implements iController
                             $this->cookie->add('code_user', $code_user);
                         }
                         $this->data->setUser(true);
-                        header('Location: ./');
+                        header('Location: /~user2/PHP/shop/');
                     }
                     else
                     {
@@ -182,7 +182,7 @@ class RegestrationCntr implements iController
                 ->commit();
                if($arr)
                {
-                   header("Location: ./Regestration/logon/");
+                   header("Location: /~user2/PHP/shop/Regestration/logon/");
                    return true;
                }
                 else
