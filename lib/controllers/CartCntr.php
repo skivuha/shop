@@ -28,12 +28,12 @@ class CartCntr implements iController
         $id = abs((int)($params['id']));
         $this->data->setVal($id);
         $this->data->setPage('templates/cart.html');
-        header("Location: /Cart/index/");
+        header("Location: /~user2/PHP/shop/Cart/index/");
     }
 
     function buyAction()
     {
-        $this->data->setPage('lib/views/cart.html');
+        $this->data->setPage('templates/cart.html');
     }
 
 
@@ -47,7 +47,7 @@ class CartCntr implements iController
     {
         if(false === $this->data->getUser())
         {
-            header("Location: /Regestration/logon/");
+            header("Location: /~user2/PHP/shop/Regestration/logon/");
         }
     }
 }
