@@ -123,19 +123,31 @@ class View
             if(true === $this->post)
             {
                 $this->palletAdmin->addbook();
-                header('Location: /~user2/PHP/shop/Admin/index/');
+                header('Location: '.PATH.'Admin/index/');
             }
+        }
+        elseif('fixAdmin' === $file)
+        {
+            $this->mArray['USERANDORDER'] = $this->palletOrder->$flag($this->param);
+            $this->mArray['TITLE'] = ucfirst($flag);
         }
 
         elseif('editAdmin' === $file)
         {
             $this->mArray['LISTAUTHORS'] = $this->palletAdmin->listAuthors();
             $this->mArray['LISTGANRE'] = $this->palletAdmin->listGenre();
-            $this->palletAdmin->update();
+            $arr = $this->palletAdmin->update();
+            if($arr) {
+                foreach ($arr as $key => $val) {
+                    $this->mArray[$key] = $val;
+                }
+            }else{
+                header('Location: '.PATH.'Admin/index/');
+            }
             if(true === $this->post)
             {
                 $this->palletAdmin->update();
-                header('Location: /~user2/PHP/shop/Admin/index/');
+                header('Location: '.PATH.'Admin/index/');
             }
         }
 

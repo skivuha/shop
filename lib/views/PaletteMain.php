@@ -30,8 +30,8 @@ class PaletteMain implements iPallet
             $cnt = 0;
             $data.='<div align="center" id="contentIndex">';
             $data.='<div id=contenrInfo>';
-            $data.='<p><a href="/~user2/PHP/shop/Home/details/id/'.$books['book_id'].'" class="nameBook">'.$books['book_name'].'</a></p>';
-            $data.='<a href="/~user2/PHP/shop/Home/details/id/'.$books['book_id'].'" class="nameBook"><img src="'.SRC_IMG.$books['img'].'"></a>';
+            $data.='<p><a href="'.PATH.'Home/details/id/'.$books['book_id'].'" class="nameBook">'.$books['book_name'].'</a></p>';
+            $data.='<a href="'.PATH.'Home/details/id/'.$books['book_id'].'" class="nameBook"><img src="'.SRC_IMG.$books['img'].'"></a>';
             $data.='<p><span id="priceBook">'.$books['price'].' $</span></p>';
             foreach($buy as $val)
             {
@@ -42,13 +42,13 @@ class PaletteMain implements iPallet
             }
             if(false == $cnt)
             {
-                $data .= '<p><a href="/~user2/PHP/shop/Home/add/id/' . $books['book_id'] . '" id="buyBook">Buy</a></p>';
+                $data .= '<p><a href="'.PATH.'Home/add/id/' . $books['book_id'] . '" id="buyBook">Buy</a></p>';
             }
             else
             {
-                $data .= '<p><a href="/~user2/PHP/shop/Cart/index/" id="toCart">To cart</a></p>';
+                $data .= '<p><a href="'.PATH.'Cart/index/" id="toCart">To cart</a></p>';
             }
-            $data.='<p><a href="/~user2/PHP/shop/Home/details/id/'.$books['book_id'].'" id="detailsBook">Details</a></p>';
+            $data.='<p><a href="'.PATH.'Home/details/id/'.$books['book_id'].'" id="detailsBook">Details</a></p>';
             $data.='</div></div>';
         }
 
@@ -145,7 +145,7 @@ class PaletteMain implements iPallet
         $data.='<ul class="authorsCol">';
         foreach($arr as $authors)
         {
-            $data.='<li><a href="/~user2/PHP/shop/Home/sort/author/'.$authors['authors_id'].'">'.$authors['authors_name'].'</a></li>';
+            $data.='<li><a href="'.PATH.'Home/sort/author/'.$authors['authors_id'].'">'.$authors['authors_name'].'</a></li>';
         }
         $data.='</ul></div>';
         return $data;
@@ -164,7 +164,7 @@ class PaletteMain implements iPallet
         $data.='<ul class="genreCol">';
         foreach($arr as $genres)
         {
-            $data.='<li><a href="/~user2/PHP/shop/Home/sort/genre/'.$genres['genre_id'].'">'.$genres['genre_name'].'</a></li>';
+            $data.='<li><a href="'.PATH.'Home/sort/genre/'.$genres['genre_id'].'">'.$genres['genre_name'].'</a></li>';
         }
         $data.='</ul></div>';
         return $data;
@@ -200,11 +200,11 @@ class PaletteMain implements iPallet
         $data = '
 <div id="exit">
 <form action="" method="post"><input type="submit" value="en" name="leng"><span></span><span><input type="submit" value="ru" name="leng"></span></form>
-<form action="/~user2/PHP/shop/Regestration/logout/" method="post">
+<form action="'.PATH.'Regestration/logout/" method="post">
         <span>Hello <span id="nameSession">'.$this->session->getSession('login_user').'</span></span>
         <input type="submit" class="btn btn-default btn-xs" value="Exit" name="exit"></div></form>
-        <a href="/~user2/PHP/shop/Cart/index"><span class="glyphicon glyphicon-shopping-cart"> My cart</span></a><br>
-        <a href="/~user2/PHP/shop/Order/index/"><span class="glyphicon glyphicon-home"> My cabinet</span></a>';
+        <a href="'.PATH.'Cart/index"><span class="glyphicon glyphicon-shopping-cart"> My cart</span></a><br>
+        <a href="'.PATH.'Order/index/"><span class="glyphicon glyphicon-home"> My cabinet</span></a>';
         return $data;
     }
 
@@ -212,11 +212,11 @@ class PaletteMain implements iPallet
 
     function formLogin()
     {
-        $data = '<span><a href="/~user2/PHP/shop/Admin/index">For admin!</a></span>
+        $data = '<span><a href="'.PATH.'Admin/index">For admin!</a></span>
 <div id="exit"><form action="" method="post"><input type="submit" value="en" name="leng"><span></span><span><input type="submit" value="ru" name="leng"></span></form>
         <span>Hello, <span id="nameSession">guest!</span></span></div>
-        <a href="/~user2/PHP/shop/Cart/index"><span class="glyphicon glyphicon-shopping-cart"> My cart</span></a><br>
-        <a href="/~user2/PHP/shop/Regestration/logon/"><span class="glyphicon glyphicon-home"> My cabinet</span></a>';
+        <a href="'.PATH.'Cart/index"><span class="glyphicon glyphicon-shopping-cart"> My cart</span></a><br>
+        <a href="'.PATH.'Regestration/logon/"><span class="glyphicon glyphicon-home"> My cabinet</span></a>';
         return $data;
     }
 
@@ -234,35 +234,35 @@ class PaletteMain implements iPallet
 
         if($page > 1)
         {
-            $back = "<a href='/~user2/PHP/shop/$uri/page/" .($page-1). "'>&lt;</a>";
+            $back = '<a href="'.PATH.$uri.'/page/' .($page-1). '">&lt;</a>';
         }
         if($this->page < $this->page_count)
         {
-            $forward = "<a href='/~user2/PHP/shop/$uri/page/" .($page+1). "'>&gt;</a>";
+            $forward = '<a href="'.PATH.$uri.'/page/' .($page+1). '">&gt;</a>';
         }
         if($page > 3)
         {
-            $startpage = "<a href='/~user2/PHP/shop/$uri/page/1'>&laquo;</a>";
+            $startpage = '<a href="'.PATH.$uri.'/page/1">&laquo;</a>';
         }
         if($page < $page_count-2)
         {
-            $endpage = "<a href='/~user2/PHP/shop/$uri/page/{$page_count}'>&raquo;</a>";
+            $endpage = '<a href="'.PATH.$uri.'/page/'.$page_count.'">&raquo;</a>';
         }
         if($page - 2 > 0)
         {
-            $page2left = "<a href='/~user2/PHP/shop/$uri/page/" .($page-2). "'>" .($page-2). "</a>";
+            $page2left = '<a href="'.PATH.$uri.'/page/' .($page-2). '">' .($page-2). '</a>';
         }
         if($page - 1 > 0)
         {
-            $page1left = "<a href='/~user2/PHP/shop/$uri/page/" .($page-1). "'>" .($page-1). "</a>";
+            $page1left = '<a href="'.PATH.$uri.'/page/' .($page-1). '">' .($page-1). '</a>';
         }
         if($page + 2 <= $page_count)
         {
-            $page2right = "<a href='/~user2/PHP/shop/$uri/page/" .($page+2). "'>" .($page+2). "</a>";
+            $page2right = '<a href="'.PATH.$uri.'/page/' .($page+2). '">' .($page+2). '</a>';
         }
         if($page + 1 <= $page_count)
         {
-            $page1right = "<a href='/~user2/PHP/shop/$uri/page/" .($page+1). "'>" .($page+1). "</a>";
+            $page1right = '<a href="'.PATH.$uri.'/page/' .($page+1). '">' .($page+1). '</a>';
         }
 
         $this->nav = $startpage.$back.$page2left.$page1left.'<a class="navActive">'.$page.'</a>'.$page1right.$page2right.$forward.$endpage;

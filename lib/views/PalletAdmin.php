@@ -5,6 +5,7 @@ class PalletAdmin implements iPallet
     private $data;
     public $nav;
     private $session;
+    private $arrayPlace;
 
     public function __construct()
     {
@@ -32,6 +33,8 @@ class PalletAdmin implements iPallet
             ->commit();
         return $this->bookCreate($arr);
     }
+
+
 
     function bookCreate($arr)
     {
@@ -281,10 +284,97 @@ class PalletAdmin implements iPallet
 
     function update()
     {
+        $post = $this->data->getPost();
+        $list_param = $this->data->getParam();
         $id_book = $this->data->getVal();
-        var_dump($id_book);
+        //info
+        if(false === $post) {
+            $arr = $this->myPdo->select("DISTINCT book_id, price, book_name, img, content, visible, GROUP_CONCAT(DISTINCT authors_name) as authors_name, GROUP_CONCAT(DISTINCT genre_name) as genre_name")
+                ->table("shop_books, shop_authors, shop_genre INNER JOIN shop_book_a, shop_book_g WHERE shop_books.book_id = shop_book_a.b_id and shop_authors.authors_id = shop_book_a.a_id and shop_books.book_id = shop_book_g.b_id and shop_genre.genre_id = shop_book_g.g_id and book_id = $id_book GROUP BY book_name")
+                ->query()
+                ->commit();
+
+
+            $this->arrayPlace['BOOKNAME'] = $arr[0]['book_name'];
+            $this->arrayPlace['PRICE'] = $arr[0]['price'];
+            $this->arrayPlace['CONTENT'] = $arr[0]['content'];
+            $this->arrayPlace['IMG'] = $arr[0]['img'];
+
+            $auth = explode(",", $arr[0]['authors_name']);
+            $authorlist='';
+            foreach ($auth as $alist) {
+                $authorlist .= "<p><input type='checkbox' name='alist[]' value='$alist'>$alist</p>";
+            }
+            $this->arrayPlace['AUTHORLIST'] = $authorlist;
+
+            $genr = explode(",", $arr[0]['genre_name']);
+            $genlist='';
+            foreach ($genr as $glist) {
+                $genlist .= "<p><input type='checkbox' name='glist[]' value='$glist'>$glist</p>";
+            }
+            $this->arrayPlace['GENRELIST'] = $genlist;
+        }
+else {
+
+    if (1 == $list_param['delbaseimg']) {
+        $this->myPdo->update()->table("shop_books SET img = 'no_image.png' where book_id = '$id_book'")->query()->commit();
+    }
+
+
+    if ( ! empty($list_param['alist'])) {
+        $authlist = $list_param['alist'];
+        foreach ($authlist as $alist) {
+            $rez = $this->myPdo->select('authors_id')->table("shop_authors WHERE authors_name='$alist'")->query()->commit();
+            $id_authtor = $rez[0]['authors_id'];
+            $this->myPdo->delete()
+                ->table("shop_book_a where b_id = '$id_book' and a_id = '$id_authtor'")
+                ->query()
+                ->commit();
+        }
 
     }
+
+
+    if ( ! empty($list_param['glist'])) {
+        $genlist = $list_param['glist'];
+        foreach ($genlist as $glist) {
+
+            $rez = $this->myPdo->select('genre_id')->table("shop_genre WHERE genre_name='$glist'")->query()->commit();
+            $id_genre = $rez[0]['genre_id'];
+
+            $this->myPdo->delete()->table("shop_book_g where b_id = '$id_book' and g_id = '$id_genre'")->query()->commit();
+        }
+    }
+
+    //обновление данныйх в книге
+    $book_name = $list_param['book_name'];
+    $price = round(floatval(preg_replace("#,#", ".", $list_param['price'])), 2);
+    $content = $list_param['content'];
+
+    $this->myPdo->update()->table("shop_books SET book_name = '$book_name', price = '$price', content = '$content' where book_id = '$id_book'")->query()->commit();
+
+//Add authors (edit book)
+    if ( ! empty($list_param['authors_name'])) {
+        $author_name = $list_param['authors_name'];
+        foreach ($author_name as $authors_name) {
+            $rez = $this->myPdo->select('authors_id')->table("shop_authors WHERE authors_name='$authors_name'")->query()->commit();
+            $id_auth= $rez[0]['authors_id'];
+            $this->myPdo->insert()->table("shop_book_a SET a_id = '$id_auth', b_id = '$id_book'")->query()->commit();
+        }
+    }
+//Add genre (edit book)
+
+    if ( ! empty($list_param['genre_name'])) {
+        $genr_name = $list_param['genre_name'];
+        foreach ($genr_name as $genre_name) {
+            $rez = $this->myPdo->select('genre_id')->table("shop_genre WHERE genre_name='$genre_name'")->query()->commit();
+            $id_genre = $rez[0]['genre_id'];
+            $this->myPdo->insert()->table("shop_book_g SET g_id = '$id_genre', b_id = '$id_book'")->query()->commit();
+        }
+    }
+}
+        return $this->arrayPlace;
+        }
 
 //resize images
 function resize($target, $dest, $wmax, $hmax, $ext){

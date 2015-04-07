@@ -51,7 +51,7 @@ class AdminCntr implements iController
         if (isset($_POST['name_genre'])) {
             $clear_genre = $this->check->clearData($_POST['name_genre']);
             if (empty($clear_genre)) {
-                header('Location: /Admin/editgenre/');
+                header('Location: '.PATH.'/Admin/editgenre/');
             }
             else {
                 $this->data->setParam($clear_genre);
@@ -69,7 +69,7 @@ class AdminCntr implements iController
         if (isset($_POST['name_author'])) {
             $clear_author = $this->check->clearData($_POST['name_author']);
             if (empty($clear_author)) {
-                header('Location: /Admin/editauthor/');
+                header('Location: '.PATH.'/Admin/editauthor/');
             }
             else {
                 $this->data->setParam($clear_author);
@@ -126,6 +126,13 @@ class AdminCntr implements iController
     {
         $params = $this->fc->getParams();
         $this->data->setVal($params['id']);
+
+        $this->data->setPost(false);
+        if (isset($_POST['submit']))
+        {
+            $this->data->setParam($_POST);
+            $this->data->setPost(true);
+        }
         $this->data->setPage('templates/admin/editAdmin.html');
     }
 

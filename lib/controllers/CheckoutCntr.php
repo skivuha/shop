@@ -49,7 +49,7 @@ class CheckoutCntr implements iController
     {
         if(false === $this->data->getUser())
         {
-            header("Location: /~user2/PHP/shop/Regestration/logon/");
+            header('Location: '.PATH.'Regestration/logon/');
         }
     }
 }

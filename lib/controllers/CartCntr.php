@@ -28,7 +28,7 @@ class CartCntr implements iController
         $id = abs((int)($params['id']));
         $this->data->setVal($id);
         $this->data->setPage('templates/cart.html');
-        header("Location: /~user2/PHP/shop/Cart/index/");
+        header('Location: '.PATH.'Cart/index/');
     }
 
     function buyAction()
@@ -47,7 +47,7 @@ class CartCntr implements iController
     {
         if(false === $this->data->getUser())
         {
-            header("Location: /~user2/PHP/shop/Regestration/logon/");
+            header('Location: '.PATH.'Regestration/logon/');
         }
     }
 }

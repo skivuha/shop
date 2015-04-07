@@ -62,11 +62,11 @@ class HomeCntr implements iController
             $this->data->setIdUser($id_user);
             $this->data->setVal($id);
             $this->data->setPage('templates/main.html');
-            header("Location: /~user2/PHP/shop/");
+            header('Location: '.PATH.'');
         }
         else
         {
-            header("Location: /~user2/PHP/shop/Regestration/logon/");
+            header('Location: '.PATH.'Regestration/logon/');
         }
 
     }
