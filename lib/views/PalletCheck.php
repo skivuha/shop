@@ -54,7 +54,7 @@ class PalletCheck implements iPallet
             {
                 return false;
             }
-                $data.=' <form method="post" action="/Checkout/confirm/"><p>';
+                $data.=' <form method="post" action="/~user2/PHP/shop/Checkout/confirm/"><p>';
                      foreach($payment as $val)
                      {
                         $data.='<input type="radio" name="radio" required value="'.$val['payment_id'].'" />'.$val['payment_name'].'<br>';
@@ -121,7 +121,7 @@ class PalletCheck implements iPallet
             $data .='<p>Your order # '.$id_order.'</p>';
             $data .='<p>Total sum: '.$your_price.' $</p>';
             $data .='<p>Thank you for buying</p>';
-            $data .='<br><a href="'.PATH.'/" class="btn btn-default">to main</a></div>';
+            $data .='<br><a href="/~user2/PHP/shop/" class="btn btn-default">to main</a></div>';
             return $data;
         }
     }
