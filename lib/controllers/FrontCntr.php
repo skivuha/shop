@@ -61,7 +61,7 @@ class FrontCntr
             }
             else
             {
-                header('Location: /');
+                header('Location: /~user2/PHP/shop/');
             }
         }
     }
@@ -84,7 +84,7 @@ class FrontCntr
             }
             else
             {
-                header('Location: /');
+                header('Location: /~user2/PHP/shop/');
             }
             //получаем метод этого объекта
             $method = $rc->getMethod($this->getAction());
@@ -93,13 +93,13 @@ class FrontCntr
             }
             else
             {
-                header('Location: /');
+                header('Location: /~user2/PHP/shop/');
             }
 
         }
         else
         {
-            header('Location: /');
+            header('Location: /~user2/PHP/shop/');
         }
         $view = new View();
         $view->drowPage();
