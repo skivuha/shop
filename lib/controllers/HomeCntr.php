@@ -66,7 +66,7 @@ class HomeCntr implements iController
         }
         else
         {
-            header("Location: ./Regestration/logon/");
+            header("Location: /Regestration/logon/");
         }
 
     }
