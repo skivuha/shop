@@ -58,7 +58,7 @@ class PalletAuth implements iPallet
 
 <form class="simple-form" name="auth" id="formVal" method="POST">
                             <div class="row">
-                            <a href="./Regestration/adduser/">Regestration</a>
+                            <a href="/~user2/PHP/shop/Regestration/adduser/">Regestration</a>
                             </div>
                             <br />
                             <div class="row">
@@ -78,7 +78,7 @@ class PalletAuth implements iPallet
                             <br />
                             <div class="row col-sm-offset-3">
                                 <div>
-                                    <a href="./" class="btn btn-default">Back</a>
+                                    <a href="/~user2/PHP/shop/" class="btn btn-default">Back</a>
                                     <button class="btn btn-default" name="signin">Log in</button>
                                 </div>
                             </div>
