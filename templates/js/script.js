@@ -60,7 +60,7 @@ function quantity(book_id, newQ)
 
     //console.log(newQ);
     $.ajax({
-        url: '/Ajax/addQuantity/id/'+book_id+'/quantity/'+newQ+'/',
+        url: '/~user2/PHP/shop/Ajax/addQuantity/id/'+book_id+'/quantity/'+newQ+'/',
         method: 'GET'
     });
 }
@@ -68,10 +68,10 @@ function quantity(book_id, newQ)
     function deleteBookFromCart(id)
     {
         $.ajax({
-            url: '/Ajax/delete/id/'+id+'/',
+            url: '/~user2/PHP/shop/Ajax/delete/id/'+id+'/',
             method: 'GET'
         }).then(function(){
-            document.location.href = '/Cart/index/';
+            document.location.href = '/~user2/PHP/shop/Cart/index/';
         });
     }
 });
