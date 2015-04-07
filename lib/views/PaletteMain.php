@@ -30,8 +30,8 @@ class PaletteMain implements iPallet
             $cnt = 0;
             $data.='<div align="center" id="contentIndex">';
             $data.='<div id=contenrInfo>';
-            $data.='<p><a href="/Home/details/id/'.$books['book_id'].'" class="nameBook">'.$books['book_name'].'</a></p>';
-            $data.='<a href="/Home/details/id/'.$books['book_id'].'" class="nameBook"><img src="'.SRC_IMG.$books['img'].'"></a>';
+            $data.='<p><a href="./Home/details/id/'.$books['book_id'].'" class="nameBook">'.$books['book_name'].'</a></p>';
+            $data.='<a href="./Home/details/id/'.$books['book_id'].'" class="nameBook"><img src="'.SRC_IMG.$books['img'].'"></a>';
             $data.='<p><span id="priceBook">'.$books['price'].' $</span></p>';
             foreach($buy as $val)
             {
@@ -42,13 +42,13 @@ class PaletteMain implements iPallet
             }
             if(false == $cnt)
             {
-                $data .= '<p><a href="/Home/add/id/' . $books['book_id'] . '" id="buyBook">Buy</a></p>';
+                $data .= '<p><a href="./Home/add/id/' . $books['book_id'] . '" id="buyBook">Buy</a></p>';
             }
             else
             {
-                $data .= '<p><a href="/Cart/index/" id="toCart">To cart</a></p>';
+                $data .= '<p><a href="./Cart/index/" id="toCart">To cart</a></p>';
             }
-            $data.='<p><a href="/Home/details/id/'.$books['book_id'].'" id="detailsBook">Details</a></p>';
+            $data.='<p><a href="./Home/details/id/'.$books['book_id'].'" id="detailsBook">Details</a></p>';
             $data.='</div></div>';
         }
         return $data;
@@ -66,7 +66,7 @@ class PaletteMain implements iPallet
         $id_book = $this->data->getVal();
         //if(true === $this->data->getUser())
         //{
-            //$quantity = 1;
+            //$quantity = 1://github.com/skivuha/shop;
             $check = $this->myPdo->select('cart_id')->table("shop_cart WHERE user_id = '$id_user' AND  book_id = '$id_book' AND status = '0'")->query()->commit();
             if (0 === count($check))
             {
@@ -97,13 +97,13 @@ class PaletteMain implements iPallet
 
     function sort()
     {
-        $params = $this->data->getParam();
-        if(isset($params[author]))
+      $params = $this->data->getParam();
+        if(isset($params['author']))
         {
             $author = abs((int)$params[author]);
             $arr = $this->myPdo->select('book_id, book_name, img, price, visible')
                 //$sortPage = $this->myPdo->select('book_id, book_name, img, price, visible')
-                ->table("shop_books, shop_authors INNER JOIN shop_book_a WHERE shop_books.book_id = shop_book_a.b_id and shop_authors.authors_id = shop_book_a.a_id and visible='1' and authors_id='$author'")
+                ->table("shop_books, shop_authors, shop_book_a WHERE shop_books.book_id = shop_book_a.b_id and shop_authors.authors_id = shop_book_a.a_id and visible='1' and authors_id='$author'")
                 //->table("shop_books, shop_authors")
                 //  ->join('shop_book_a')
                 //->where(array('shop_books.book_id' => 'shop_book_a.b_id' , 'shop_authors.authors_id' => 'shop_book_a.a_id', 'visible'=>'1', 'authors_id'=>$author))
@@ -137,7 +137,7 @@ class PaletteMain implements iPallet
         $data.='<ul class="authorsCol">';
         foreach($arr as $authors)
         {
-            $data.='<li><a href="'.PATH.'/Home/sort/author/'.$authors['authors_id'].'">'.$authors['authors_name'].'</a></li>';
+            $data.='<li><a href="./Home/sort/author/'.$authors['authors_id'].'">'.$authors['authors_name'].'</a></li>';
         }
         $data.='</ul></div>';
         return $data;
@@ -146,7 +146,7 @@ class PaletteMain implements iPallet
     function genres()
     {
         $arr = $this->myPdo->select('DISTINCT genre_name, genre_id')
-            ->table("shop_books, shop_genre INNER JOIN shop_book_g WHERE shop_books.book_id = shop_book_g.b_id and shop_genre.genre_id = shop_book_g.g_id and visible='1'")
+            ->table("shop_books, shop_genre, shop_book_g WHERE shop_books.book_id = shop_book_g.b_id and shop_genre.genre_id = shop_book_g.g_id and visible='1'")
             //->where('visible', '1')
             ->query()
             ->commit();
@@ -156,7 +156,7 @@ class PaletteMain implements iPallet
         $data.='<ul class="genreCol">';
         foreach($arr as $genres)
         {
-            $data.='<li><a href="'.PATH.'/Home/sort/genre/'.$genres['genre_id'].'">'.$genres['genre_name'].'</a></li>';
+            $data.='<li><a href="./Home/sort/genre/'.$genres['genre_id'].'">'.$genres['genre_name'].'</a></li>';
         }
         $data.='</ul></div>';
         return $data;
@@ -171,6 +171,7 @@ class PaletteMain implements iPallet
             ->commit();
 
         $arr = $arr[0];
+
 
         $data = '';
         $data.='<div id="bookDetails">';
@@ -203,11 +204,11 @@ class PaletteMain implements iPallet
 
     function formLogin()
     {
-        $data = '<span><a href="/Admin/index">For admin!</a></span>
+        $data = '<span><a href="./Admin/index">For admin!</a></span>
 <div id="exit"><form action="" method="post"><input type="submit" value="en" name="leng"><span></span><span><input type="submit" value="ru" name="leng"></span></form>
         <span>Hello, <span id="nameSession">guest!</span></span></div>
-        <a href="/Cart/index"><span class="glyphicon glyphicon-shopping-cart"> My cart</span></a><br>
-        <a href="/Regestration/logon/"><span class="glyphicon glyphicon-home"> My cabinet</span></a>';
+        <a href="./Cart/index"><span class="glyphicon glyphicon-shopping-cart"> My cart</span></a><br>
+        <a href="./Regestration/logon/"><span class="glyphicon glyphicon-home"> My cabinet</span></a>';
         return $data;
     }
 
@@ -225,35 +226,35 @@ class PaletteMain implements iPallet
 
         if($page > 1)
         {
-            $back = "<a href='".PATH."/$uri/page/" .($page-1). "'>&lt;</a>";
+            $back = "<a href='".PATH."./$uri/page/" .($page-1). "'>&lt;</a>";
         }
         if($this->page < $this->page_count)
         {
-            $forward = "<a href='".PATH."/$uri/page/" .($page+1). "'>&gt;</a>";
+            $forward = "<a href='".PATH."./$uri/page/" .($page+1). "'>&gt;</a>";
         }
         if($page > 3)
         {
-            $startpage = "<a href='".PATH."/$uri/page/1'>&laquo;</a>";
+            $startpage = "<a href='".PATH."./$uri/page/1'>&laquo;</a>";
         }
         if($page < $page_count-2)
         {
-            $endpage = "<a href='".PATH."/$uri/page/{$page_count}'>&raquo;</a>";
+            $endpage = "<a href='".PATH."./$uri/page/{$page_count}'>&raquo;</a>";
         }
         if($page - 2 > 0)
         {
-            $page2left = "<a href='".PATH."/$uri/page/" .($page-2). "'>" .($page-2). "</a>";
+            $page2left = "<a href='".PATH."./$uri/page/" .($page-2). "'>" .($page-2). "</a>";
         }
         if($page - 1 > 0)
         {
-            $page1left = "<a href='".PATH."/$uri/page/" .($page-1). "'>" .($page-1). "</a>";
+            $page1left = "<a href='".PATH."./$uri/page/" .($page-1). "'>" .($page-1). "</a>";
         }
         if($page + 2 <= $page_count)
         {
-            $page2right = "<a href='".PATH."/$uri/page/" .($page+2). "'>" .($page+2). "</a>";
+            $page2right = "<a href='".PATH."./$uri/page/" .($page+2). "'>" .($page+2). "</a>";
         }
         if($page + 1 <= $page_count)
         {
-            $page1right = "<a href='".PATH."/$uri/page/" .($page+1). "'>" .($page+1). "</a>";
+            $page1right = "<a href='".PATH."./$uri/page/" .($page+1). "'>" .($page+1). "</a>";
         }
 
         $this->nav = $startpage.$back.$page2left.$page1left.'<a class="navActive">'.$page.'</a>'.$page1right.$page2right.$forward.$endpage;
