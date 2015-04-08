@@ -108,7 +108,7 @@ class PaletteMain implements iPallet
       $params = $this->data->getParam();
         if(isset($params['author']))
         {
-            $author = abs((int)$params[author]);
+            $author = abs((int)$params['author']);
             $arr = $this->myPdo->select('book_id, book_name, img, price, visible')
                 //$sortPage = $this->myPdo->select('book_id, book_name, img, price, visible')
                 ->table("shop_books, shop_authors, shop_book_a WHERE shop_books.book_id = shop_book_a.b_id and shop_authors.authors_id = shop_book_a.a_id and visible='1' and authors_id='$author'")
@@ -119,9 +119,9 @@ class PaletteMain implements iPallet
                 ->query()
                 ->commit();
         }
-        elseif(isset($params[genre]))
+        elseif(isset($params['genre']))
         {
-            $genre = abs((int)$params[genre]);
+            $genre = abs((int)$params['genre']);
             $arr = $this->myPdo->select('book_id, book_name, img, price, visible')
                 ->table("shop_books, shop_genre INNER JOIN shop_book_g WHERE shop_books.book_id = shop_book_g.b_id and shop_genre.genre_id = shop_book_g.g_id and visible='1' and genre_id=$genre")
                 ->query()

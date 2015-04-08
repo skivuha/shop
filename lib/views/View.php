@@ -17,6 +17,7 @@ class View
     private $langArr;
     private $palletAdmin;
     private $post;
+    private $palletAdminUser;
 
     function __construct()
     {
@@ -27,6 +28,7 @@ class View
         $this->palletCheck = new PalletCheck();
         $this->palletCart = new PalletCart();
         $this->palletOrder = new PalletOrder();
+        $this->palletAdminUser = new PalletAdminUser();
         $this->data = DataCont::getInstance();
         $this->file = $this->data->getPage();
         $this->cntr = $this->data->getCntr();
@@ -128,7 +130,7 @@ class View
         }
         elseif('fixAdmin' === $file)
         {
-            $this->mArray['USERANDORDER'] = $this->palletOrder->$flag($this->param);
+            $this->mArray['USERANDORDER'] = $this->palletAdminUser->$flag($this->param);
             $this->mArray['TITLE'] = ucfirst($flag);
         }
 

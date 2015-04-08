@@ -3,11 +3,14 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>%#%TITLE%#%</title>
+    <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <link href="/templates/css/style.css" type="text/css" rel="stylesheet">
-    <link href="/templates/admin/style.css" type="text/css" rel="stylesheet">
-    <script type="text/javascript" src="scripts.js"></script>
-    <base href="/shop/" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+<link href="/templates/admin/style.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="scripts.js"></script>
+
 
 <body>
 <div id="wrapper">             <!--wrapper-->
@@ -19,13 +22,20 @@
     </div>
     <ul id="menu" >             <!--menu-->
         <li class="firstMenu"><a href="/Admin/index/">User</a></li>
-        <li><a href="/Admin/orders">Orders</a></li>
+        <li><a href="/AdminUser/order">Orders</a></li>
     </ul>
     <div id="content">             <!--content-->
         <div id="cornerL"></div>
         <div id="cornerR"></div>
-        %#%ADMINUSER%#%
-
+        <div class="row orderList">
+            <div class="col-md-12">
+                <div id="accordion" class="panel-group">
+        %#%USERANDORDER%#%
+                </div>
+            </div>
+            <div class="col-md-6">
+            </div>
+        </div>
         <!-- content -->
         <div class="reviews"></div>
         <!--cleaning-->
