@@ -42,12 +42,12 @@ class PalletAdmin implements iPallet
         foreach ($arr as $books) {
             $data .= '<div align="center" id="contentIndex">';
             $data .= '<div id=contenrInfo>';
-            $data .= '<p><a href="/Admin/details/id/' . $books['book_id'] . '" class="nameBook">' . $books['book_name'] . '</a></p>';
-            $data .= '<a href="/Admin/details/id/' . $books['book_id'] . '" class="nameBook"><img src="' . SRC_IMG . $books['img'] . '"></a>';
+            $data .= '<p><a href="/~user2/PHP/shop/Admin/details/id/' . $books['book_id'] . '" class="nameBook">' . $books['book_name'] . '</a></p>';
+            $data .= '<a href="/~user2/PHP/shop/Admin/details/id/' . $books['book_id'] . '" class="nameBook"><img src="' . SRC_IMG_ADM . $books['img'] . '"></a>';
             $data .= '<p><span id="priceBook">' . $books['price'] . ' $</span></p>';
-            $data .= '<p><a href="/Admin/details/id/' . $books['book_id'] . '" id="addBook">Details</a></p>
-                      <p><a href="/Admin/update/id/' . $books['book_id'] . '" id="updateBook">Update</a></p>
-<p><a href="/Admin/delete/id/' . $books['book_id'] . '" onclick="return confirmDelete();" id="delBook">Delete</a></p>';
+            $data .= '<p><a href="/~user2/PHP/shop/Admin/details/id/' . $books['book_id'] . '" id="addBook">Details</a></p>
+                      <p><a href="/~user2/PHP/shop/Admin/update/id/' . $books['book_id'] . '" id="updateBook">Update</a></p>
+<p><a href="/~user2/PHP/shop/Admin/delete/id/' . $books['book_id'] . '" onclick="return confirmDelete();" id="delBook">Delete</a></p>';
             $data .= '</div></div>';
         }
         return $data;
@@ -95,7 +95,7 @@ class PalletAdmin implements iPallet
             ->query()
             ->commit();
 
-        header('Location: /Admin/index/');
+        header('Location: /~user2/PHP/shop/Admin/index/');
     }
 
     function genreDelete()
@@ -106,7 +106,7 @@ class PalletAdmin implements iPallet
             ->query()
             ->commit();
 
-        header('Location: /Admin/editgenre/');
+        header('Location: /~user2/PHP/shop/Admin/editgenre/');
     }
 
     function authorDelete()
@@ -117,7 +117,7 @@ class PalletAdmin implements iPallet
             ->query()
             ->commit();
 
-        header('Location: /Admin/editauthor/');
+        header('Location: /~user2/PHP/shop/Admin/editauthor/');
     }
 
 
@@ -144,7 +144,7 @@ class PalletAdmin implements iPallet
             {
                 $this->myPdo->insert()->table("shop_authors SET authors_name = '$new_author'")->query()->commit();
             }
-            header('Location: /Admin/editauthor/');
+            header('Location: /~user2/PHP/shop/Admin/editauthor/');
         }
         else
         {
@@ -163,8 +163,8 @@ class PalletAdmin implements iPallet
         $data.='<table class="table table-striped"><tr><th>#</th><th>Name</th><th>Delete</th><th>Edit</th></tr>';
         foreach($arr as $authors)
         {
-            $data.='<tr><td>'.$cnt.'</td><td>'.$authors['authors_name'].'</td><td><a href="/Admin/authorDelete/id/'.$authors['authors_id'].'">X</a>
-            </td><td><a href="/Admin/editauthor/id/'.$authors['authors_id'].'">Edit</a></td></tr>';
+            $data.='<tr><td>'.$cnt.'</td><td>'.$authors['authors_name'].'</td><td><a href="/~user2/PHP/shop/Admin/authorDelete/id/'.$authors['authors_id'].'">X</a>
+            </td><td><a href="/~user2/PHP/shop/Admin/editauthor/id/'.$authors['authors_id'].'">Edit</a></td></tr>';
             $cnt++;
         }
         $data.='</table></div>';}
@@ -198,7 +198,7 @@ class PalletAdmin implements iPallet
 
                 $this->myPdo->insert()->table("shop_genre SET genre_name = '$new_genre'")->query()->commit();
             }
-            header('Location: /Admin/editgenre/');
+            header('Location: /~user2/PHP/shop/Admin/editgenre/');
         }
         else
         {
@@ -217,8 +217,8 @@ class PalletAdmin implements iPallet
         $data.='<table class="table table-striped"><tr><th>#</th><th>Name</th><th>Delete</th><th>Edit</th></tr>';
         foreach($arr as $genres)
         {
-            $data.='<tr><td>'.$cnt.'</td><td>'.$genres['genre_name'].'</td><td><a href="/Admin/genreDelete/id/'.$genres['genre_id'].'">X</a>
-            </td><td><a href="/Admin/editgenre/id/'.$genres['genre_id'].'">Edit</a></td></tr>';
+            $data.='<tr><td>'.$cnt.'</td><td>'.$genres['genre_name'].'</td><td><a href="/~user2/PHP/shop/Admin/genreDelete/id/'.$genres['genre_id'].'">X</a>
+            </td><td><a href="/~user2/PHP/shop/Admin/editgenre/id/'.$genres['genre_id'].'">Edit</a></td></tr>';
             $cnt++;
         }
         $data.='</table></div>';
@@ -244,9 +244,9 @@ class PalletAdmin implements iPallet
             $baseingTmpName = $_FILES['baseimg']['tmp_name']; // tmp name image
             $baseimgType = $_FILES['baseimg']['type']; // type img
 
-            if(move_uploaded_file($baseingTmpName, "user_files/tmp/$baseimgName")){
-                $this->resize("user_files/tmp/$baseimgName", "user_files/img/$baseimgName", 210, 316, $baseimgExt);
-                @unlink("user_files/tmp/$baseimgName");
+            if(move_uploaded_file($baseingTmpName, "/~user2/PHP/shop/user_files/tmp/$baseimgName")){
+                $this->resize("/~user2/PHP/shop/user_files/tmp/$baseimgName", "/~user2/PHP/shop/user_files/img/$baseimgName", 210, 316, $baseimgExt);
+                @unlink("/~user2/PHP/shop/user_files/tmp/$baseimgName");
 
 
                 $this->myPdo->update()
@@ -462,7 +462,7 @@ function resize($target, $dest, $wmax, $hmax, $ext){
         $data.='<div id="bookDetails">';
         $data.='<h1>'.$arr['book_name'].'</h1>';
         $data.='<div class="productDetails">';
-        $data.='<img src="'.SRC_IMG.$arr['img'].'"></div>';
+        $data.='<img src="'.SRC_IMG_ADM.$arr['img'].'"></div>';
         $data.='<div id="detailsText">';
         $data.='<h2>Product Details</h2>';
         $data.='<p class="detailsfirst"><b>Author: </b>'.$arr['authors_name'].'</p>';
@@ -515,31 +515,31 @@ function resize($target, $dest, $wmax, $hmax, $ext){
         }
         if($this->page < $this->page_count)
         {
-            $forward = "<a href='".PATH."/$uri/page/" .($page+1). "'>&gt;</a>";
+            $forward = "<a href='".PATH."$uri/page/" .($page+1). "'>&gt;</a>";
         }
         if($page > 3)
         {
-            $startpage = "<a href='".PATH."/$uri/page/1'>&laquo;</a>";
+            $startpage = "<a href='".PATH."$uri/page/1'>&laquo;</a>";
         }
         if($page < $page_count-2)
         {
-            $endpage = "<a href='".PATH."/$uri/page/{$page_count}'>&raquo;</a>";
+            $endpage = "<a href='".PATH."$uri/page/{$page_count}'>&raquo;</a>";
         }
         if($page - 2 > 0)
         {
-            $page2left = "<a href='".PATH."/$uri/page/" .($page-2). "'>" .($page-2). "</a>";
+            $page2left = "<a href='".PATH."$uri/page/" .($page-2). "'>" .($page-2). "</a>";
         }
         if($page - 1 > 0)
         {
-            $page1left = "<a href='".PATH."/$uri/page/" .($page-1). "'>" .($page-1). "</a>";
+            $page1left = "<a href='".PATH."$uri/page/" .($page-1). "'>" .($page-1). "</a>";
         }
         if($page + 2 <= $page_count)
         {
-            $page2right = "<a href='".PATH."/$uri/page/" .($page+2). "'>" .($page+2). "</a>";
+            $page2right = "<a href='".PATH."$uri/page/" .($page+2). "'>" .($page+2). "</a>";
         }
         if($page + 1 <= $page_count)
         {
-            $page1right = "<a href='".PATH."/$uri/page/" .($page+1). "'>" .($page+1). "</a>";
+            $page1right = "<a href='".PATH."$uri/page/" .($page+1). "'>" .($page+1). "</a>";
         }
 
         $this->nav = $startpage.$back.$page2left.$page1left.'<a class="navActive">'.$page.'</a>'.$page1right.$page2right.$forward.$endpage;

@@ -9,8 +9,15 @@ class Validator
 
     public function clearData($data)
     {
+      if(is_array($data))
+      {
+        return false;
+      }
+      else
+      {
         $data = trim(strip_tags($data));
         return $data;
+      }
     }
 
     public function clearDataArr(array $arr)

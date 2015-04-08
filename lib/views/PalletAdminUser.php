@@ -62,7 +62,7 @@ class PalletAdminUser implements iPallet
 
                         <h4 class="panel-title">
                          <a href="#collapse-' . $cnt . '" data-parent="#accordion" data-toggle="collapse"><span>' . $val['data_st'] . '</span>
-                         <span id="sum">' . $val['total_price'] . ' $</span><span>'.$val['mail_user'].'</span></a>
+                         <span id="sum">' . $val['total_price'] . ' $</span><span id="mail">'.$val['mail_user'].'</span></a>
                          <span id="status">' . $val['name_status'] . '</span><span><form method="post" action="">'.$status_ord.'</span><span><input type="submit" name="'.$order.'" value="save"/></form></span>
 
                                 </h4>

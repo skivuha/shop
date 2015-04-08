@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>%#%TITLE%#%</title>
+    <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+<link href="/templates/admin/style.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="scripts.js"></script>
+
+
+<body>
+<div id="wrapper">             <!--wrapper-->
+    <div id="header">             <!--header-->
+        <div id="logo"><a href="/Admin/index/"></a></div>    <!--logo-->
+        <div id="buy">                   <!--admin-->
+            <a class="adminlogin">welcome admin |</a><a href="/" class="adminexit">exit</a>
+        </div>
+    </div>
+    <ul id="menu" >             <!--menu-->
+        <li class="firstMenu"><a href="/Admin/index/">User</a></li>
+        <li><a href="/AdminUser/order">Orders</a></li>
+    </ul>
+    <div id="content">             <!--content-->
+        <div id="cornerL"></div>
+        <div id="cornerR"></div>
+        <div class="row orderList">
+            <div class="col-md-12">
+                <div id="accordion" class="panel-group">
+        %#%USERANDORDER%#%
+                </div>
+            </div>
+            <div class="col-md-6">
+            </div>
+        </div>
+        <!-- content -->
+        <div class="reviews"></div>
+        <!--cleaning-->
+        <div class="pager">
+            <!--pager menu-->
+
+        </div>
+    </div>
+    <div class="reviews"></div>
+    <!--cleaning-->
+</div>
+</body>
+
+</html>
