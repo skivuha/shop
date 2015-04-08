@@ -1,7 +1,7 @@
 <?php
 class PalletCart implements iPallet
 {
-    private $myPdo;
+    private $query;
     private $data;
     public $nav;
     private $session;
@@ -9,7 +9,7 @@ class PalletCart implements iPallet
 
     public function __construct()
     {
-        $this->myPdo = MyPdo::getInstance();
+        $this->query = new QueryToDb();
         $this->data = DataCont::getInstance();
         $this->session = Session::getInstance();
         $this->cookie = new Cookie();
@@ -18,26 +18,7 @@ class PalletCart implements iPallet
     function index()
     {
         $id_user = $this->data->getVal();
-        $valid = $this->data->getUser();
-        $arr = array();
-        if(false === $valid)
-        {
-            $cart_cookie = $this->cookie->read('cart');
-            if(null != $cart_cookie)
-            {
-                $arr = unserialize($cart_cookie);
-
-                $this->cookie->add('json', json_encode($arr));
-            }
-        }
-        else
-        {
-            $arr = $this->myPdo->select('cart_id, quantity, book_name, price, shop_books.book_id')->table("shop_users, shop_books INNER JOIN shop_cart WHERE id_user = '$id_user' AND shop_books.book_id = shop_cart.book_id and shop_users.id_user = shop_cart.user_id and status = '0'")//->table("shop_users, shop_books INNER JOIN shop_cart")
-                //->where(array("`shop_users.id_user`" => "`shop_cart.user_id`", "`shop_books.book_id`" => "`shop_cart.book_id`", 'user_id'=>$id_user))
-                ->query()->commit();
-//        SELECT * FROM `shop_users`, `shop_books` INNER JOIN `shop_cart` WHERE `id_user` = 15
-//    AND shop_books.book_id = shop_cart.book_id and shop_users.id_user = shop_cart.user_id
-        }
+        $arr = $this->query->getListBookForCart($id_user);
         $data = '<table class="table table-striped">
             <tr>
                 <th>#</th>
@@ -67,10 +48,7 @@ class PalletCart implements iPallet
     function delete()
     {
         $id_user = $this->data->getVal();
-        $arr=$this->myPdo->delete()
-        ->table("shop_cart where cart_id = '$id_user'")
-        ->query()
-        ->commit();
+        $this->query->deleteFromCart($id_user);
     }
 }
 ?>

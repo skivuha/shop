@@ -4,9 +4,7 @@ class HomeCntr implements iController
     private $fc;
     private $data;
     private $check;
-    private $myPdo;
     private $session;
-    private $cookie;
 
     public function __construct()
     {
@@ -14,9 +12,7 @@ class HomeCntr implements iController
             $this->data = DataCont::getInstance();
             $this->data->setFlag($this->fc->getAction());
             $this->check = new Validator();
-            $this->myPdo = MyPdo::getInstance();
             $this->session = Session::getInstance();
-            $this->cookie = new Cookie();
     }
 
     function indexAction()
@@ -53,7 +49,6 @@ class HomeCntr implements iController
 
     function addAction()
     {
-
         if(true === $this->data->getUser())
         {
             $params = $this->fc->getParams();
@@ -68,7 +63,6 @@ class HomeCntr implements iController
         {
             header('Location: '.PATH.'Regestration/logon/');
         }
-
     }
 }
 ?>

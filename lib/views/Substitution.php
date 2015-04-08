@@ -35,6 +35,13 @@ class Substitution
         {
             $this->file = preg_replace('/%#%' .$key. '%#%/i', $val, $this->file);
         }
+        $default = '';
+        $this->file = preg_replace('/%#%(.*)%#%/Uis', $default, $this->file);
+        return $this->file;
+    }
+
+    public function drowPage()
+    {
         foreach($this->forRender as $key=>$val)
         {
             $this->file = preg_replace('/%#%' .$key. '%#%/i', $val, $this->file);
@@ -43,7 +50,6 @@ class Substitution
         {
             $this->file = preg_replace('/###LANG_' .$key. '###/i', $val, $this->file);
         }
-
         $default = '';
         $this->file = preg_replace('/%#%(.*)%#%/Uis', $default, $this->file);
         header("Content-Type: text/html; charset = UTF-8");

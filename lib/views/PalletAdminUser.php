@@ -1,12 +1,12 @@
 <?php
 class PalletAdminUser implements iPallet
 {
-    private $myPdo;
+    private $query;
     private $data;
 
     public function __construct()
     {
-        $this->myPdo = MyPdo::getInstance();
+        $this->query = new QueryToDb();
         $this->data = DataCont::getInstance();
     }
 
@@ -22,15 +22,14 @@ class PalletAdminUser implements iPallet
                     $id = $key;
                 }
             }
-
-           $this->myPdo->update()->table('shop_orders SET id_status = '.$id_chenge_status['sel'].' where id_order = '.$id.'')->query()->commit();
+            $id_status = $id_chenge_status['sel'];
+            if( isset($id_status) && isset($id) )
+            {
+                $this->query->setNewStatusOrder($id_status, $id);
+            }
         }
 
-        $arr = $this->myPdo->select('DISTINCT data_st, total_price, shop_status.name_status, id_order, mail_user')
-            ->table("shop_status, shop_users, shop_orders WHERE shop_status.id_status = shop_orders.id_status and
-             shop_users.id_user=shop_orders.id_user order by id_order DESC ")
-            ->query()
-            ->commit();
+        $arr = $this->query->getAllOrders();
 
         $cnt=1;
         $data= '<table class="table table-striped">
@@ -42,11 +41,8 @@ class PalletAdminUser implements iPallet
                     </tr>
                     </table>';
 
-        $status = $this->myPdo->select('DISTINCT id_status, name_status')
-            ->table('shop_status')
-            ->query()
-            ->commit();
-        $status_ord = '';
+        $status = $this->query->getAllStatus();
+
         $status_ord = '<select name="sel"><option value="1"></option> ';
 
             foreach($status as $stat)
@@ -69,11 +65,8 @@ class PalletAdminUser implements iPallet
                             </div>
                             <div id="collapse-' . $cnt . '" class="panel-collapse collapse">
                                 <div class="panel-body">';
-
-            $book = $this->myPdo->select('book_name, price, shop_book_order.quantity')
-                ->table("shop_book_order INNER JOIN shop_books ON shop_book_order.id_book = shop_books.book_id WHERE id_order = '$val[id_order]' ")
-                ->query()
-                ->commit();
+            $id_order = $val['id_order'];
+            $book = $this->query->getListBodyOrderForUser($id_order);
             $data.= '<table class="table table-striped"><th>#</th><th>Book name</th><th>Quantity</th><th>Price</th>';
             foreach($book as $key=>$val)
             {

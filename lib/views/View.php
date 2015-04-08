@@ -59,7 +59,7 @@ class View
             }
 
         }
-        elseif('regestration' === $file)
+        elseif('logon' === $file || 'adduser' === $file)
         {
             if(false === $this->user)
             {
@@ -71,6 +71,10 @@ class View
             }
             $this->mArray['AUTH'] = $this->palletAuth->$flag($this->param);
             $this->mArray['TITLE'] = ucfirst($flag);
+
+            $this->substitution->setFileTemplate($this->file);
+            $this->substitution->addToReplace($this->mArray);
+            $this->mArray['BOOKLIST'] = $this->substitution->templateRender();
         }
         elseif('cart' === $file)
         {
@@ -85,7 +89,7 @@ class View
             $this->mArray['LISTCHOISEBOOK'] = $this->palletCart->$flag($this->param);
             $this->mArray['TITLE'] = ucfirst($flag);
         }
-        elseif('checkout' === $file)
+        elseif('checkout' === $file || 'confirm' === $file)
         {
             if(false === $this->user)
             {
@@ -97,25 +101,31 @@ class View
             }
             $this->mArray['CHECKOUT'] = $this->palletCheck->$flag($this->param);
             $this->mArray['TITLE'] = ucfirst($flag);
+            $this->substitution->setFileTemplate($this->file);
+            $this->substitution->addToReplace($this->mArray);
+            $this->mArray['BOOKLIST'] = $this->substitution->templateRender();
         }
         elseif('order' === $file)
         {
+            if(false === $this->user)
+            {
+                $this->mArray['LOGINFORM'] = $this->palletMain->formLogin();
+            }
+            else
+            {
+                $this->mArray['LOGINFORM'] = $this->palletMain->formExit();
+            }
             $this->mArray['ORDERLIST'] = $this->palletOrder->$flag($this->param);
             $this->mArray['LOGINFORM'] = $this->palletMain->formExit();
             $this->mArray['TITLE'] = ucfirst($flag);
+            $this->substitution->setFileTemplate($this->file);
+            $this->substitution->addToReplace($this->mArray);
+            $this->mArray['BOOKLIST'] = $this->substitution->templateRender();
         }
         elseif('mainAdmin' === $file)
         {
             $this->mArray['BOOKLIST'] = $this->palletAdmin->$flag($this->param);
             $this->mArray['TITLE'] = ucfirst($flag);
-            if(false === $this->user)
-            {
-                $this->mArray['LOGINFORM'] = $this->palletAdmin->formLogin();
-            }
-            else
-            {
-                $this->mArray['LOGINFORM'] = $this->palletAdmin->formExit();
-            }
             $this->mArray['PAGENAV'] = $this->palletAdmin->getNav();
         }
         elseif('addAdmin' === $file)
@@ -163,11 +173,11 @@ class View
 
     function drowPage()
     {
-            $this->data = $this->substitution->setFileTemplate($this->file);
             $this->choisePalett();
+            $this->substitution->setFileTemplate('templates/main.html');
             $this->substitution->addToReplace($this->mArray);
             $this->substitution->addToReplace($this->langArr);
-            $this->substitution->templateRender();
+            $this->substitution->drowPage();
     }
 }
 ?>

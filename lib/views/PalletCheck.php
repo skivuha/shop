@@ -1,37 +1,23 @@
 <?php
 class PalletCheck implements iPallet
 {
-    private $myPdo;
+    private $query;
     private $data;
 
     public function __construct()
     {
-        $this->myPdo = MyPdo::getInstance();
+        $this->query = new QueryToDb();
         $this->data = DataCont::getInstance();
     }
         function index()
         {
             $id_user = $this->data->getVal();
-            $arr = $this->myPdo->select('cart_id, quantity, book_name, price, shop_books.book_id, discount_user')
-                ->table("shop_users, shop_books INNER JOIN shop_cart WHERE id_user = '$id_user' AND shop_books.book_id = shop_cart.book_id and shop_users.id_user = shop_cart.user_id and status = '0'")
-                ->query()
-                ->commit();
-
-            $payment = $this->myPdo->select('payment_name, payment_id')
-                ->table("shop_payment")
-                ->query()
-                ->commit();
-
-            $data = '<table class="table table-striped">
-            <tr>
-                <th>#</th>
-                <th>Book name</th>
-                <th>Quantity</th>
-                <th>Price</th>
-            </tr>';
+            $arr = $this->query->getListBookForCart($id_user);
+            $payment = $this->query->getListPaymentForCheckout();
             $cnt = 0;
             $total=0;
             $quantity = 0;
+            $data='';
             foreach($arr as $key=>$val)
             {
                 $cnt++;
@@ -66,15 +52,8 @@ class PalletCheck implements iPallet
     {
         $id_user = $this->data->getVal();
         $radio = $this->data->getPost();
-        $arr = $this->myPdo->select('quantity, price, shop_books.book_id, discount_user')
-            ->table("shop_users, shop_books INNER JOIN shop_cart WHERE id_user = '$id_user' AND shop_books.book_id = shop_cart.book_id and shop_users.id_user = shop_cart.user_id and status = '0'")
-            ->query()
-            ->commit();
-
-        $count_payment = $this->myPdo->select('count(*)')
-            ->table("shop_payment")
-            ->query()
-            ->commit();
+        $arr = $this->query->getListBookForCart($id_user);
+        $count_payment = $this->query->getCountBuyingBook();
 
         $total = 0;
 
@@ -98,31 +77,23 @@ class PalletCheck implements iPallet
         }
         $your_price = round($total-$discount);
 
-        $this->myPdo->insert()
-        ->table("shop_orders SET data_st = CURDATE(), id_user = '$id_user', total_price = '$your_price', id_payment = $radio")
-        ->query()
-        ->commit();
+        $this->query->setBuyingBook($id_user, $your_price, $radio);
 
-        $id_order = $this->myPdo->lastId;
+        $id_order = $this->query->getLastId();
+
         if(0 !== $id_order)
         {
             foreach($arr as $key=>$val)
             {
-                $this->myPdo->insert()
-                    ->table("shop_book_order SET id_book = '$val[book_id]', id_order = $id_order, quantity = '$val[quantity]'")
-                    ->query()
-                    ->commit();
+                $id_book = $val['book_id'];
+                $quantity = $val['quantity'];
+                $this->query->setOrder($id_book, $quantity, $id_order);
             }
-            $this->myPdo->update()
-                ->table("shop_cart SET status = '1' where user_id = '$id_user'")
-                ->query()
-                ->commit();
-            $data ='<div class="container well col-sm-4 col-sm-offset-4">';
-            $data .='<p>Your order # '.$id_order.'</p>';
-            $data .='<p>Total sum: '.$your_price.' $</p>';
-            $data .='<p>Thank you for buying</p>';
-            $data .='<br><a href="'.PATH.'" class="btn btn-default">to main</a></div>';
-            return $data;
+
+            $this->query->setStatusBookInCart($id_user);
+            $this->data->setmArray('IDORDER', $id_order);
+            $this->data->setmArray('YOUPRICE', $your_price);
+            return true;
         }
     }
 }

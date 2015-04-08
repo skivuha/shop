@@ -1,7 +1,7 @@
 <?php
 class PalletAdmin implements iPallet
 {
-    private $myPdo;
+    private $query;
     private $data;
     public $nav;
     private $session;
@@ -9,7 +9,7 @@ class PalletAdmin implements iPallet
 
     public function __construct()
     {
-        $this->myPdo = MyPdo::getInstance();
+        $this->query = new QueryToDb();
         $this->data = DataCont::getInstance();
         $this->session = Session::getInstance();
     }
@@ -25,12 +25,7 @@ class PalletAdmin implements iPallet
         $uri = $nav->getUriPageNav();
         $this->navBar($uri, $page, $page_count);
 
-        $arr = $this->myPdo->select('book_id, book_name, img, price, visible')
-            ->table('shop_books')
-            ->where(array('visible'=>1))
-            ->limit($start_pos, $perpage)
-            ->query()
-            ->commit();
+        $arr = $this->query->getBookForOneMainPage($start_pos, $perpage);
         return $this->bookCreate($arr);
     }
 
@@ -62,26 +57,19 @@ class PalletAdmin implements iPallet
     function sort()
     {
         $params = $this->data->getParam();
-        if(isset($params[author]))
+        if(isset($params['author']))
         {
-            $author = abs((int)$params[author]);
-            $arr = $this->myPdo->select('book_id, book_name, img, price, visible')
-                //$sortPage = $this->myPdo->select('book_id, book_name, img, price, visible')
-                ->table("shop_books, shop_authors INNER JOIN shop_book_a WHERE shop_books.book_id = shop_book_a.b_id and shop_authors.authors_id = shop_book_a.a_id and visible='1' and authors_id='$author'")
-                //->table("shop_books, shop_authors")
-                //  ->join('shop_book_a')
-                //->where(array('shop_books.book_id' => 'shop_book_a.b_id' , 'shop_authors.authors_id' => 'shop_book_a.a_id', 'visible'=>'1', 'authors_id'=>$author))
-                //->limit($start_pos, $perpage)
-                ->query()
-                ->commit();
+            $author = abs((int)$params['author']);
+            $arr = $this->query->getBookForAuthor($author);
         }
-        elseif(isset($params[genre]))
+        elseif(isset($params['genre']))
         {
-            $genre = abs((int)$params[genre]);
-            $arr = $this->myPdo->select('book_id, book_name, img, price, visible')
-                ->table("shop_books, shop_genre INNER JOIN shop_book_g WHERE shop_books.book_id = shop_book_g.b_id and shop_genre.genre_id = shop_book_g.g_id and visible='1' and genre_id=$genre")
-                ->query()
-                ->commit();
+            $genre = abs((int)$params['genre']);
+            $arr = $this->query->getBookForGenre($genre);
+        }
+        if(!isset($arr))
+        {
+            return false;
         }
         return $this->bookCreate($arr);
 
@@ -90,33 +78,21 @@ class PalletAdmin implements iPallet
     function delete()
     {
         $id_book = $this->data->getParam();
-        $this->myPdo->delete()
-            ->table("shop_books where book_id = '$id_book'")
-            ->query()
-            ->commit();
-
+        $this->query->deleteBook($id_book);
         header('Location: /~user2/PHP/shop/Admin/index/');
     }
 
     function genreDelete()
     {
         $id_genre = $this->data->getParam();
-        $this->myPdo->delete()
-            ->table("shop_genre where genre_id = '$id_genre'")
-            ->query()
-            ->commit();
-
+        $this->query->deleteGenre($id_genre);
         header('Location: /~user2/PHP/shop/Admin/editgenre/');
     }
 
     function authorDelete()
     {
         $id_author = $this->data->getParam();
-        $this->myPdo->delete()
-            ->table("shop_authors where authors_id = '$id_author'")
-            ->query()
-            ->commit();
-
+        $this->query->deleteAuthor($id_author);
         header('Location: /~user2/PHP/shop/Admin/editauthor/');
     }
 
@@ -127,10 +103,7 @@ class PalletAdmin implements iPallet
         $id_author = $this->data->getVal();
         if(0 !== $id_author)
         {
-            $arr_edit = $this->myPdo->select('authors_name, authors_id')
-                ->table("shop_authors where authors_id = '$id_author'")
-                ->query()
-                ->commit();
+            $arr_edit = $this->query->getAuthorName($id_author);
         }
 
         if(isset($_POST['name_author']))
@@ -138,23 +111,20 @@ class PalletAdmin implements iPallet
             $new_author = $this->data->getParam();
             if (0 !== $id_author)
             {
-                $this->myPdo->update()->table("shop_authors SET authors_name = '$new_author' where authors_id = '$id_author'")->query()->commit();
+                $this->query->setAuthorNewName($new_author, $id_author);
             }
             else
             {
-                $this->myPdo->insert()->table("shop_authors SET authors_name = '$new_author'")->query()->commit();
+                $this->query->setAuthorNew($new_author);
             }
             header('Location: /~user2/PHP/shop/Admin/editauthor/');
         }
         else
         {
-        $arr = $this->myPdo->select('DISTINCT authors_name, authors_id')
-            ->table("shop_authors")
-            ->query()
-            ->commit();
+        $arr = $this->query->getAuthorsName();
         $cnt=1;
-        $data = '';
-        $data.= '<div id="genre"> ';
+
+        $data= '<div id="genre"> ';
         $data.='<h2>Authors</h2>';
         $data.= '<form action="" method="post">
    <p> Author: <input type="text" name="name_author" value="'.$arr_edit[0]['authors_name'].'">
@@ -176,39 +146,27 @@ class PalletAdmin implements iPallet
         $id_genre = $this->data->getVal();
         if(0 !== $id_genre)
         {
-            $arr_edit = $this->myPdo->select('genre_name, genre_id')
-                ->table("shop_genre where genre_id = '$id_genre'")
-                ->query()
-                ->commit();
+            $arr_edit = $this->query->getGenreName($id_genre);
         }
-
 
         if(isset($_POST['name_genre']))
         {
             $new_genre = $this->data->getParam();
             if(0 !== $id_genre)
             {
-                $this->myPdo->update()
-                    ->table("shop_genre SET genre_name = '$new_genre' where genre_id = '$id_genre'")
-                    ->query()
-                    ->commit();
+                $this->query->setGenreNewName($new_genre, $id_genre);
             }
             else
             {
-
-                $this->myPdo->insert()->table("shop_genre SET genre_name = '$new_genre'")->query()->commit();
+                $this->query->setGenreNew($new_genre);
             }
             header('Location: /~user2/PHP/shop/Admin/editgenre/');
         }
         else
         {
-        $arr = $this->myPdo->select('DISTINCT genre_name, genre_id')
-            ->table("shop_genre")
-            ->query()
-            ->commit();
+        $arr = $this->query->getGenresName();
         $cnt=1;
-        $data = '';
-        $data.= '<div id="genre"> ';
+        $data = '<div id="genre"> ';
         $data.='<h2>Genre</h2>';
         $data.= '<form action="" method="post">
    <p> Genre: <input type="text" name="name_genre" value="'.$arr_edit[0]['genre_name'].'">
@@ -229,13 +187,14 @@ class PalletAdmin implements iPallet
     function addbook()
     {
         $list_param = $this->data->getParam();
-        $var = $this->myPdo->insert()
-            ->table("shop_books SET book_name = '$list_param[book_name]', price = '$list_param[price]', content = '$list_param[content]', visible = '$list_param[visible]'")
-            ->query()
-            ->commit();
+        $name = $list_param['book_name'];
+        $price = $list_param['price'];
+        $content = $list_param['content'];
+        $visible = $list_param['visible'];
 
+        $this->query->setBookNew($name,$price,$content, $visible);
 
-        $id = $this->myPdo->lastId;
+        $id = $this->query->getLastId();
         $types = array("image/gif", "image/png", "image/jpeg", "image/pjpeg", "image/x-png"); // array extensions
 
         if($_FILES['baseimg']['name']){
@@ -248,37 +207,23 @@ class PalletAdmin implements iPallet
                 $this->resize("/~user2/PHP/shop/user_files/tmp/$baseimgName", "/~user2/PHP/shop/user_files/img/$baseimgName", 210, 316, $baseimgExt);
                 @unlink("/~user2/PHP/shop/user_files/tmp/$baseimgName");
 
-
-                $this->myPdo->update()
-                    ->table("shop_books SET img = '$baseimgName' where book_id = '$id'")
-                    ->query()
-                    ->commit();
-
+                $this->query->setImgNew($baseimgName,$id);
             }
         }
 //Show authors
         $author_name = $list_param['authors_name'];
         foreach($author_name as $authors_name){
-            $rez = $this->myPdo->select('authors_id')
-                ->table("shop_authors WHERE authors_name='$authors_name'")
-                ->query()
-                ->commit();
+            $rez = $this->query->getAuthorsList($authors_name);
             $id_a = $rez[0]['authors_id'];
-            $this->myPdo->insert()
-                ->table("shop_book_a SET a_id = '$id_a', b_id = '$id'")
-                ->query()
-                ->commit();
+            $this->query->setAuthorToBook($id_a, $id);
         }
 
 //Show genre
         $genr_name = $list_param['genre_name'];
         foreach($genr_name as $genre_name){
-            $rez = $this->myPdo->select('genre_id')
-                ->table("shop_genre WHERE genre_name='$genre_name'")
-                ->query()
-                ->commit();
+            $rez = $this->query->getGenresList($genre_name);
             $id_g = $rez[0]['genre_id'];
-            $this->myPdo->insert()->table("shop_book_g SET g_id = '$id_g', b_id = '$id'")->query()->commit();
+            $this->query->setGenreToBook($id_g, $id);
         }
 }
 
@@ -289,11 +234,7 @@ class PalletAdmin implements iPallet
         $id_book = $this->data->getVal();
         //info
         if(false === $post) {
-            $arr = $this->myPdo->select("DISTINCT book_id, price, book_name, img, content, visible, GROUP_CONCAT(DISTINCT authors_name) as authors_name, GROUP_CONCAT(DISTINCT genre_name) as genre_name")
-                ->table("shop_books, shop_authors, shop_genre INNER JOIN shop_book_a, shop_book_g WHERE shop_books.book_id = shop_book_a.b_id and shop_authors.authors_id = shop_book_a.a_id and shop_books.book_id = shop_book_g.b_id and shop_genre.genre_id = shop_book_g.g_id and book_id = $id_book GROUP BY book_name")
-                ->query()
-                ->commit();
-
+            $arr = $this->query->getAllDataBook($id_book);
 
             $this->arrayPlace['BOOKNAME'] = $arr[0]['book_name'];
             $this->arrayPlace['PRICE'] = $arr[0]['price'];
@@ -317,32 +258,25 @@ class PalletAdmin implements iPallet
 else {
 
     if (1 == $list_param['delbaseimg']) {
-        $this->myPdo->update()->table("shop_books SET img = 'no_image.png' where book_id = '$id_book'")->query()->commit();
+        $this->query->setNoImg($id_book);
     }
-
 
     if ( ! empty($list_param['alist'])) {
         $authlist = $list_param['alist'];
         foreach ($authlist as $alist) {
-            $rez = $this->myPdo->select('authors_id')->table("shop_authors WHERE authors_name='$alist'")->query()->commit();
+            $rez = $this->query->getBookAuthor($alist);
             $id_authtor = $rez[0]['authors_id'];
-            $this->myPdo->delete()
-                ->table("shop_book_a where b_id = '$id_book' and a_id = '$id_authtor'")
-                ->query()
-                ->commit();
+            $this->query->deleteBookAuthor($id_book, $id_authtor);
         }
-
     }
-
 
     if ( ! empty($list_param['glist'])) {
         $genlist = $list_param['glist'];
         foreach ($genlist as $glist) {
 
-            $rez = $this->myPdo->select('genre_id')->table("shop_genre WHERE genre_name='$glist'")->query()->commit();
+            $rez = $this->query->getBookGenre($glist);
             $id_genre = $rez[0]['genre_id'];
-
-            $this->myPdo->delete()->table("shop_book_g where b_id = '$id_book' and g_id = '$id_genre'")->query()->commit();
+            $this->query->deleteBookGenre($id_book, $id_genre);
         }
     }
 
@@ -350,16 +284,15 @@ else {
     $book_name = $list_param['book_name'];
     $price = round(floatval(preg_replace("#,#", ".", $list_param['price'])), 2);
     $content = $list_param['content'];
-
-    $this->myPdo->update()->table("shop_books SET book_name = '$book_name', price = '$price', content = '$content' where book_id = '$id_book'")->query()->commit();
+    $this->query->setNewDataToBook($book_name, $price, $content, $id_book);
 
 //Add authors (edit book)
     if ( ! empty($list_param['authors_name'])) {
         $author_name = $list_param['authors_name'];
         foreach ($author_name as $authors_name) {
-            $rez = $this->myPdo->select('authors_id')->table("shop_authors WHERE authors_name='$authors_name'")->query()->commit();
+            $rez = $this->query->getAuthorsList($authors_name);
             $id_auth= $rez[0]['authors_id'];
-            $this->myPdo->insert()->table("shop_book_a SET a_id = '$id_auth', b_id = '$id_book'")->query()->commit();
+            $this->query->setAuthorToBook($id_auth, $id_book);
         }
     }
 //Add genre (edit book)
@@ -367,9 +300,9 @@ else {
     if ( ! empty($list_param['genre_name'])) {
         $genr_name = $list_param['genre_name'];
         foreach ($genr_name as $genre_name) {
-            $rez = $this->myPdo->select('genre_id')->table("shop_genre WHERE genre_name='$genre_name'")->query()->commit();
+            $rez = $this->query->getGenresList($genre_name);
             $id_genre = $rez[0]['genre_id'];
-            $this->myPdo->insert()->table("shop_book_g SET g_id = '$id_genre', b_id = '$id_book'")->query()->commit();
+            $this->query->setGenreToBook($id_genre, $id_book);
         }
     }
 }
@@ -420,10 +353,7 @@ function resize($target, $dest, $wmax, $hmax, $ext){
 
     function listAuthors()
     {
-        $authors = $this->myPdo->select('DISTINCT authors_name, authors_id')
-            ->table("shop_authors")
-            ->query()
-            ->commit();
+        $authors = $this->query->getAuthorsName();
         $data = '';
          foreach($authors as $val)
          {
@@ -434,10 +364,7 @@ function resize($target, $dest, $wmax, $hmax, $ext){
 
     function listGenre()
     {
-        $authors = $this->myPdo->select('DISTINCT genre_name, genre_id')
-            ->table("shop_genre")
-            ->query()
-            ->commit();
+        $authors = $this->query->getGenresName();
         $data = '';
         foreach($authors as $val)
         {
@@ -450,11 +377,7 @@ function resize($target, $dest, $wmax, $hmax, $ext){
 
     function details($book_id)
     {
-        $arr = $this->myPdo->select('DISTINCT book_id, price, book_name, img, content, GROUP_CONCAT(DISTINCT authors_name) as authors_name, GROUP_CONCAT(DISTINCT genre_name) as genre_name')
-            ->table("shop_books, shop_authors, shop_genre INNER JOIN shop_book_a, shop_book_g WHERE shop_books.book_id = shop_book_a.b_id and shop_authors.authors_id = shop_book_a.a_id and shop_books.book_id = shop_book_g.b_id and shop_genre.genre_id = shop_book_g.g_id and book_id = $book_id and visible='1' GROUP BY book_name")
-            //->where('visible', '1')
-            ->query()
-            ->commit();
+        $arr = $this->query->getDetailsBook($book_id);
 
         $arr = $arr[0];
 
@@ -468,32 +391,6 @@ function resize($target, $dest, $wmax, $hmax, $ext){
         $data.='<p class="detailsfirst"><b>Author: </b>'.$arr['authors_name'].'</p>';
         $data.='<p><b>Genre: </b>'.$arr['genre_name'].'</p>';
         $data.=$arr['content'].'</div></div>';
-        return $data;
-    }
-
-    function formExit()
-    {
-
-        $data = '
-<div id="exit">
-<form action="" method="post"><input type="submit" value="en" name="leng"><span></span><span><input type="submit" value="ru" name="leng"></span></form>
-<form action="/Regestration/logout/" method="post">
-        <span>Hello <span id="nameSession">'.$this->session->getSession('login_user').'</span></span>
-        <input type="submit" class="btn btn-default btn-xs" value="Exit" name="exit"></div></form>
-        <a href="/Cart/index"><span class="glyphicon glyphicon-shopping-cart"> My cart</span></a><br>
-        <a href="/Order/index/"><span class="glyphicon glyphicon-home"> My cabinet</span></a>';
-        return $data;
-    }
-
-
-
-    function formLogin()
-    {
-        $data = '<span><a href="/Admin/index">For admin!</a></span>
-<div id="exit"><form action="" method="post"><input type="submit" value="en" name="leng"><span></span><span><input type="submit" value="ru" name="leng"></span></form>
-        <span>Hello, <span id="nameSession">guest!</span></span></div>
-        <a href="/Cart/index"><span class="glyphicon glyphicon-shopping-cart"> My cart</span></a><br>
-        <a href="/Regestration/logon/"><span class="glyphicon glyphicon-home"> My cabinet</span></a>';
         return $data;
     }
 

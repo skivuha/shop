@@ -1,0 +1,31 @@
+%#%STATUS%#%
+<form class="simple-form" name="frm" id="formVal" method="POST">
+    <div class="row">
+        <div>
+            <label>Name: <span>%#%ERROR_NAME%#%</span></label>
+            <input type="text" class="form-control" required name="username" />
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div>
+            <label>Password: <span>%#%ERROR_PASS%#%</span></label>
+            <input type="password" class="form-control" required name="password" />
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div>
+            <label>E-mail: <span>%#%ERROR_EMAIL%#%</span></label>
+            <input type="email" class="form-control" required id="email" name="email" />
+        </div>
+    </div>
+    <br />
+    <br />
+    <div class="row col-sm-offset-3">
+        <div>
+            <button class="btn btn-default" type="reset">Reset</button>
+            <input type="submit" name="regNew" class="btn btn-default" value="Send" />
+        </div>
+    </div>
+</form>

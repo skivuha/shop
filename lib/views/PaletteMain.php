@@ -5,12 +5,14 @@ class PaletteMain implements iPallet
     private $data;
     public $nav;
     private $session;
+    private $query;
 
     public function __construct()
     {
         $this->myPdo = MyPdo::getInstance();
         $this->data = DataCont::getInstance();
         $this->session = Session::getInstance();
+        $this->query = new QueryToDb();
     }
 
     function bookCreate($arr)
@@ -22,7 +24,7 @@ class PaletteMain implements iPallet
 
         }
         else {
-            $buy = $this->myPdo->select('book_id')->table("shop_cart WHERE user_id = '$id_user' and status = '0'")->query()->commit();
+            $buy = $this->query->getBookIdInCartForCurentUser($id_user);
         }
         $data = '';
         foreach($arr as $books)
@@ -75,10 +77,10 @@ class PaletteMain implements iPallet
         //if(true === $this->data->getUser())
         //{
             //$quantity = 1://github.com/skivuha/shop;
-            $check = $this->myPdo->select('cart_id')->table("shop_cart WHERE user_id = '$id_user' AND  book_id = '$id_book' AND status = '0'")->query()->commit();
+            $check = $this->query->getChechBookInCartForThisUser($id_user, $id_book);
             if (0 === count($check))
             {
-                $this->myPdo->insert()->table("shop_cart SET user_id = '$id_user', book_id = '$id_book', status = '0'")->query()->commit();
+                $this->query->setBookToCartForThisUser($id_user, $id_book);
             }
         //}
     }
@@ -94,12 +96,7 @@ class PaletteMain implements iPallet
         $uri = $nav->getUriPageNav();
         $this->navBar($uri, $page, $page_count);
 
-        $arr = $this->myPdo->select('book_id, book_name, img, price, visible')
-            ->table('shop_books')
-            ->where(array('visible'=>1))
-            ->limit($start_pos, $perpage)
-            ->query()
-            ->commit();
+        $arr = $this->query->getBookForOneMainPage($start_pos, $perpage);
         return $this->bookCreate($arr);
     }
 
@@ -109,35 +106,19 @@ class PaletteMain implements iPallet
         if(isset($params['author']))
         {
             $author = abs((int)$params['author']);
-            $arr = $this->myPdo->select('book_id, book_name, img, price, visible')
-                //$sortPage = $this->myPdo->select('book_id, book_name, img, price, visible')
-                ->table("shop_books, shop_authors, shop_book_a WHERE shop_books.book_id = shop_book_a.b_id and shop_authors.authors_id = shop_book_a.a_id and visible='1' and authors_id='$author'")
-                //->table("shop_books, shop_authors")
-                //  ->join('shop_book_a')
-                //->where(array('shop_books.book_id' => 'shop_book_a.b_id' , 'shop_authors.authors_id' => 'shop_book_a.a_id', 'visible'=>'1', 'authors_id'=>$author))
-                //->limit($start_pos, $perpage)
-                ->query()
-                ->commit();
+            $arr = $this->query->getBookForAuthor($author);
         }
         elseif(isset($params['genre']))
         {
             $genre = abs((int)$params['genre']);
-            $arr = $this->myPdo->select('book_id, book_name, img, price, visible')
-                ->table("shop_books, shop_genre INNER JOIN shop_book_g WHERE shop_books.book_id = shop_book_g.b_id and shop_genre.genre_id = shop_book_g.g_id and visible='1' and genre_id=$genre")
-                ->query()
-                ->commit();
+            $arr = $this->query->getBookForGenre($genre);
         }
         return $this->bookCreate($arr);
-
     }
 
     function authors()
     {
-        $arr = $this->myPdo->select('DISTINCT authors_name, authors_id')
-            ->table("shop_books, shop_authors INNER JOIN shop_book_a WHERE shop_books.book_id = shop_book_a.b_id and shop_authors.authors_id = shop_book_a.a_id and visible='1' ORDER BY authors_name")
-            //->where('visible', '1')
-            ->query()
-            ->commit();
+        $arr = $this->query->getAuthors();
 
         $data = '';
         $data.= '<div id="authors">';
@@ -153,11 +134,7 @@ class PaletteMain implements iPallet
 
     function genres()
     {
-        $arr = $this->myPdo->select('DISTINCT genre_name, genre_id')
-            ->table("shop_books, shop_genre, shop_book_g WHERE shop_books.book_id = shop_book_g.b_id and shop_genre.genre_id = shop_book_g.g_id and visible='1'")
-            //->where('visible', '1')
-            ->query()
-            ->commit();
+        $arr = $this->query->getGenre();
         $data = '';
         $data.= '<div id="genre"> ';
         $data.='<h2>Genre</h2>';
@@ -172,11 +149,7 @@ class PaletteMain implements iPallet
 
     function details($book_id)
     {
-        $arr = $this->myPdo->select('DISTINCT book_id, price, book_name, img, content, GROUP_CONCAT(DISTINCT authors_name) as authors_name, GROUP_CONCAT(DISTINCT genre_name) as genre_name')
-            ->table("shop_books, shop_authors, shop_genre INNER JOIN shop_book_a, shop_book_g WHERE shop_books.book_id = shop_book_a.b_id and shop_authors.authors_id = shop_book_a.a_id and shop_books.book_id = shop_book_g.b_id and shop_genre.genre_id = shop_book_g.g_id and book_id = $book_id and visible='1' GROUP BY book_name")
-            //->where('visible', '1')
-            ->query()
-            ->commit();
+        $arr = $this->query->getDetailsBook($book_id);
 
         $arr = $arr[0];
 

@@ -41,7 +41,7 @@ class CheckoutCntr implements iController
             $params = abs((int)($_SESSION['id_user']));
             $this->data->setVal($params);
             $this->data->setPost($radio);
-            $this->data->setPage('templates/checkout.html');
+            $this->data->setPage('templates/confirm.html');
         }
     }
 

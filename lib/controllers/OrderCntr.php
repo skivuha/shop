@@ -7,7 +7,6 @@ class OrderCntr implements iController
         $this->valid();
         $this->fc = FrontCntr::getInstance();
         $this->data->setFlag($this->fc->getAction());
-        $this->myPdo = MyPdo::getInstance();
     }
 
     function indexAction()

@@ -8,12 +8,14 @@ class PaletteNav implements iPallet
     private $start_pos;
     private $fc;
     private $uri;
+    private $query;
 
     public function __construct($params)
     {
         $this->fc = FrontCntr::getInstance();
         $this->myPdo = MyPdo::getInstance();
         $this->pageFromParams($params);
+        $this->query = new QueryToDb();
         $this->startPage();
         $this->pageNav();
     }
@@ -37,7 +39,7 @@ class PaletteNav implements iPallet
 
     private function startPage()
     {
-        $this->page_count = ceil($this->countRow() / $this->perpage);
+        $this->page_count = ceil($this->query->getCountRow() / $this->perpage);
         if(!$this->page_count) $this->page_count = 1;
         if($this->page > $this->page_count)
         {
@@ -67,12 +69,6 @@ class PaletteNav implements iPallet
     public function getPageCount()
     {
         return $this->page_count;
-    }
-
-    private function countRow()
-    {
-        $count = $this->myPdo->select('COUNT(book_id) as count_rows')->table('shop_books')->where(array('visible'=>1))->query()->commit();
-        return $count[0]['count_rows'];
     }
 
     function pageNav()
