@@ -3,6 +3,7 @@ class PalletCheck implements iPallet
 {
     private $query;
     private $data;
+    private $arr;
 
     public function __construct()
     {
@@ -46,6 +47,7 @@ class PalletCheck implements iPallet
                         $data.='<input type="radio" name="radio" required value="'.$val['payment_id'].'" />'.$val['payment_name'].'<br>';
                      }
                 $data.='<input type="submit" class="btn btn-default btn-xs" value="Confirm order" name="buyTooOrder" /></p></form>';
+
             return $data;
         }
     function confirm()
@@ -91,8 +93,9 @@ class PalletCheck implements iPallet
             }
 
             $this->query->setStatusBookInCart($id_user);
-            $data['IDORDER'] =  $id_order;
-            return $data; 
+            $this->arr['IDORDER'] = $id_order;
+            $this->arr['PRICE'] = $your_price;
+            return $this->arr;
         }
     }
 }

@@ -60,7 +60,7 @@ function quantity(book_id, newQ)
 
     //console.log(newQ);
     $.ajax({
-        url: '/~user2/PHP/shop/Ajax/addQuantity/id/'+book_id+'/quantity/'+newQ+'/',
+        url: '/Ajax/addQuantity/id/'+book_id+'/quantity/'+newQ+'/',
         method: 'GET'
     });
 }
@@ -68,17 +68,11 @@ function quantity(book_id, newQ)
     function deleteBookFromCart(id)
     {
         $.ajax({
-            url: '/~user2/PHP/shop/Ajax/delete/id/'+id+'/',
+            url: '/Ajax/delete/id/'+id+'/',
             method: 'GET'
         }).then(function(){
-            document.location.href = '/~user2/PHP/shop/Cart/index/';
+            document.location.href = '/Cart/index/';
         });
     }
 });
 
-function getCookie(name) {
-    var matches = document.cookie.match(new RegExp(
-        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-    ));
-    return matches ? decodeURIComponent(matches[1]) : undefined;
-}

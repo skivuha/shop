@@ -29,8 +29,10 @@ class Substitution
         return true;
     }
 
-    public function templateRender()
+    public function templateRender($file, $arr)
     {
+        $this->setFileTemplate($file);
+        $this->addToReplace($arr);
       if(isset($this->forRender)) {
           foreach ($this->forRender as $key => $val) {
                 $this->file = preg_replace('/%#%' . $key . '%#%/i', $val, $this->file);

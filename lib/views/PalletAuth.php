@@ -85,7 +85,6 @@ class PalletAuth implements iPallet
                 if(!empty($arr))
                 {
                     $this->error['ERROR_NAME'] = 'E-mail already exists';
-                    return false;
                 }
                 else
                 {
@@ -95,17 +94,15 @@ class PalletAuth implements iPallet
                     if($arr)
                     {
                         header('Location: '.PATH.'Regestration/logon/');
-                        return true;
                     }
                     else
                     {
                         $this->error['STATUS'] = 'An error occurred while registering a new user. Contact the Administration.';
-                        return false;
                     }
                 }
             }
         }
-        if(!empty($this->error)
+        if(!empty($this->error))
         {
           return $this->error;
         }
@@ -145,7 +142,6 @@ class PalletAuth implements iPallet
                 $arr = $this->query->getUser($email);
                 if (empty($arr)) {
                     $this->error['ERRORLOGIN']= 'Wrong e-mail or password';
-                    return $this->error;
                 }
                 else
                 {
@@ -164,20 +160,18 @@ class PalletAuth implements iPallet
                             $this->cookie->add('code_user', $code_user);
                         }
                         $this->data->setUser(true);
-                        header('Location: '.PATH.'');
+                        header('Location: /');
                     }
                     else
                     {
                         $this->error['ERRORLOGIN'] =  'Wrong e-mail or password';
-                        return $this->error;
                     }
                 }
             }
-            if(!empty($this->error))
-            {
-              return $this->error;
-            }
-
+        }
+        if(!empty($this->error))
+        {
+            return $this->error;
         }
         return true;
     }

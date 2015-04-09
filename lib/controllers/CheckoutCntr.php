@@ -21,8 +21,7 @@ class CheckoutCntr implements iController
         $params = abs((int)($_SESSION['id_user']));
         $this->data->setVal($params);
         $this->data->setPage('templates/checkout.html');
-
-            $this->data->setmArray('ERROR', 'Choise payment method');
+        $this->data->setmArray('ERROR', 'Choise payment method');
     }
 
     function confirmAction()

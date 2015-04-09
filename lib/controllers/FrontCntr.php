@@ -48,7 +48,7 @@ class FrontCntr
         if (!empty($splits[PARAM]) && !empty($splits[PARAM + 1])) {
             $keys = $values = array();
             for ($i = PARAM, $cnt = count($splits); $i < $cnt; $i++) {
-                if (0 != $i % 2) {
+                if (0 == $i % 2) {
                     //четное параметр
                     $keys[] = $splits[$i];
                 } else {
@@ -103,7 +103,6 @@ class FrontCntr
         }
         $view = new View();
         $view->drowPage();
-        
     }
 
     public function getParams()

@@ -30,165 +30,78 @@ class View
         $this->palletOrder = new PalletOrder();
         $this->palletAdminUser = new PalletAdminUser();
         $this->data = DataCont::getInstance();
+        $this->fc = FrontCntr::getInstance();
         $this->file = $this->data->getPage();
-        $this->cntr = $this->data->getCntr();
+        $this->cntr = $this->fc->getCntr();
         $this->flag = $this->data->getFlag();
         $this->param = $this->data->getParam();
         $this->mArray = $this->data->getmArray();
         $this->user = $this->data->getUser();
         $this->lang = $this->data->getLang();
         $this->post = $this->data->getPost();
+
     }
+private function headAuth()
+{
+    if (false === $this->user) {
+        $this->mArray['LOGINFORM'] = $this->substitution->templateRender('templates/formlogin.html', $this->mArray);
+    }
+    else {
+        $this->mArray['LOGINMENU'] = $this->palletMain->formExit();
+        $this->mArray['LOGINFORM'] = $this->substitution->templateRender('templates/formexit.html', $this->mArray);
+    }
+}
 
     function choisePalett()
     {
         $file = basename($this->file, '.html');
         $this->flag = str_replace('Action','', $this->flag);
         $flag = str_replace('"','',$this->flag);
+
         if('main' === $file)
         {
-            if(false === $this->user)
-            {
-                $this->substitution->setFileTemplate('templates/formlogin.html');
-                $this->substitution->addToReplace($this->mArray);
-                $this->mArray['LOGINFORM'] = $this->substitution->templateRender();
-            }
-            else
-            {
-                $this->mArray['LOGINMENU'] = $this->palletMain->formExit();
-                $this->substitution->setFileTemplate('templates/formexit.html');
-                $this->substitution->addToReplace($this->mArray);
-                $this->mArray['LOGINFORM'] = $this->substitution->templateRender();
-            }
-
+            $this->headAuth();
             $this->mArray['BOOKLIST'] = $this->palletMain->$flag($this->param);
             $this->mArray['TITLE'] = ucfirst($flag);
-
         }
         elseif('logon' === $file || 'adduser' === $file)
         {
-            if(false === $this->user)
+            $this->headAuth();
+            if(true !== $this->palletAuth->$flag($this->param))
             {
-                $this->substitution->setFileTemplate('templates/formlogin.html');
-                $this->substitution->addToReplace($this->mArray);
-                $this->mArray['LOGINFORM'] = $this->substitution->templateRender();
-            }
-            else
-            {
-                $this->mArray['LOGINMENU'] = $this->palletMain->formExit();
-                $this->substitution->setFileTemplate('templates/formexit.html');
-                $this->substitution->addToReplace($this->mArray);
-                $this->mArray['LOGINFORM'] = $this->substitution->templateRender();
-            }
-            if(true === $this->palletAuth->$flag($this->param))
-            {
-              
-            }
-            else{
               $this->mArray = $this->palletAuth->$flag($this->param);
             }
             $this->mArray['TITLE'] = ucfirst($flag);
-          
-            $this->substitution->setFileTemplate($this->file);
-            $this->substitution->addToReplace($this->mArray);
-            $this->mArray['BOOKLIST'] = $this->substitution->templateRender();
+            $this->mArray['BOOKLIST'] = $this->substitution->templateRender($this->file, $this->mArray);
         }
         elseif('cart' === $file)
         {
-            if(false === $this->user)
-            {
-                $this->substitution->setFileTemplate('templates/formlogin.html');
-                $this->substitution->addToReplace($this->mArray);
-                $this->mArray['LOGINFORM'] = $this->substitution->templateRender();
-            }
-            else
-            {
-                $this->mArray['LOGINMENU'] = $this->palletMain->formExit();
-                $this->substitution->setFileTemplate('templates/formexit.html');
-                $this->substitution->addToReplace($this->mArray);
-                $this->mArray['LOGINFORM'] = $this->substitution->templateRender();
-            }
+            $this->headAuth();
             $this->mArray['LISTCHOISEBOOK'] = $this->palletCart->$flag($this->param);
             $this->mArray['TITLE'] = ucfirst($flag);
-            $this->substitution->setFileTemplate($this->file);
-            $this->substitution->addToReplace($this->mArray);
-            $this->mArray['BOOKLIST'] = $this->substitution->templateRender();
+            $this->mArray['BOOKLIST'] = $this->substitution->templateRender($this->file, $this->mArray);
         }
-        elseif('confirm' === $file)
+        elseif('confirm' === $file || 'checkout' === $file)
         {
-            if(false === $this->user)
+            //var_dump($flag);
+            $this->headAuth();
+            if('confirm' === $file)
             {
-                $this->substitution->setFileTemplate('templates/formlogin.html');
-                $this->substitution->addToReplace($this->mArray);
-                $this->mArray['LOGINFORM'] = $this->substitution->templateRender();
+                $this->mArray = $this->palletCheck->$flag($this->param);
             }
-            else
-            {
-                $this->mArray['LOGINMENU'] = $this->palletMain->formExit();
-                $this->substitution->setFileTemplate('templates/formexit.html');
-                $this->substitution->addToReplace($this->mArray);
-                $this->mArray['LOGINFORM'] = $this->substitution->templateRender();
-            }
-            if('checkout' === $file){
-              $this->mArray['CHECKOUT'] = $this->palletCheck->index($this->param);
-            }
-            else
-            {
-              $this->mArray['IDORDER'] = $this->palletCheck->confirm($this->param);
+            else {
+                $this->mArray['CHECKOUT'] = $this->palletCheck->$flag($this->param);
             }
             $this->mArray['TITLE'] = ucfirst($flag);
-            $this->substitution->setFileTemplate($this->file);
-            $this->substitution->addToReplace($this->mArray);
-            $this->mArray['BOOKLIST'] = $this->substitution->templateRender();
-        }
-        elseif('checkout' == $file)
-        {
-            if(false === $this->user)
-            {
-                $this->substitution->setFileTemplate('templates/formlogin.html');
-                $this->substitution->addToReplace($this->mArray);
-                $this->mArray['LOGINFORM'] = $this->substitution->templateRender();
-            }
-            else
-            {
-                $this->mArray['LOGINMENU'] = $this->palletMain->formExit();
-                $this->substitution->setFileTemplate('templates/formexit.html');
-                $this->substitution->addToReplace($this->mArray);
-                $this->mArray['LOGINFORM'] = $this->substitution->templateRender();
-            }
-            if('checkout' === $file){
-              $this->mArray['CHECKOUT'] = $this->palletCheck->index($this->param);
-            }
-            else
-            {
-              $this->mArray['IDORDER'] = $this->palletCheck->confirm($this->param);
-            }
-            $this->mArray['TITLE'] = ucfirst($flag);
-            $this->substitution->setFileTemplate($this->file);
-            $this->substitution->addToReplace($this->mArray);
-            $this->mArray['BOOKLIST'] = $this->substitution->templateRender();
+            $this->mArray['BOOKLIST'] = $this->substitution->templateRender($this->file, $this->mArray);
         }
 
         elseif('order' === $file)
         {
-            if(false === $this->user)
-            {
-                $this->substitution->setFileTemplate('templates/formlogin.html');
-                $this->substitution->addToReplace($this->mArray);
-                $this->mArray['LOGINFORM'] = $this->substitution->templateRender();
-            }
-            else
-            {
-                $this->mArray['LOGINMENU'] = $this->palletMain->formExit();
-                $this->substitution->setFileTemplate('templates/formexit.html');
-                $this->substitution->addToReplace($this->mArray);
-                $this->mArray['LOGINFORM'] = $this->substitution->templateRender();
-            }
+            $this->headAuth();
             $this->mArray['ORDERLIST'] = $this->palletOrder->$flag($this->param);
             $this->mArray['TITLE'] = ucfirst($flag);
-            $this->substitution->setFileTemplate($this->file);
-            $this->substitution->addToReplace($this->mArray);
-            $this->mArray['BOOKLIST'] = $this->substitution->templateRender();
+            $this->mArray['BOOKLIST'] = $this->substitution->templateRender($this->file, $this->mArray);
         }
         elseif('mainAdmin' === $file)
         {
@@ -230,7 +143,6 @@ class View
                 header('Location: '.PATH.'Admin/index/');
             }
         }
-
         if (('index' === $this->flag || 'logon' === $this->flag) && 'main' === $file )
         {
             $this->mArray['PAGENAV'] = $this->palletMain->getNav();
@@ -242,7 +154,14 @@ class View
     function drowPage()
     {
             $this->choisePalett();
+        if( 'AdminCntr' === $this->cntr || 'AdminUserCntr' === $this->cntr )
+        {
+            $this->substitution->setFileTemplate('templates/admin/mainAdmin.html');
+        }
+        else
+        {
             $this->substitution->setFileTemplate('templates/main.html');
+        }
             $this->substitution->addToReplace($this->mArray);
             $this->substitution->addToReplace($this->langArr);
             $this->substitution->drowPage();
