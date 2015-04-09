@@ -5,6 +5,8 @@ class PalletAuth implements iPallet
     private $check;
     private $encode;
     private $query;
+    private $error;
+
 
     public function __construct()
     {
@@ -25,14 +27,14 @@ class PalletAuth implements iPallet
             $data_post = $this->check->clearDataArr($_POST);
             if('' === $data_post['password'])
             {
-                $this->data->setmArray('ERROR_PASS', 'Field is empty');
+                $this->error['ERROR_PASS'] = 'Field is empty';
                 $pass = false;
             }
             else
             {
                 if( false === $this->check->checkPass($data_post['password']))
                 {
-                    $this->data->setmArray('ERROR_PASS', 'Wrong data');
+                    $this->error['ERROR_PASS'] = 'Wrong data';
                     $pass = false;
                 }
                 else
@@ -43,14 +45,14 @@ class PalletAuth implements iPallet
 
             if('' === $data_post['username'])
             {
-                $this->data->setmArray('ERROR_NAME', 'Field is empty');
+                $this->error['ERROR_NAME'] = 'Field is empty';
                 $name = false;
             }
             else
             {
                 if( false === $this->check->checkForm($data_post['username']))
                 {
-                    $this->data->setmArray('ERROR_NAME', 'Wrong data');
+                    $this->error['ERROR_NAME'] =  'Wrong data';
                     $name = false;
                 }
                 else
@@ -61,14 +63,14 @@ class PalletAuth implements iPallet
 
             if('' === $data_post['email'])
             {
-                $this->data->setmArray('ERROR_EMAIL', 'Field is empty');
+                $this->error['ERROR_EMAIL'] = 'Field is empty';
                 $email = false;
             }
             else
             {
                 if( false === $this->check->checkEmail($data_post['email']))
                 {
-                    $this->data->setmArray('ERROR_EMAIL', 'Wrong data');
+                    $this->error['ERROR_EMAIL'] = 'Wrong data';
                     $email = false;
                 }
                 else
@@ -82,7 +84,7 @@ class PalletAuth implements iPallet
                 $arr = $this->query->getLoginUser($email);
                 if(!empty($arr))
                 {
-                    $this->data->setmArray('ERROR_NAME', 'E-mail already exists');
+                    $this->error['ERROR_NAME'] = 'E-mail already exists';
                     return false;
                 }
                 else
@@ -97,11 +99,15 @@ class PalletAuth implements iPallet
                     }
                     else
                     {
-                        $this->data->setmArray('STATUS', 'An error occurred while registering a new user. Contact the Administration.');
+                        $this->error['STATUS'] = 'An error occurred while registering a new user. Contact the Administration.';
                         return false;
                     }
                 }
             }
+        }
+        if(!empty($this->error)
+        {
+          return $this->error;
         }
         return true;
     }
@@ -112,11 +118,11 @@ class PalletAuth implements iPallet
         if (true === $this->data->getPost()) {
             $data_post = $this->check->clearDataArr($_POST);
             if ('' === $data_post['password']) {
-                $this->data->setmArray('ERRORLOGIN', 'Field is empty');
+                $this->error['ERRORLOGIN'] = 'Field is empty';
                 $pass = false;
             } else {
                 if (false === $this->check->checkPass($data_post['password'])) {
-                    $this->data->setmArray('ERRORLOGIN', 'Wrong data');
+                    $this->error['ERRORLOGIN'] = 'Wrong data';
                     $pass = false;
                 } else {
                     $pass = $data_post['password'];
@@ -124,11 +130,11 @@ class PalletAuth implements iPallet
             }
 
             if ('' === $data_post['email']) {
-                $this->data->setmArray('ERRORLOGIN', 'Field is empty');
+                $this->error['ERRORLOGIN'] = 'Field is empty';
                 $email = false;
             } else {
                 if (false === $this->check->checkEmail($data_post['email'])) {
-                    $this->data->setmArray('ERRORLOGIN', 'Wrong data');
+                    $this->error['ERRORLOGIN'] = 'Wrong data';
                     $email = false;
                 } else {
                     $email = $data_post['email'];
@@ -138,8 +144,8 @@ class PalletAuth implements iPallet
             if (false !== $pass && false !== $email) {
                 $arr = $this->query->getUser($email);
                 if (empty($arr)) {
-                    $this->data->setmArray('ERRORLOGIN', 'Wrong e-mail or password');
-                    //return false;
+                    $this->error['ERRORLOGIN']= 'Wrong e-mail or password';
+                    return $this->error;
                 }
                 else
                 {
@@ -162,11 +168,16 @@ class PalletAuth implements iPallet
                     }
                     else
                     {
-                        $this->data->setmArray('ERRORLOGIN', 'Wrong e-mail or password');
-                        //return false;
+                        $this->error['ERRORLOGIN'] =  'Wrong e-mail or password';
+                        return $this->error;
                     }
                 }
             }
+            if(!empty($this->error))
+            {
+              return $this->error;
+            }
+
         }
         return true;
     }

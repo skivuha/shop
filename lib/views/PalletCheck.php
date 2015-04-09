@@ -91,9 +91,8 @@ class PalletCheck implements iPallet
             }
 
             $this->query->setStatusBookInCart($id_user);
-            $this->data->setmArray('IDORDER', $id_order);
-            $this->data->setmArray('YOUPRICE', $your_price);
-            return true;
+            $data['IDORDER'] =  $id_order;
+            return $data; 
         }
     }
 }

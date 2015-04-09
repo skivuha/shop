@@ -80,9 +80,15 @@ class View
                 $this->substitution->addToReplace($this->mArray);
                 $this->mArray['LOGINFORM'] = $this->substitution->templateRender();
             }
-            $this->mArray['AUTH'] = $this->palletAuth->$flag($this->param);
+            if(true === $this->palletAuth->$flag($this->param))
+            {
+              
+            }
+            else{
+              $this->mArray = $this->palletAuth->$flag($this->param);
+            }
             $this->mArray['TITLE'] = ucfirst($flag);
-
+          
             $this->substitution->setFileTemplate($this->file);
             $this->substitution->addToReplace($this->mArray);
             $this->mArray['BOOKLIST'] = $this->substitution->templateRender();
@@ -108,7 +114,7 @@ class View
             $this->substitution->addToReplace($this->mArray);
             $this->mArray['BOOKLIST'] = $this->substitution->templateRender();
         }
-        elseif('checkout' === $file || 'confirm' === $file)
+        elseif('confirm' === $file)
         {
             if(false === $this->user)
             {
@@ -123,12 +129,46 @@ class View
                 $this->substitution->addToReplace($this->mArray);
                 $this->mArray['LOGINFORM'] = $this->substitution->templateRender();
             }
-            $this->mArray['CHECKOUT'] = $this->palletCheck->$flag($this->param);
+            if('checkout' === $file){
+              $this->mArray['CHECKOUT'] = $this->palletCheck->index($this->param);
+            }
+            else
+            {
+              $this->mArray['IDORDER'] = $this->palletCheck->confirm($this->param);
+            }
             $this->mArray['TITLE'] = ucfirst($flag);
             $this->substitution->setFileTemplate($this->file);
             $this->substitution->addToReplace($this->mArray);
             $this->mArray['BOOKLIST'] = $this->substitution->templateRender();
         }
+        elseif('checkout' == $file)
+        {
+            if(false === $this->user)
+            {
+                $this->substitution->setFileTemplate('templates/formlogin.html');
+                $this->substitution->addToReplace($this->mArray);
+                $this->mArray['LOGINFORM'] = $this->substitution->templateRender();
+            }
+            else
+            {
+                $this->mArray['LOGINMENU'] = $this->palletMain->formExit();
+                $this->substitution->setFileTemplate('templates/formexit.html');
+                $this->substitution->addToReplace($this->mArray);
+                $this->mArray['LOGINFORM'] = $this->substitution->templateRender();
+            }
+            if('checkout' === $file){
+              $this->mArray['CHECKOUT'] = $this->palletCheck->index($this->param);
+            }
+            else
+            {
+              $this->mArray['IDORDER'] = $this->palletCheck->confirm($this->param);
+            }
+            $this->mArray['TITLE'] = ucfirst($flag);
+            $this->substitution->setFileTemplate($this->file);
+            $this->substitution->addToReplace($this->mArray);
+            $this->mArray['BOOKLIST'] = $this->substitution->templateRender();
+        }
+
         elseif('order' === $file)
         {
             if(false === $this->user)

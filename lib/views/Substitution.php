@@ -31,11 +31,11 @@ class Substitution
 
     public function templateRender()
     {
-        if(isset($this->forRender)) {
-            foreach ($this->forRender as $key => $val) {
+      if(isset($this->forRender)) {
+          foreach ($this->forRender as $key => $val) {
                 $this->file = preg_replace('/%#%' . $key . '%#%/i', $val, $this->file);
             }
-        }else {
+        }else{
             $default = '';
             $this->file = preg_replace('/%#%(.*)%#%/Uis', $default, $this->file);
         }
