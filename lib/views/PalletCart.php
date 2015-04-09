@@ -19,14 +19,7 @@ class PalletCart implements iPallet
     {
         $id_user = $this->data->getVal();
         $arr = $this->query->getListBookForCart($id_user);
-        $data = '<table class="table table-striped">
-            <tr>
-                <th>#</th>
-                <th>Book name</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Delete</th>
-            </tr>';
+        $data = '';
             $cnt = 0;
             $total = 0;
             foreach ($arr as $key => $val) {
@@ -41,7 +34,6 @@ class PalletCart implements iPallet
                 $data .= '<input type="submit" class="btn btn-default btn-xs" value="Buy" name="buyTooOrder" />';
             }
         $data.='</a></p>';
-
     return $data;
     }
 

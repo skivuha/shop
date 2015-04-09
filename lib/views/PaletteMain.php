@@ -1,7 +1,6 @@
 <?php
 class PaletteMain implements iPallet
 {
-    private $myPdo;
     private $data;
     public $nav;
     private $session;
@@ -9,7 +8,6 @@ class PaletteMain implements iPallet
 
     public function __construct()
     {
-        $this->myPdo = MyPdo::getInstance();
         $this->data = DataCont::getInstance();
         $this->session = Session::getInstance();
         $this->query = new QueryToDb();
@@ -53,14 +51,6 @@ class PaletteMain implements iPallet
             $data.='<p><a href="'.PATH.'Home/details/id/'.$books['book_id'].'" id="detailsBook">Details</a></p>';
             $data.='</div></div>';
         }
-
-    /*    $pdoo=$this->myPdo->select('book_name, ')
-          ->table('shop_books, shop_authors, shop_book_a')
-          ->where(array('visible'=>'1', 'shop_authors.authors_id'=>'shop_book_a.a_id','authors_id' => '6','shop_books.book_id' =>'shop_book_a.b_id'))
-          ->query()
-          ->commit();
-        echo '<pre>';  
-        var_dump($pdoo);*/
         return $data;
     }
 
@@ -71,18 +61,13 @@ class PaletteMain implements iPallet
 
     function add()
     {
-        //$id_user = abs((int)($_SESSION['id_user']));
         $id_user = $this->data->getIdUser();
         $id_book = $this->data->getVal();
-        //if(true === $this->data->getUser())
-        //{
-            //$quantity = 1://github.com/skivuha/shop;
             $check = $this->query->getChechBookInCartForThisUser($id_user, $id_book);
             if (0 === count($check))
             {
                 $this->query->setBookToCartForThisUser($id_user, $id_book);
             }
-        //}
     }
 
     function index()
@@ -95,7 +80,6 @@ class PaletteMain implements iPallet
         $page_count = $nav->getPageCount();
         $uri = $nav->getUriPageNav();
         $this->navBar($uri, $page, $page_count);
-
         $arr = $this->query->getBookForOneMainPage($start_pos, $perpage);
         return $this->bookCreate($arr);
     }
@@ -169,28 +153,8 @@ class PaletteMain implements iPallet
 
     function formExit()
     {
-
-        $data = '
-<div id="exit">
-<form action="" method="post"><input type="submit" value="en" name="leng"><span></span><span><input type="submit" value="ru" name="leng"></span></form>
-<form action="'.PATH.'Regestration/logout/" method="post">
-        <span>Hello <span id="nameSession">'.$this->session->getSession('login_user').'</span></span>
-        <input type="submit" class="btn btn-default btn-xs" value="Exit" name="exit"></div></form>
-        <a href="'.PATH.'Cart/index"><span class="glyphicon glyphicon-shopping-cart"> My cart</span></a><br>
-        <a href="'.PATH.'Order/index/"><span class="glyphicon glyphicon-home"> My cabinet</span></a>';
-        return $data;
-    }
-
-
-
-    function formLogin()
-    {
-        $data = '<span><a href="'.PATH.'Admin/index">For admin!</a></span>
-<div id="exit"><form action="" method="post"><input type="submit" value="en" name="leng"><span></span><span><input type="submit" value="ru" name="leng"></span></form>
-        <span>Hello, <span id="nameSession">guest!</span></span></div>
-        <a href="'.PATH.'Cart/index"><span class="glyphicon glyphicon-shopping-cart"> My cart</span></a><br>
-        <a href="'.PATH.'Regestration/logon/"><span class="glyphicon glyphicon-home"> My cabinet</span></a>';
-        return $data;
+        $name = $this->session->getSession('login_user');
+        return $name;
     }
 
     function navBar($uri, $page, $page_count)

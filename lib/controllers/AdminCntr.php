@@ -78,8 +78,6 @@ class AdminCntr implements iController
         $this->data->setPage('templates/admin/mainAdmin.html');
     }
 
-
-
     function genreDeleteAction()
     {
         $params = $this->fc->getParams();
@@ -135,8 +133,5 @@ class AdminCntr implements iController
         }
         $this->data->setPage('templates/admin/editAdmin.html');
     }
-
-
-
 }
 ?>
