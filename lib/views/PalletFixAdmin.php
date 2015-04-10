@@ -1,5 +1,5 @@
 <?php
-class PalletAdminUser implements iPallet
+class PalletFixAdmin implements iPallet
 {
     private $query;
     private $data;

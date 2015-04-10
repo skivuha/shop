@@ -1,8 +1,8 @@
 <?php
-class PaletteMain implements iPallet
+class PalletMain implements iPallet
 {
     private $data;
-    public $nav;
+    public $navig;
     private $session;
     private $query;
     private $bookarr;
@@ -18,6 +18,7 @@ class PaletteMain implements iPallet
 
     function bookCreate($arr)
     {
+
         $buy = array();
         $id_user = abs((int)($this->session->getSession('id_user')));
         if(0 === $id_user)
@@ -72,16 +73,16 @@ class PaletteMain implements iPallet
             }
     }
 
-    function index()
+    public function index()
     {
         $params = $this->data->getParam();
-        $nav = new PaletteNav($params);
+        $nav = new PalleteNav($params);
         $start_pos = $nav->getStartPage();
         $perpage = $nav->getPerPage();
         $page = $nav->getPageNav();
         $page_count = $nav->getPageCount();
         $uri = $nav->getUriPageNav();
-        $this->navBar($uri, $page, $page_count);
+        $this->nav = $this->navBar($uri, $page, $page_count);
         $arr = $this->query->getBookForOneMainPage($start_pos, $perpage);
         return $this->bookCreate($arr);
     }
@@ -148,7 +149,7 @@ class PaletteMain implements iPallet
         return $name;
     }
 
-    function navBar($uri, $page, $page_count)
+    public function navBar($uri, $page, $page_count)
     {
         $this->bookarr['URI'] = $uri;
         $this->bookarr['PAGE'] = $page;
@@ -186,7 +187,7 @@ class PaletteMain implements iPallet
         }
 
         $this->nav = $this->subs->templateRender('templates/subtemplates/nav.html',$this->bookarr);
-        return $this->nav;
+        return $this->navig;
     }
 }
 ?>

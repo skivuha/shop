@@ -1,5 +1,5 @@
 <?php
-class PalletCheck implements iPallet
+class PalletCheckout implements iPallet
 {
     private $query;
     private $data;
@@ -12,7 +12,12 @@ class PalletCheck implements iPallet
         $this->subs = new Substitution();
         $this->data = DataCont::getInstance();
     }
-        function index()
+    function index()
+    {
+        return $this->checkout();
+    }
+
+        function checkout()
         {
             $id_user = $this->data->getVal();
             $arr = $this->query->getListBookForCart($id_user);
@@ -20,7 +25,6 @@ class PalletCheck implements iPallet
             $cnt = 0;
             $total=0;
             $quantity = 0;
-            $data='';
             foreach($arr as $key=>$val)
             {
                 $cnt ++;
@@ -62,54 +66,6 @@ class PalletCheck implements iPallet
             $data = $this->subs->templateRender('templates/checkout.html', $this->cartarr);
             return $data;
         }
-    function confirm()
-    {
-        $id_user = $this->data->getVal();
-        $radio = $this->data->getPost();
-        $arr = $this->query->getListBookForCart($id_user);
-        $count_payment = $this->query->getCountBuyingBook();
 
-        $total = 0;
-
-        foreach($arr as $key=>$val)
-        {
-            $total += $val['price']*$val['quantity'];
-        }
-
-        if(0 >= $radio && $count_payment[0]['count(*)'] <= $radio)
-        {
-            $radio = 1;
-        }
-
-        if(0 !== $val['discount_user'])
-        {
-            $discount = ($total * $val['discount_user']) / (100);
-        }
-        else
-        {
-            $discount = 0;
-        }
-        $your_price = round($total-$discount);
-
-        $this->query->setBuyingBook($id_user, $your_price, $radio);
-
-        $id_order = $this->query->getLastId();
-
-        if(0 !== $id_order)
-        {
-            foreach($arr as $key=>$val)
-            {
-                $id_book = $val['book_id'];
-                $quantity = $val['quantity'];
-                $this->query->setOrder($id_book, $quantity, $id_order);
-            }
-
-            $this->query->setStatusBookInCart($id_user);
-            $this->cartarr['IDORDER'] = $id_order;
-            $this->cartarr['PRICE'] = $your_price;
-            $data = $this->subs->templateRender('templates/confirm.html', $this->cartarr);
-            return $data;
-        }
-    }
 }
 ?>

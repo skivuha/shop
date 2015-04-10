@@ -1,5 +1,5 @@
 <?php
-class PaletteNav implements iPallet
+class PalleteNav implements iPallet
 {
     private $perpage = PERPAGE;
     private $myPdo;

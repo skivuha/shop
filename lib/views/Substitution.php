@@ -3,8 +3,10 @@ class Substitution
 {
     private $forRender;
     private $file;
+    private $mArray;
+    private $langArr;
 
-    public function setFileTemplate($template)
+    private function setFileTemplate($template)
 {
     if(is_file($template))
     {
@@ -15,7 +17,7 @@ class Substitution
         throw new Exception('No template file');
     }
 }
-    public function addToReplace($mArray)
+    private function addToReplace($mArray)
 {
     foreach($mArray as $key=>$val)
     {
@@ -23,10 +25,51 @@ class Substitution
     }
 }
 
-    public function setReplace($key, $val)
+    private function headAuth()
     {
-        $this->forRender[$key] = $val;
-        return true;
+        $data = DataCont::getInstance();
+        $user = $data->getUser();
+        if (false === $user) {
+            $this->mArray['LOGINFORM'] = $this->templateRender('templates/formlogin.html', $this->mArray);
+        }
+        else {
+            $palletMain = new PalletMain();
+            $this->mArray['LOGINMENU'] = $palletMain->formExit();
+            $this->mArray['LOGINFORM'] = $this->templateRender('templates/formexit.html', $this->mArray);
+        }
+    }
+
+    public function choisePalett($file, $flag)
+    {
+        $data = DataCont::getInstance();
+        $fc = FrontCntr::getInstance();
+        $lang = $data->getLang();
+        $param = $data->getParam();
+        $file = basename($file, '.html');
+        $flag = str_replace('Action','', $flag);
+        $flag = str_replace('"','',$flag);
+        $file = 'pallet'.ucfirst($file);
+        $file = ucfirst($file);
+        $file = str_replace('"','',$file);
+        $pallet = new $file();
+        $this->mArray['TITLE'] = ucfirst($flag);
+        $this->mArray['BOOKLIST'] = $pallet->$flag($param);
+        //$this->mArray['PAGENAV'] = $this->palletMain->navig;
+        $langObj = new Lang($lang);
+        $this->langArr = $langObj->getLangArr();
+
+        $cntr = $fc->getCntr();
+        $this->headAuth();
+        if( 'AdminCntr' === $cntr || 'AdminUserCntr' === $cntr )
+        {
+            $this->setFileTemplate('templates/admin/mainAdmin.html');
+        }
+        else
+        {
+            $this->setFileTemplate('templates/main.html');
+        }
+        $this->addToReplace($this->mArray);
+        $this->addToReplace($this->langArr);
     }
 
     public function templateRender($file, $arr)
@@ -56,8 +99,7 @@ class Substitution
         }
         $default = '';
         $this->file = preg_replace('/%#%(.*)%#%/Uis', $default, $this->file);
-        header("Content-Type: text/html; charset = UTF-8");
-        echo $this->file;
+        return $this->file;
     }
 }
 ?>
