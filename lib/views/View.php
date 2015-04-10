@@ -7,7 +7,7 @@ class View
     private $flag;
     private $lang;
 
-    function __construct()
+    public function __construct()
     {
         $this->substitution = new Substitution();
         $this->data = DataCont::getInstance();
@@ -17,7 +17,11 @@ class View
 
     }
 
-    function drowPage()
+    /**
+     * drowPage 
+     * 
+     */
+    public function drowPage()
     {
             $this->substitution->choisePalett($this->file, $this->flag);
             header("Content-Type: text/html; charset = UTF-8");
