@@ -6,12 +6,15 @@ class PalletAdmin implements iPallet
     public $nav;
     private $session;
     private $arrayPlace;
+    private $bookarr;
+    private $subs;
 
     public function __construct()
     {
         $this->query = new QueryToDb();
         $this->data = DataCont::getInstance();
         $this->session = Session::getInstance();
+        $this->subs = new Substitution();
     }
 
     function index()
@@ -35,15 +38,11 @@ class PalletAdmin implements iPallet
     {
         $data = '';
         foreach ($arr as $books) {
-            $data .= '<div align="center" id="contentIndex">';
-            $data .= '<div id=contenrInfo>';
-            $data .= '<p><a href="/~user2/PHP/shop/Admin/details/id/' . $books['book_id'] . '" class="nameBook">' . $books['book_name'] . '</a></p>';
-            $data .= '<a href="/~user2/PHP/shop/Admin/details/id/' . $books['book_id'] . '" class="nameBook"><img src="' . SRC_IMG_ADM . $books['img'] . '"></a>';
-            $data .= '<p><span id="priceBook">' . $books['price'] . ' $</span></p>';
-            $data .= '<p><a href="/~user2/PHP/shop/Admin/details/id/' . $books['book_id'] . '" id="addBook">Details</a></p>
-                      <p><a href="/~user2/PHP/shop/Admin/update/id/' . $books['book_id'] . '" id="updateBook">Update</a></p>
-<p><a href="/~user2/PHP/shop/Admin/delete/id/' . $books['book_id'] . '" onclick="return confirmDelete();" id="delBook">Delete</a></p>';
-            $data .= '</div></div>';
+            $this->bookarr['BOOK_ID'] = $books['book_id'];
+            $this->bookarr['BOOK_NAME'] = $books['book_name'];
+            $this->bookarr['BOOK_IMG'] = $books['img'];
+            $this->bookarr['BOOK_PRICE'] = $books['price'];
+            $data.= $this->subs->templateRender('templates/admin/book.html',$this->bookarr);
         }
         return $data;
     }
@@ -79,21 +78,21 @@ class PalletAdmin implements iPallet
     {
         $id_book = $this->data->getParam();
         $this->query->deleteBook($id_book);
-        header('Location: /~user2/PHP/shop/Admin/index/');
+        header('Location: /Admin/index/');
     }
 
     function genreDelete()
     {
         $id_genre = $this->data->getParam();
         $this->query->deleteGenre($id_genre);
-        header('Location: /~user2/PHP/shop/Admin/editgenre/');
+        header('Location: /Admin/editgenre/');
     }
 
     function authorDelete()
     {
         $id_author = $this->data->getParam();
         $this->query->deleteAuthor($id_author);
-        header('Location: /~user2/PHP/shop/Admin/editauthor/');
+        header('Location: /Admin/editauthor/');
     }
 
 
@@ -117,27 +116,23 @@ class PalletAdmin implements iPallet
             {
                 $this->query->setAuthorNew($new_author);
             }
-            header('Location: /~user2/PHP/shop/Admin/editauthor/');
+            header('Location: /Admin/editauthor/');
         }
         else
         {
         $arr = $this->query->getAuthorsName();
         $cnt=1;
-
-        $data= '<div id="genre"> ';
-        $data.='<h2>Authors</h2>';
-        $data.= '<form action="" method="post">
-   <p> Author: <input type="text" name="name_author" value="'.$arr_edit[0]['authors_name'].'">
-    <input type="submit" name="submit" value="Save"></p>
-</form>';
-        $data.='<table class="table table-striped"><tr><th>#</th><th>Name</th><th>Delete</th><th>Edit</th></tr>';
+            $this->bookarr['AUTHEDIT'] = $arr_edit[0]['authors_name'];
         foreach($arr as $authors)
         {
-            $data.='<tr><td>'.$cnt.'</td><td>'.$authors['authors_name'].'</td><td><a href="/~user2/PHP/shop/Admin/authorDelete/id/'.$authors['authors_id'].'">X</a>
-            </td><td><a href="/~user2/PHP/shop/Admin/editauthor/id/'.$authors['authors_id'].'">Edit</a></td></tr>';
+            $this->bookarr['CNT'] = $cnt;
+            $this->bookarr['AUTHNAME'] = $authors['authors_name'];
+            $this->bookarr['AUTHID'] = $authors['authors_id'];
+            $this->bookarr['LISTAUTHORS'].= $this->subs->templateRender('templates/admin/authorlist.html',$this->bookarr);
             $cnt++;
         }
-        $data.='</table></div>';}
+            $data = $this->subs->templateRender('templates/admin/authoredit.html',$this->bookarr);
+        }
         return $data;
     }
 
@@ -160,26 +155,24 @@ class PalletAdmin implements iPallet
             {
                 $this->query->setGenreNew($new_genre);
             }
-            header('Location: /~user2/PHP/shop/Admin/editgenre/');
+            header('Location: /Admin/editgenre/');
         }
         else
         {
         $arr = $this->query->getGenresName();
         $cnt=1;
-        $data = '<div id="genre"> ';
-        $data.='<h2>Genre</h2>';
-        $data.= '<form action="" method="post">
-   <p> Genre: <input type="text" name="name_genre" value="'.$arr_edit[0]['genre_name'].'">
-    <input type="submit" name="submit" value="Save"></p>
-</form>';
-        $data.='<table class="table table-striped"><tr><th>#</th><th>Name</th><th>Delete</th><th>Edit</th></tr>';
+            $this->bookarr['GENREEDIT'] = $arr_edit[0]['genre_name'];
+
+
         foreach($arr as $genres)
         {
-            $data.='<tr><td>'.$cnt.'</td><td>'.$genres['genre_name'].'</td><td><a href="/~user2/PHP/shop/Admin/genreDelete/id/'.$genres['genre_id'].'">X</a>
-            </td><td><a href="/~user2/PHP/shop/Admin/editgenre/id/'.$genres['genre_id'].'">Edit</a></td></tr>';
+            $this->bookarr['CNT'] = $cnt;
+            $this->bookarr['GENRENAME'] = $genres['genre_name'];
+            $this->bookarr['GENREID'] = $genres['genre_id'];
+            $this->bookarr['GENRELIST'].= $this->subs->templateRender('templates/admin/genrelist.html',$this->bookarr);
             $cnt++;
         }
-        $data.='</table></div>';
+        $data = $this->subs->templateRender('templates/admin/genreedit.html',$this->bookarr);;
         }
         return $data;
     }
@@ -203,28 +196,35 @@ class PalletAdmin implements iPallet
             $baseingTmpName = $_FILES['baseimg']['tmp_name']; // tmp name image
             $baseimgType = $_FILES['baseimg']['type']; // type img
 
-            if(move_uploaded_file($baseingTmpName, "/~user2/PHP/shop/user_files/tmp/$baseimgName")){
-                $this->resize("/~user2/PHP/shop/user_files/tmp/$baseimgName", "/~user2/PHP/shop/user_files/img/$baseimgName", 210, 316, $baseimgExt);
-                @unlink("/~user2/PHP/shop/user_files/tmp/$baseimgName");
+            if(move_uploaded_file($baseingTmpName, "/user_files/tmp/$baseimgName")){
+                $this->resize("/user_files/tmp/$baseimgName", "/user_files/img/$baseimgName", 210, 316, $baseimgExt);
+                @unlink("/user_files/tmp/$baseimgName");
 
                 $this->query->setImgNew($baseimgName,$id);
             }
         }
 //Show authors
-        $author_name = $list_param['authors_name'];
-        foreach($author_name as $authors_name){
-            $rez = $this->query->getAuthorsList($authors_name);
-            $id_a = $rez[0]['authors_id'];
-            $this->query->setAuthorToBook($id_a, $id);
+        if(isset($list_param['authors_name'])) {
+            $author_name = $list_param['authors_name'];
+            foreach ($author_name as $authors_name) {
+                $rez = $this->query->getAuthorsList($authors_name);
+                $id_a = $rez[0]['authors_id'];
+                $this->query->setAuthorToBook($id_a, $id);
+            }
         }
-
 //Show genre
-        $genr_name = $list_param['genre_name'];
-        foreach($genr_name as $genre_name){
-            $rez = $this->query->getGenresList($genre_name);
-            $id_g = $rez[0]['genre_id'];
-            $this->query->setGenreToBook($id_g, $id);
+        if(isset($list_param['genre_name'])) {
+            $genr_name = $list_param['genre_name'];
+            foreach ($genr_name as $genre_name) {
+                $rez = $this->query->getGenresList($genre_name);
+                $id_g = $rez[0]['genre_id'];
+                $this->query->setGenreToBook($id_g, $id);
+            }
         }
+        $this->bookarr['LISTAUTHORS'] = $this->listAuthors();
+        $this->bookarr['LISTGANRE'] = $this->listGenre();
+        $data = $this->subs->templateRender('templates/admin/addAdmin.html',$this->bookarr);
+        return $data;
 }
 
     function update()
@@ -236,24 +236,24 @@ class PalletAdmin implements iPallet
         if(false === $post) {
             $arr = $this->query->getAllDataBook($id_book);
 
-            $this->arrayPlace['BOOKNAME'] = $arr[0]['book_name'];
-            $this->arrayPlace['PRICE'] = $arr[0]['price'];
-            $this->arrayPlace['CONTENT'] = $arr[0]['content'];
-            $this->arrayPlace['IMG'] = $arr[0]['img'];
+            $this->bookarr['BOOKNAME'] = $arr[0]['book_name'];
+            $this->bookarr['PRICE'] = $arr[0]['price'];
+            $this->bookarr['CONTENT'] = $arr[0]['content'];
+            $this->bookarr['IMG'] = $arr[0]['img'];
 
             $auth = explode(",", $arr[0]['authors_name']);
             $authorlist='';
             foreach ($auth as $alist) {
                 $authorlist .= "<p><input type='checkbox' name='alist[]' value='$alist'>$alist</p>";
             }
-            $this->arrayPlace['AUTHORLIST'] = $authorlist;
+            $this->bookarr['AUTHORLIST'] = $authorlist;
 
             $genr = explode(",", $arr[0]['genre_name']);
             $genlist='';
             foreach ($genr as $glist) {
                 $genlist .= "<p><input type='checkbox' name='glist[]' value='$glist'>$glist</p>";
             }
-            $this->arrayPlace['GENRELIST'] = $genlist;
+            $this->bookarr['GENRELIST'] = $genlist;
         }
 else {
 
@@ -306,7 +306,11 @@ else {
         }
     }
 }
-        return $this->arrayPlace;
+        $this->bookarr['LISTAUTHORS'] = $this->listAuthors();
+        $this->bookarr['LISTGANRE'] = $this->listGenre();
+        $data= $this->subs->templateRender('templates/admin/editAdmin.html',$this->bookarr);
+
+        return $data;
         }
 
 //resize images
@@ -396,50 +400,42 @@ function resize($target, $dest, $wmax, $hmax, $ext){
 
     function navBar($uri, $page, $page_count)
     {
-        // crating of links
-        $back = '';
-        $forward = '';
-        $startpage = '';
-        $endpage = '';
-        $page2left = '';
-        $page1left = '';
-        $page2right = '';
-        $page1right = '';
-
+        $this->bookarr['URI'] = $uri;
+        $this->bookarr['PAGE'] = $page;
         if($page > 1)
         {
-            $back = "<a href='".PATH."/$uri/page/" .($page-1). "'>&lt;</a>";
+            $this->bookarr['BACK'] = $page-1;
         }
-        if($this->page < $this->page_count)
+        if($page < $page_count)
         {
-            $forward = "<a href='".PATH."$uri/page/" .($page+1). "'>&gt;</a>";
+            $this->bookarr['FORWARD'] = $page+1;
         }
         if($page > 3)
         {
-            $startpage = "<a href='".PATH."$uri/page/1'>&laquo;</a>";
+            $this->bookarr['START'] = '1';
         }
         if($page < $page_count-2)
         {
-            $endpage = "<a href='".PATH."$uri/page/{$page_count}'>&raquo;</a>";
+            $this->bookarr['END'] = $page_count;
         }
         if($page - 2 > 0)
         {
-            $page2left = "<a href='".PATH."$uri/page/" .($page-2). "'>" .($page-2). "</a>";
+            $this->bookarr['PAGE2L'] = $page-2;
         }
         if($page - 1 > 0)
         {
-            $page1left = "<a href='".PATH."$uri/page/" .($page-1). "'>" .($page-1). "</a>";
+            $this->bookarr['PAGE1L'] = $page-1;
         }
         if($page + 2 <= $page_count)
         {
-            $page2right = "<a href='".PATH."$uri/page/" .($page+2). "'>" .($page+2). "</a>";
+            $this->bookarr['PAGE2R'] = $page+2;
         }
         if($page + 1 <= $page_count)
         {
-            $page1right = "<a href='".PATH."$uri/page/" .($page+1). "'>" .($page+1). "</a>";
+            $this->bookarr['PAGE1R'] = $page+1;
         }
 
-        $this->nav = $startpage.$back.$page2left.$page1left.'<a class="navActive">'.$page.'</a>'.$page1right.$page2right.$forward.$endpage;
+        $this->nav = $this->subs->templateRender('templates/subtemplates/nav.html',$this->bookarr);
         return $this->nav;
     }
 

@@ -9,7 +9,7 @@ define('DB_HOST', 'localhost');
 //define('DB_PASS','tuser2');
 //define('PATH', '/~user2/PHP/shop/');
 define('PATH', '/');
-define('SRC_IMG', './user_files/img/');
+define('SRC_IMG', '/user_files/img/');
 
 //define('SRC_IMG_ADM', '/~user2/PHP/shop/user_files/img/');
 

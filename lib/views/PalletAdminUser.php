@@ -3,11 +3,14 @@ class PalletAdminUser implements iPallet
 {
     private $query;
     private $data;
+    private $bookarr;
+    private $subs;
 
     public function __construct()
     {
         $this->query = new QueryToDb();
         $this->data = DataCont::getInstance();
+        $this->subs = new Substitution();
     }
 
     function order()
@@ -32,51 +35,40 @@ class PalletAdminUser implements iPallet
         $arr = $this->query->getAllOrders();
 
         $cnt=1;
-        $data= '<table class="table table-striped">
-                    <tr>
-                        <th>Date</th>
-                        <th>Total sum</th>
-                        <th>User</th>
-                        <th>Status</th>
-                    </tr>
-                    </table>';
 
         $status = $this->query->getAllStatus();
 
-        $status_ord = '<select name="sel"><option value="1"></option> ';
-
             foreach($status as $stat)
             {
-                $status_ord.='<option value="'.$stat['id_status'].'">'.$stat['name_status'].'</option> ';
+                $this->bookarr['STATUSID'] = $stat['id_status'];
+                $this->bookarr['STATUSNAME'] = $stat['name_status'];
+                $this->bookarr['STATUS'].=$this->subs->templateRender('templates/admin/orderstatus.html',$this->bookarr);
             }
-            $status_ord .= '</select>';
+
             foreach($arr as $key=>$val) {
                 $order = $val['id_order'];
                 $cnt_book = 1;
-                $data .= '<div class="panel panel-default">
-                    <div class="panel-heading orderHead">
-
-                        <h4 class="panel-title">
-                         <a href="#collapse-' . $cnt . '" data-parent="#accordion" data-toggle="collapse"><span>' . $val['data_st'] . '</span>
-                         <span id="sum">' . $val['total_price'] . ' $</span><span id="mail">'.$val['mail_user'].'</span></a>
-                         <span id="status">' . $val['name_status'] . '</span><span><form method="post" action="">'.$status_ord.'</span><span><input type="submit" name="'.$order.'" value="save"/></form></span>
-
-                                </h4>
-                            </div>
-                            <div id="collapse-' . $cnt . '" class="panel-collapse collapse">
-                                <div class="panel-body">';
+                $this->bookarr['CNT'] = $cnt;
+                $this->bookarr['DATAST'] = $val['data_st'];
+                $this->bookarr['TOTALPRICE'] = $val['total_price'];
+                $this->bookarr['MAIL'] = $val['mail_user'];
+                $this->bookarr['STATUSNAME'] = $val['name_status'];
+                $this->bookarr['ORDER'] = $order;
             $id_order = $val['id_order'];
             $book = $this->query->getListBodyOrderForUser($id_order);
-            $data.= '<table class="table table-striped"><th>#</th><th>Book name</th><th>Quantity</th><th>Price</th>';
             foreach($book as $key=>$val)
             {
-                $data.= '<tr><td>'.$cnt_book.'</td><td>'.$val['book_name'].'</td><td>'.$val['quantity'].'</td><td>'.$val['price']*$val['quantity'].'</td></tr>';
+                $this->bookarr['CNTBOOK'] = $cnt_book;
+                $this->bookarr['BOOKNAME'] = $val['book_name'];
+                $this->bookarr['QUANTITY'] = $val['quantity'];
+                $this->bookarr['PRICE'] = $val['price']*$val['quantity'];
+                $this->bookarr['BODY'].=$this->subs->templateRender('templates/admin/body.html',$this->bookarr);
                 $cnt_book++;
             }
-            $data.='</table></div></div></div>';
+                $this->bookarr['USERANDORDER'].=$this->subs->templateRender('templates/admin/head.html',$this->bookarr);
             $cnt ++;
         };
-
+        $data = $this->subs->templateRender('templates/admin/fixAdmin.html',$this->bookarr);
         return $data;
     }
 

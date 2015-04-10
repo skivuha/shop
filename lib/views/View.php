@@ -77,31 +77,21 @@ private function headAuth()
         elseif('cart' === $file)
         {
             $this->headAuth();
-            $this->mArray['LISTCHOISEBOOK'] = $this->palletCart->$flag($this->param);
             $this->mArray['TITLE'] = ucfirst($flag);
-            $this->mArray['BOOKLIST'] = $this->substitution->templateRender($this->file, $this->mArray);
+            $this->mArray['BOOKLIST'] = $this->palletCart->$flag($this->param);
         }
         elseif('confirm' === $file || 'checkout' === $file)
         {
-            //var_dump($flag);
             $this->headAuth();
-            if('confirm' === $file)
-            {
-                $this->mArray = $this->palletCheck->$flag($this->param);
-            }
-            else {
-                $this->mArray['CHECKOUT'] = $this->palletCheck->$flag($this->param);
-            }
             $this->mArray['TITLE'] = ucfirst($flag);
-            $this->mArray['BOOKLIST'] = $this->substitution->templateRender($this->file, $this->mArray);
+            $this->mArray['BOOKLIST'] = $this->palletCheck->$flag($this->param);
         }
 
         elseif('order' === $file)
         {
             $this->headAuth();
-            $this->mArray['ORDERLIST'] = $this->palletOrder->$flag($this->param);
             $this->mArray['TITLE'] = ucfirst($flag);
-            $this->mArray['BOOKLIST'] = $this->substitution->templateRender($this->file, $this->mArray);
+            $this->mArray['BOOKLIST'] = $this->palletOrder->$flag($this->param);
         }
         elseif('mainAdmin' === $file)
         {
@@ -111,32 +101,23 @@ private function headAuth()
         }
         elseif('addAdmin' === $file)
         {
-            $this->mArray['LISTAUTHORS'] = $this->palletAdmin->listAuthors();
-            $this->mArray['LISTGANRE'] = $this->palletAdmin->listGenre();
             if(true === $this->post)
             {
                 $this->palletAdmin->addbook();
                 header('Location: '.PATH.'Admin/index/');
             }
+            $this->mArray['BOOKLIST'] = $this->palletAdmin->$flag($this->param);
         }
         elseif('fixAdmin' === $file)
         {
-            $this->mArray['USERANDORDER'] = $this->palletAdminUser->$flag($this->param);
             $this->mArray['TITLE'] = ucfirst($flag);
+            $this->mArray['BOOKLIST'] = $this->palletAdminUser->$flag($this->param);
         }
 
         elseif('editAdmin' === $file)
         {
-            $this->mArray['LISTAUTHORS'] = $this->palletAdmin->listAuthors();
-            $this->mArray['LISTGANRE'] = $this->palletAdmin->listGenre();
-            $arr = $this->palletAdmin->update();
-            if($arr) {
-                foreach ($arr as $key => $val) {
-                    $this->mArray[$key] = $val;
-                }
-            }else{
-                header('Location: '.PATH.'Admin/index/');
-            }
+
+            $this->mArray['BOOKLIST'] = $this->palletAdmin->$flag($this->param);
             if(true === $this->post)
             {
                 $this->palletAdmin->update();

@@ -5,11 +5,14 @@ class PaletteMain implements iPallet
     public $nav;
     private $session;
     private $query;
+    private $bookarr;
+    private $subs;
 
     public function __construct()
     {
         $this->data = DataCont::getInstance();
         $this->session = Session::getInstance();
+        $this->subs = new Substitution();
         $this->query = new QueryToDb();
     }
 
@@ -18,9 +21,7 @@ class PaletteMain implements iPallet
         $buy = array();
         $id_user = abs((int)($this->session->getSession('id_user')));
         if(0 === $id_user)
-        {
-
-        }
+        {}
         else {
             $buy = $this->query->getBookIdInCartForCurentUser($id_user);
         }
@@ -28,11 +29,11 @@ class PaletteMain implements iPallet
         foreach($arr as $books)
         {
             $cnt = 0;
-            $data.='<div align="center" id="contentIndex">';
-            $data.='<div id=contenrInfo>';
-            $data.='<p><a href="'.PATH.'Home/details/id/'.$books['book_id'].'" class="nameBook">'.$books['book_name'].'</a></p>';
-            $data.='<a href="'.PATH.'Home/details/id/'.$books['book_id'].'" class="nameBook"><img src="'.SRC_IMG.$books['img'].'"></a>';
-            $data.='<p><span id="priceBook">'.$books['price'].' $</span></p>';
+            $this->bookarr['BOOK_ID'] = $books['book_id'];
+            $this->bookarr['BOOK_NAME'] = $books['book_name'];
+            $this->bookarr['BOOK_IMG'] = $books['img'];
+            $this->bookarr['BOOK_PRICE'] = $books['price'];
+
             foreach($buy as $val)
             {
                 if($val['book_id'] === $books['book_id'])
@@ -42,14 +43,15 @@ class PaletteMain implements iPallet
             }
             if(false == $cnt)
             {
-                $data .= '<p><a href="'.PATH.'Home/add/id/' . $books['book_id'] . '" id="buyBook">Buy</a></p>';
+                $this->bookarr['BOOK_PATH'] = '/Home/add/id/'.$books['book_id'].'" id="buyBook"';
+                $this->bookarr['BUYORCART'] = 'Buy';
             }
             else
             {
-                $data .= '<p><a href="'.PATH.'Cart/index/" id="toCart">To cart</a></p>';
+                $this->bookarr['BOOK_PATH'] = '/Cart/index/" id="toCart"';
+                $this->bookarr['BUYORCART'] = 'To cart';
             }
-            $data.='<p><a href="'.PATH.'Home/details/id/'.$books['book_id'].'" id="detailsBook">Details</a></p>';
-            $data.='</div></div>';
+            $data.= $this->subs->templateRender('templates/subtemplates/book.html',$this->bookarr);
         }
         return $data;
     }
@@ -97,57 +99,46 @@ class PaletteMain implements iPallet
             $genre = abs((int)$params['genre']);
             $arr = $this->query->getBookForGenre($genre);
         }
+
         return $this->bookCreate($arr);
     }
 
     function authors()
     {
         $arr = $this->query->getAuthors();
-
-        $data = '';
-        $data.= '<div id="authors">';
-        $data.='<h2>Authors</h2>';
-        $data.='<ul class="authorsCol">';
         foreach($arr as $authors)
         {
-            $data.='<li><a href="'.PATH.'Home/sort/author/'.$authors['authors_id'].'">'.$authors['authors_name'].'</a></li>';
+            $this->bookarr['AUTHOR_NAME'] = $authors['authors_name'];
+            $this->bookarr['AUTHOR_ID'] = $authors['authors_id'];
+            $this->bookarr['AUTHORSALL'].= $this->subs->templateRender('templates/subtemplates/authorsall.html',$this->bookarr);
         }
-        $data.='</ul></div>';
+        $data = $this->subs->templateRender('templates/subtemplates/authors.html',$this->bookarr);
         return $data;
     }
 
     function genres()
     {
         $arr = $this->query->getGenre();
-        $data = '';
-        $data.= '<div id="genre"> ';
-        $data.='<h2>Genre</h2>';
-        $data.='<ul class="genreCol">';
         foreach($arr as $genres)
         {
-            $data.='<li><a href="'.PATH.'Home/sort/genre/'.$genres['genre_id'].'">'.$genres['genre_name'].'</a></li>';
+            $this->bookarr['GENRE_NAME'] = $genres['genre_name'];
+            $this->bookarr['GENRE_ID'] = $genres['genre_id'];
+            $this->bookarr['GENREALL'].= $this->subs->templateRender('templates/subtemplates/genreall.html',$this->bookarr);
         }
-        $data.='</ul></div>';
+        $data = $this->subs->templateRender('templates/subtemplates/genre.html',$this->bookarr);
         return $data;
     }
 
     function details($book_id)
     {
         $arr = $this->query->getDetailsBook($book_id);
-
         $arr = $arr[0];
-
-
-        $data = '';
-        $data.='<div id="bookDetails">';
-        $data.='<h1>'.$arr['book_name'].'</h1>';
-        $data.='<div class="productDetails">';
-        $data.='<img src="'.SRC_IMG.$arr['img'].'"></div>';
-        $data.='<div id="detailsText">';
-        $data.='<h2>Product Details</h2>';
-        $data.='<p class="detailsfirst"><b>Author: </b>'.$arr['authors_name'].'</p>';
-        $data.='<p><b>Genre: </b>'.$arr['genre_name'].'</p>';
-        $data.=$arr['content'].'</div></div>';
+        $this->bookarr['BOOKNAME'] = $arr['book_name'];
+        $this->bookarr['BOOKIMG'] = $arr['img'];
+        $this->bookarr['AUTHORSNAME'] = $arr['authors_name'];
+        $this->bookarr['GENRENAME'] = $arr['genre_name'];
+        $this->bookarr['CONTENT'] = $arr['content'];
+        $data = $this->subs->templateRender('templates/subtemplates/detailsbook.html',$this->bookarr);
         return $data;
     }
 
@@ -159,50 +150,42 @@ class PaletteMain implements iPallet
 
     function navBar($uri, $page, $page_count)
     {
-        // crating of links
-        $back = '';
-        $forward = '';
-        $startpage = '';
-        $endpage = '';
-        $page2left = '';
-        $page1left = '';
-        $page2right = '';
-        $page1right = '';
-
+        $this->bookarr['URI'] = $uri;
+        $this->bookarr['PAGE'] = $page;
         if($page > 1)
         {
-            $back = '<a href="'.PATH.$uri.'/page/' .($page-1). '">&lt;</a>';
+            $this->bookarr['BACK'] = $page-1;
         }
-        if($this->page < $this->page_count)
+        if($page < $page_count)
         {
-            $forward = '<a href="'.PATH.$uri.'/page/' .($page+1). '">&gt;</a>';
+            $this->bookarr['FORWARD'] = $page+1;
         }
         if($page > 3)
         {
-            $startpage = '<a href="'.PATH.$uri.'/page/1">&laquo;</a>';
+            $this->bookarr['START'] = '1';
         }
         if($page < $page_count-2)
         {
-            $endpage = '<a href="'.PATH.$uri.'/page/'.$page_count.'">&raquo;</a>';
+            $this->bookarr['END'] = $page_count;
         }
         if($page - 2 > 0)
         {
-            $page2left = '<a href="'.PATH.$uri.'/page/' .($page-2). '">' .($page-2). '</a>';
+            $this->bookarr['PAGE2L'] = $page-2;
         }
         if($page - 1 > 0)
         {
-            $page1left = '<a href="'.PATH.$uri.'/page/' .($page-1). '">' .($page-1). '</a>';
+            $this->bookarr['PAGE1L'] = $page-1;
         }
         if($page + 2 <= $page_count)
         {
-            $page2right = '<a href="'.PATH.$uri.'/page/' .($page+2). '">' .($page+2). '</a>';
+            $this->bookarr['PAGE2R'] = $page+2;
         }
         if($page + 1 <= $page_count)
         {
-            $page1right = '<a href="'.PATH.$uri.'/page/' .($page+1). '">' .($page+1). '</a>';
+            $this->bookarr['PAGE1R'] = $page+1;
         }
 
-        $this->nav = $startpage.$back.$page2left.$page1left.'<a class="navActive">'.$page.'</a>'.$page1right.$page2right.$forward.$endpage;
+        $this->nav = $this->subs->templateRender('templates/subtemplates/nav.html',$this->bookarr);
         return $this->nav;
     }
 }

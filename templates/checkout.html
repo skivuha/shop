@@ -1,10 +1,14 @@
-        <span>&nbsp;</span>
-        <h2>###LANG_CHECKOUT_LANG###</h2>
-        <table class="table table-striped">
-            <tr>
-                <th>#</th>
-                <th>Book name</th>
-                <th>Quantity</th>
-                <th>Price</th>
-            </tr>
-%#%CHECKOUT%#%
+<span>&nbsp;</span>
+<h2>###LANG_CHECKOUT_LANG###</h2>
+<table class="table table-striped">
+    <tr>
+        <th>#</th>
+        <th>Book name</th>
+        <th>Quantity</th>
+        <th>Price</th>
+    </tr>
+    %#%TABLE%#%
+%#%FUTER%#%
+<form method="post" action="/Checkout/confirm/"><p>
+    %#%PAYMENT%#%
+    <input type="submit" class="btn btn-default btn-xs" value="Confirm order" name="buyTooOrder" /></p></form>

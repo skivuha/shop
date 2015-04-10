@@ -3,11 +3,13 @@ class PalletCheck implements iPallet
 {
     private $query;
     private $data;
-    private $arr;
+    private $subs;
+    private $cartarr;
 
     public function __construct()
     {
         $this->query = new QueryToDb();
+        $this->subs = new Substitution();
         $this->data = DataCont::getInstance();
     }
         function index()
@@ -21,10 +23,15 @@ class PalletCheck implements iPallet
             $data='';
             foreach($arr as $key=>$val)
             {
-                $cnt++;
-                $total += $val['price']*$val['quantity'];
+                $cnt ++;
+                $total += $val['price'] * $val['quantity'];
                 $quantity += $val['quantity'];
-                $data.='<tr><td>'.$cnt.'</td><td class="book_id" name="'.$val['book_id'].'">'.$val['book_name'].'</td><td><span class="quantity">'.$val['quantity'].'</span></td><td class="price">'.$val['price']*$val['quantity'].'</td></tr>';
+                $this->cartarr['CNT'] = $cnt;
+                $this->cartarr['BOOK_ID'] = $val['book_id'];
+                $this->cartarr['BOOK_NAME'] = $val['book_name'];
+                $this->cartarr['QUANTITY'] = $val['quantity'];
+                $this->cartarr['PRICE'] = $val['price'] * $val['quantity'];
+                $this->cartarr['TABLE'] .= $this->subs->templateRender('templates/subtemplates/checktable.html', $this->cartarr);
             }
             if(0 !== $val['discount_user'])
             {
@@ -35,19 +42,24 @@ class PalletCheck implements iPallet
                 $discount = 0;
             }
             $your_price = $total-$discount;
-            $data.='</table><hr><p id="totalPrice"><span> Quantity: '.$quantity.' </span><span>Total: <span  class="totalSum">'.$total.'</span> $ </span></p>
-            <p>Taking into your discount: '.round($your_price).' $</p><p>%#%ERROR%#%</p>';
+
+            $this->cartarr['ALLQUANTITY'] = $quantity;
+            $this->cartarr['TOTAL'] = $total;
+            $this->cartarr['YOUPRICE'] = round($your_price);
+            $this->cartarr['FUTER'] = $this->subs->templateRender('templates/subtemplates/checktotal.html', $this->cartarr);
             if( 0 === $cnt)
             {
                 return false;
             }
-                $data.=' <form method="post" action="'.PATH.'Checkout/confirm/"><p>';
+
                      foreach($payment as $val)
                      {
-                        $data.='<input type="radio" name="radio" required value="'.$val['payment_id'].'" />'.$val['payment_name'].'<br>';
+                         $this->cartarr['PAYMENTID'] = $val['payment_id'];
+                         $this->cartarr['PAYMENTNAME'] = $val['payment_name'];
+                         $this->cartarr['PAYMENT'] .= $this->subs->templateRender('templates/subtemplates/checkpayment.html', $this->cartarr);
                      }
-                $data.='<input type="submit" class="btn btn-default btn-xs" value="Confirm order" name="buyTooOrder" /></p></form>';
 
+            $data = $this->subs->templateRender('templates/checkout.html', $this->cartarr);
             return $data;
         }
     function confirm()
@@ -93,9 +105,10 @@ class PalletCheck implements iPallet
             }
 
             $this->query->setStatusBookInCart($id_user);
-            $this->arr['IDORDER'] = $id_order;
-            $this->arr['PRICE'] = $your_price;
-            return $this->arr;
+            $this->cartarr['IDORDER'] = $id_order;
+            $this->cartarr['PRICE'] = $your_price;
+            $data = $this->subs->templateRender('templates/confirm.html', $this->cartarr);
+            return $data;
         }
     }
 }
