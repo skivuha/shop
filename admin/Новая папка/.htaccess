@@ -1,4 +1,0 @@
-AuthType Basic   
-AuthName "For administrator!" 
-AuthUserFile  Z:/home/booksite/www/admin/.htpasswd
-require valid-user
