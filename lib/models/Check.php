@@ -23,11 +23,11 @@ class Check
 
     private function lang()
     {
-        if(!isset($_COOKIE['lang']))
+        if(!isset($_COOKIE['langanator']))
         {
-            $this->cookie->add('lang', 'en');
+            $this->cookie->add('langanator', 'en');
         }
-        $this->data->setLang($_COOKIE['lang']);
+        $this->data->setLang($_COOKIE['langanator']);
     }
 
     private function choiseLang()
@@ -35,13 +35,13 @@ class Check
         $post_clear = $this->valid->clearDataArr($_POST);
         if('ru' === $post_clear['leng'])
         {
-            $this->cookie->add('lang', 'ru');
-            $this->data->setLang($_COOKIE['lang']);
+            $this->cookie->add('langanator', 'ru');
+            $this->data->setLang($_COOKIE['langanator']);
         }
         elseif('en' === $post_clear['leng'])
         {
-            $this->cookie->add('lang', 'en');
-            $this->data->setLang($_COOKIE['lang']);
+            $this->cookie->add('langanator', 'en');
+            $this->data->setLang($_COOKIE['langanator']);
         }
         //var_dump($_SESSION);
     }
