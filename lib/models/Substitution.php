@@ -18,11 +18,14 @@ class Substitution
     }
 }
     private function addToReplace($mArray)
-{
+    {
+      if(isset($mArray))
+      {
     foreach($mArray as $key=>$val)
     {
         $this->forRender[$key] = $val;
     }
+  }
 }
 
     private function headAuth()

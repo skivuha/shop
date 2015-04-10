@@ -75,7 +75,7 @@ class PalletLogon implements iPallet
                             $this->cookie->add('code_user', $code_user);
                         }
                         $this->data->setUser(true);
-                        header('Location: /');
+                        header('Location: /~user2/PHP/shop/');
                     }
                     else {
                         $this->error['ERRORLOGIN'] = 'Wrong e-mail or password';

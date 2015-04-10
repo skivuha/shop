@@ -5,7 +5,6 @@ class View
     private $substitution;
     private $data;
     private $flag;
-    private $lang;
 
     public function __construct()
     {
@@ -13,7 +12,6 @@ class View
         $this->data = DataCont::getInstance();
         $this->file = $this->data->getPage();
         $this->flag = $this->data->getFlag();
-        $this->lang = $this->data->getLang();
 
     }
 

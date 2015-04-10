@@ -78,21 +78,21 @@ class PalletMainAdmin implements iPallet
     {
         $id_book = $this->data->getParam();
         $this->query->deleteBook($id_book);
-        header('Location: /Admin/index/');
+        header('Location: /~user2/PHP/shop/Admin/index/');
     }
 
     function genreDelete()
     {
         $id_genre = $this->data->getParam();
         $this->query->deleteGenre($id_genre);
-        header('Location: /Admin/editgenre/');
+        header('Location: /~user2/PHP/shop/Admin/editgenre/');
     }
 
     function authorDelete()
     {
         $id_author = $this->data->getParam();
         $this->query->deleteAuthor($id_author);
-        header('Location: /Admin/editauthor/');
+        header('Location: /~user2/PHP/shop/Admin/editauthor/');
     }
 
 
@@ -116,7 +116,7 @@ class PalletMainAdmin implements iPallet
             {
                 $this->query->setAuthorNew($new_author);
             }
-            header('Location: /Admin/editauthor/');
+            header('Location: /~user2/PHP/shop/Admin/editauthor/');
         }
         else
         {
@@ -155,7 +155,7 @@ class PalletMainAdmin implements iPallet
             {
                 $this->query->setGenreNew($new_genre);
             }
-            header('Location: /Admin/editgenre/');
+            header('Location: /~user2/PHP/shop/Admin/editgenre/');
         }
         else
         {
@@ -211,7 +211,7 @@ class PalletMainAdmin implements iPallet
         $data.='<div id="bookDetails">';
         $data.='<h1>'.$arr['book_name'].'</h1>';
         $data.='<div class="productDetails">';
-        $data.='<img src="'.SRC_IMG_ADM.$arr['img'].'"></div>';
+        $data.='<img src="/~user2/PHP/shop/user_files/img/'.$arr['img'].'"></div>';
         $data.='<div id="detailsText">';
         $data.='<h2>Product Details</h2>';
         $data.='<p class="detailsfirst"><b>Author: </b>'.$arr['authors_name'].'</p>';
