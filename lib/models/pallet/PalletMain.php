@@ -44,12 +44,12 @@ class PalletMain implements iPallet
             }
             if(false == $cnt)
             {
-                $this->bookarr['BOOK_PATH'] = '/Home/add/id/'.$books['book_id'].'" id="buyBook"';
+                $this->bookarr['BOOK_PATH'] = '/~user2/PHP/shop/Home/add/id/'.$books['book_id'].'" id="buyBook"';
                 $this->bookarr['BUYORCART'] = 'Buy';
             }
             else
             {
-                $this->bookarr['BOOK_PATH'] = '/Cart/index/" id="toCart"';
+                $this->bookarr['BOOK_PATH'] = '/~user2/PHP/shop/Cart/index/" id="toCart"';
                 $this->bookarr['BUYORCART'] = 'To cart';
             }
             $data.= $this->subs->templateRender('templates/subtemplates/book.html',$this->bookarr);
